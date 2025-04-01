@@ -1,3 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.flex-container {
+  @apply w-full flex flex-col items-center;
+}
