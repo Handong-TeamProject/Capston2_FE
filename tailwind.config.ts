@@ -10,11 +10,10 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        primary: '#1D4ED8', // 사용자 정의 색상 (파란색)
-        secondary: '#4B5563', // 사용자 정의 색상 (회색)
-      },
-      fontFamily: {
-        sans: ['Helvetica', 'Arial', 'sans-serif'], // 사용자 정의 폰트
+        black: '#1A1A1A',
+        lightGray: '#2A2A2A',
+        gray: '#a3a3a3',
+        
       },
       spacing: {
         '72': '18rem', // 사용자 정의 간격 추가

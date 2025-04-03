@@ -4,4 +4,52 @@
 
 .flex-container {
   @apply w-full flex flex-col items-center;
+}/* Light Theme */
+:root {
+  --primary-color: #3498db;
+  --secondary-color: #2ecc71;
+  --background-color: #ffffff;
+  --text-color: #333333;
+
+  --font-family: 'Arial', sans-serif;
+  --font-size-base: 16px;
+  --border-radius: 4px;
+
+  --black100 : #1A1A1A;
+  --rightgray100 : #2A2A2A;
+}
+
+/* Dark Theme (Optional) */
+[data-theme="dark"] {
+  --primary-color: #1abc9c;
+  --secondary-color: #e74c3c;
+  --background-color: #2c3e50;
+  --text-color: #ecf0f1;
+}
+
+/* Global Styles */
+
+button {
+  background-color: var(--primary-color);
+  color: var(--text-color);
+  border: none;
+  border-radius: var(--border-radius);
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: var(--secondary-color);
+}
+
+/* 아래부터 내가 만든 것들 */
+
+@font-face {
+  font-family: "CustomFont";
+  src: url("/fonts/KimjungchulGothic-Regular.ttf") format("ttf");
+  font-weight: normal;
+  font-style: normal;
+}
+.font-custom {
+  font-family: "CustomFont", sans-serif;
 }
