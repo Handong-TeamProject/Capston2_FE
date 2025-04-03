@@ -9,11 +9,15 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        custom: ["KimjungchulGothic", "sans-serif"],
+      },
       colors: {
         black: '#1A1A1A',
         lightGray: '#2A2A2A',
         gray: '#a3a3a3',
-        
+        orange: '#FEA104',
+        orange50 : '#FEA10450',
       },
       spacing: {
         '72': '18rem', // 사용자 정의 간격 추가
