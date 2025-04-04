@@ -23,7 +23,7 @@ export const authOptions: AuthOptions = {
             if (url === "/" || url.includes("/api/auth/signout")) {
                 return baseUrl; // 로그아웃 시 루트(/)로 이동
             }
-            return `${baseUrl}/workspace`; // 로그인 성공 시 /workspace로 이동
+            return `${baseUrl}/signup`; // 로그인 성공 시 /workspace로 이동
         }
     },
     session: {
