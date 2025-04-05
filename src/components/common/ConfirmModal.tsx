@@ -4,7 +4,11 @@ interface ConfirmModalProps {
   handleAction: () => void;
 }
 
-function ConfirmModal({ message, closeModal, handleAction }: ConfirmModalProps) {
+function ConfirmModal({
+  message,
+  closeModal,
+  handleAction,
+}: ConfirmModalProps) {
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
       <div className="w-72 rounded bg-white p-6 shadow-lg">
