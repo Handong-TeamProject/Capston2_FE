@@ -124,7 +124,7 @@ function ProjectDetailPage() {
     };
 
     return (
-        <div className="w-full px-6 md:px-0">
+        <div className="w-full px-6 lg:px-0">
             <div className="w-full flex flex-col items-center">
                 <div
                     className="flex items-center justify-center group cursor-pointer"

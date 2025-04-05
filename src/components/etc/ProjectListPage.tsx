@@ -93,7 +93,7 @@ const ProjectListPage: React.FC = () => {
     };
 
     return (
-        <div className='w-full px-6 md:px-0'>
+        <div className='w-full px-6 lg:px-0'>
             {/* 헤더 섹션 */}
             <div className="flex flex-col md:flex-row mt-16 w-full justify-between">
                 <Introduce 
@@ -120,7 +120,7 @@ const ProjectListPage: React.FC = () => {
             {/* 메인 콘텐츠 섹션 */}
             {
                 projectList.length >= 0 ? (
-                    <div className='grid grid-cols-1 md:grid-cols-3 gap-10 mt-4 md:mt-10 mb-12 md:mb-20'>
+                    <div className='grid grid-cols-1 lg:grid-cols-3 md:grid-cols-2 gap-10 mt-4 md:mt-10 mb-12 md:mb-20'>
                         {
                             projectList.map((data, index) => (
                                 <ProjectCard key={index} data={data} />

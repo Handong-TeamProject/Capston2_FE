@@ -85,17 +85,21 @@ function ProjectCard({ data }: { data: ProjectData }) {
         //삭제 로직
     }
     return (
-        <div className="w-100 bg-baseGray py-8 px-10 rounded-2xl" >
-            <div className="flex justify-between">
-                <div className={`${getTextColor(data.day_status)} text-xs md:text-base w-14 md:w-20 h-6 md:h-7 font-bold flex justify-center items-center rounded`}>
-                    {handleChangeDayStatus(data.day_status)}
+        <div className="w-100 bg-baseGray py-8 px-10 rounded-2xl flex flex-col justify-between" >
+            <div>
+                <div className="flex justify-between">
+                    <div className={`${getTextColor(data.day_status)} text-xs md:text-base w-14 md:w-20 h-6 md:h-7 font-bold flex justify-center items-center rounded`}>
+                        {handleChangeDayStatus(data.day_status)}
+                    </div>
+                    <button onClick={openDeletedModal} className="text-xs md:text-base text-gray hover:text-orange">삭제하기</button>
                 </div>
-                <button onClick={openDeletedModal} className="text-xs md:text-base text-gray hover:text-orange">삭제하기</button>
+                <p className="text-xl lg:text-2xl font-bold mt-2">{data.title}</p>
+                <hr className="text-lightGray border my-3" />
+                <p>{data.desc}</p>    
             </div>
-            <p className="text-xl md:text-2xl font-bold mt-2">{data.title}</p>
-            <hr className="text-lightGray border my-3" />
-            <p>{data.desc}</p>
-            <button onClick={openSelectedModal} className={`w-full h-10 rounded-lg text-lg font-bold mt-6 object-hover hover:bg-baseGray  hover:border-2 hover:border-orange hover:text-orange ${getButtonColor(data.day_status)}`}>{getButtonText(data.day_status)}</button>
+            <div>
+                <button onClick={openSelectedModal} className={`w-full h-10 rounded-lg text-lg font-bold mt-6 object-hover hover:bg-baseGray  hover:border-2 hover:border-orange hover:text-orange ${getButtonColor(data.day_status)}`}>{getButtonText(data.day_status)}</button>
+            </div>
 
             {isSelectedModalOpen && (
                 <ConfirmModal message = "이동하시겠습니까?" closeModal={closeSelectedModal} handleAction={handleSelectedProject}/>
