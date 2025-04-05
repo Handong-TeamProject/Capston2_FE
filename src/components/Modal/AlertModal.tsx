@@ -23,7 +23,7 @@ function AlertModal({message, closeModal} : AlertModalProps) {
         <div
             className="fixed inset-0 z-10 flex items-center justify-center bg-black bg-opacity-50">
             <div className="w-72 rounded bg-white p-6 shadow-lg">
-                <h2 className="font-bol mb-4 text-lg">{message}</h2>
+                <h2 className="font-bol mb-4 text-base lg:text-lg">{message}</h2>
                 <div className="flex justify-end">
                     <button
                         className="rounded bg-orange px-4 py-2 text-white hover:bg-orange50"
