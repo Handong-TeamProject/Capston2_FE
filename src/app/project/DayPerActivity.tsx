@@ -15,14 +15,16 @@ interface DayInfo {
 function DayPerActivity({
   day,
   getDayInfo,
+  isModalOpen,
+  setModalOpen
 }: {
   day: number;
   getDayInfo: DayInfo;
+  isModalOpen : boolean,
+  setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const today = dayDescription[day - 1];
   if (!today) return null;
-
-  const [isModalOpen, setModalOpen] = useState(false);
 
   const openModal = () => setModalOpen(true);
   const closeModal = () => setModalOpen(false);

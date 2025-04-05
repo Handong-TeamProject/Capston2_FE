@@ -3,10 +3,13 @@
 import React, { useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+
+import Image from "next/image";
 import AuthButton from "../../components/Google/AuthButton";
 
 const LoginPage: React.FC = () => {
-  const { data: session, status } = useSession();
+  // const { data: session, status } = useSession();
+  const {status } = useSession();
   const router = useRouter();
 
   useEffect(() => {
@@ -20,7 +23,7 @@ const LoginPage: React.FC = () => {
 
   return (
     <div className="flex-container">
-      <img src="/Img/qrapo_logo.png" alt="logo" className="w-32" />
+      <Image src="/Img/qrapo_logo.png" alt="logo" width={128} />
       <p className="text-center text-[1rem] font-bold text-gray">
         빠르고 효과적인 친밀감 형성을 돕는
         <br />

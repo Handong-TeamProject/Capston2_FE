@@ -7,7 +7,8 @@ import Introduce from "../../components/layout/Introduce";
 import ConfirmModal from "../../components/Modal/ConfirmModal";
 import ProjectCard from "./ProjectCard";
 import { projectData } from "@/data/projectData";
-import { InputField, InputSpan, TextareaField } from "@/components/\bcommon/InputSpan";
+import { InputField, InputSpan, TextareaField } from "@/components/common/InputSpan";
+import Image from "next/image";
 
 const ProjectListPage: React.FC = () => {
   const [isJoinModalOpen, setIsJoinModalOpen] = useState(false);
@@ -93,7 +94,7 @@ const ProjectListPage: React.FC = () => {
             className="text-s object-hover flex h-8 w-24 items-center justify-center rounded bg-black font-bold text-white hover:bg-orange md:h-10 md:w-28 md:text-lg"
             onClick={openCreateModal}
           >
-            <img src="/Img/plus.png" className="mr-1 w-4" />
+            <Image src="/Img/plus.png" className="mr-1"  alt = "plus Img" width={16} height={16}/>
             <span>생성하기</span>
           </button>
         </div>
@@ -111,7 +112,7 @@ const ProjectListPage: React.FC = () => {
           <p className="mb-3 text-base font-bold text-lightGray md:text-xl">
             아직 프로젝트가 없습니다.
           </p>
-          <img src="/Img/empty.png" className="w-20 md:w-24" />
+          <Image src="/Img/empty.png" className="md:w-24" alt = "empty Img"  width={80} height={80}/>
         </div>
       )}
 
@@ -121,9 +122,11 @@ const ProjectListPage: React.FC = () => {
           <div className="w-80 rounded bg-white p-6 shadow-lg md:w-[400px]">
             <div className="mb-4 flex items-center justify-between">
               <h2 className="text-lg font-bold md:text-xl">프로젝트 참여</h2>
-              <img
+              <Image
                 src="/Img/cancleBefore.png"
-                className="w-10"
+                width={40}
+                height={40}
+                alt = "cancle before Img"
                 onMouseEnter={(e) =>
                   (e.currentTarget.src = "/Img/cancleAfter.png")
                 }
@@ -154,9 +157,11 @@ const ProjectListPage: React.FC = () => {
           <div className="w-80 rounded bg-white p-6 shadow-lg md:w-[400px]">
             <div className="mb-4 flex items-center justify-between">
               <h2 className="text-lg font-bold md:text-xl">프로젝트 생성</h2>
-              <img
+              <Image
                 src="/Img/cancleBefore.png"
-                className="w-10"
+                width={40}
+                height={40}
+                alt = "cancleBefore img"
                 onMouseEnter={(e) =>
                   (e.currentTarget.src = "/Img/cancleAfter.png")
                 }

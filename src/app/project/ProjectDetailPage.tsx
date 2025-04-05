@@ -1,12 +1,14 @@
 // components/ProjectDetailPage.tsx
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import DayPerActivity from "./DayPerActivity";
 import { dayDescription } from "@/data/dayDescription";
 import { projectInfo } from "@/data/projectInfo";
 import AlertModal from "@/components/Modal/AlertModal";
 import ConfirmModal from "@/components/Modal/ConfirmModal";
+import { useParams } from "next/navigation";
+import Image from "next/image";
 
 
 function ProjectDetailPage() {
@@ -15,6 +17,9 @@ function ProjectDetailPage() {
     content_status: number;
   }
 
+  const params = useParams<{ projectId: string }>();
+  const projectId = params?.projectId || "";
+  
 
   const [isEdit, setIsEdit] = useState(false);
   const [isUpdateModalOpen, setIsSelectedModalOpen] = useState(false);
@@ -22,6 +27,7 @@ function ProjectDetailPage() {
   const [isCancleModalOpen, setIsCancleModalOpen] = useState(false);
   const [isCopiedModalOpen, setIsCopiedModalOpen] = useState(false); 
   const [isDeleteFailModalOpen, setIsDeleteFailModalOpen] = useState(false); 
+  const [isModalOpen, setModalOpen] = useState(false);
   
   const [projectData, setProjectInfo] = useState(projectInfo);
 
@@ -145,6 +151,7 @@ function ProjectDetailPage() {
   return (
     <div className="w-full px-6 lg:px-0">
       <div className="flex w-full flex-col items-center">
+        <button onClick={() => alert(projectId)}>dsd</button>
         <div
           className="group flex cursor-pointer items-center justify-center"
           onClick={handleCopyInviteCode} // 클릭 이벤트 추가
@@ -157,10 +164,12 @@ function ProjectDetailPage() {
             if (img) img.src = "/Img/pasteBefore.png";
           }}
         >
-          <img
+          <Image
             src="/Img/pasteBefore.png"
             alt="cancel"
-            className="mr-2 h-3 w-3"
+            className="mr-2 h-3"
+            width={12}
+            height={12}
           />
           <p className="text-xs text-lightGray group-hover:text-orange">
             초대코드 복사하기
@@ -219,17 +228,19 @@ function ProjectDetailPage() {
                   <div className="mb-3 flex w-1/4 md:w-1/2" key={index}>
                     <div className="pt-4">
                       <div className="text-center">
-                        <img
+                        <Image
                           src={`/Img/member${index + 1}.png`}
                           alt={member.name}
-                          className="h-12 w-12 rounded-full md:h-16 md:w-16"
+                          className="rounded-full md:h-16 md:w-16"
+                          width={48}
+                          height={48}
                         />
                         <p>{member.name}</p>
                       </div>
                     </div>
                     {isEdit && (
                       <div>
-                        <img
+                        <Image
                           src="/Img/cancleBefore.png"
                           onMouseEnter={(e) =>
                             (e.currentTarget.src = "/Img/cancleAfter.png")
@@ -239,6 +250,8 @@ function ProjectDetailPage() {
                           }
                           alt="cancel"
                           className="ml-1 h-6 w-6 cursor-pointer md:ml-3"
+                          width={24}
+                          height={24}
                           onClick={() =>
                             handleClickDeleteMember(member.user_id)
                           }
@@ -258,6 +271,8 @@ function ProjectDetailPage() {
               key={index}
               day={index + 1}
               getDayInfo={getDayInfo}
+              isModalOpen={isModalOpen}
+              setModalOpen={setModalOpen}
             />
           ))}
         </div>

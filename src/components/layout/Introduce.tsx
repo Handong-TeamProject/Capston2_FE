@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 // Introduce.tsx 수정
 function Introduce({ title, desc }: { title: string; desc: string }) {
   const formattedDesc = (
@@ -14,7 +16,7 @@ function Introduce({ title, desc }: { title: string; desc: string }) {
   return (
     <div className="flex flex-col">
       <div className="flex items-center">
-        <img src="/Img/rani.png" alt="logo" className="mr-2 h-6" />
+        <Image src="/Img/rani.png" alt="logo" className="mr-2" width={24} height={24} />
         <p className="text-2xl font-bold">{title}</p>
       </div>
       <p className="mt-2 text-xs text-boldGray md:text-base">{formattedDesc}</p>
