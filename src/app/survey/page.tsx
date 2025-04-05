@@ -1,8 +1,8 @@
 // src/app/pages/survey.tsx
-import SurveyPage from '../../components/Day5/SurveyPage';
+import SurveyPage from "../../components/Day5/SurveyPage";
 
 const Survey: React.FC = () => {
-    return <SurveyPage />;
+  return <SurveyPage />;
 };
 
 export default Survey;

@@ -1,8 +1,8 @@
 // src/app/pages/first-impression.tsx
-import FirstImpressionPage from '../../components/Day1/FirstImpressionPage';
+import FirstImpressionPage from "../../components/Day1/FirstImpressionPage";
 
 const FirstImpression: React.FC = () => {
-    return <FirstImpressionPage />;
+  return <FirstImpressionPage />;
 };
 
 export default FirstImpression;

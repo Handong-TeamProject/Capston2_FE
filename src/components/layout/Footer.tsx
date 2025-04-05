@@ -1,16 +1,19 @@
 "use client";
 
 function Footer() {
-
-    return (
-        <div className="flex justify-between items-center flex-col w-svw bg-lightGray  sm:px-0 px-6  py-3">
-            <img src="/Img/qrapo_logo.png" alt="logo" className="w-16 md:w-20 mt-2" />
-            <div className = "flex-container text-center text-xs md:text-base text-black mt-5">
-                <p className="text-xs md:text-sm">QRapo(큐라포, 빠르게 관계 형성을 도와주는 서비스)</p>
-                <p className="text-xs md:text-sm mt-1">ⓒQRapo. 2025.All rights reserved.</p>
-            </div>
-        </div>
-    );
+  return (
+    <div className="flex w-svw flex-col items-center justify-between bg-lightGray px-6 py-3 sm:px-0">
+      <img src="/Img/qrapo_logo.png" alt="logo" className="mt-2 w-16 md:w-20" />
+      <div className="flex-container mt-5 text-center text-xs text-black md:text-base">
+        <p className="text-xs md:text-sm">
+          QRapo(큐라포, 빠르게 관계 형성을 도와주는 서비스)
+        </p>
+        <p className="mt-1 text-xs md:text-sm">
+          ⓒQRapo. 2025.All rights reserved.
+        </p>
+      </div>
+    </div>
+  );
 }
 
 export default Footer;

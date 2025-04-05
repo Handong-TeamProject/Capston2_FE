@@ -1,7 +1,7 @@
 import TestPage from "@/components/Test/TestPage";
 
 const Test: React.FC = () => {
-    return <TestPage />;
+  return <TestPage />;
 };
 
 export default Test;

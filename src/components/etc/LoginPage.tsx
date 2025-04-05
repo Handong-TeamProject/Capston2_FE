@@ -6,29 +6,30 @@ import { useRouter } from "next/navigation";
 import AuthButton from "../Google/AuthButton";
 
 const LoginPage: React.FC = () => {
-    const { data: session, status } = useSession();
-    const router = useRouter();
+  const { data: session, status } = useSession();
+  const router = useRouter();
 
-    useEffect(() => {
-        if (status === "authenticated") {
-            router.replace("/workspace");
-        }
-    }, [status, router]);
+  useEffect(() => {
+    if (status === "authenticated") {
+      router.replace("/workspace");
+    }
+  }, [status, router]);
 
-    if (status === "loading") return null; // 로딩 중일 때 아무것도 표시하지 않음
-    if (status === "authenticated") return null; // 이미 로그인 상태라면 UI 렌더링 X
+  if (status === "loading") return null; // 로딩 중일 때 아무것도 표시하지 않음
+  if (status === "authenticated") return null; // 이미 로그인 상태라면 UI 렌더링 X
 
-    return (
-        <div className="flex-container">
-            <img src="/Img/qrapo_logo.png" alt="logo" className="w-32" />
-            <p className="text-center text-gray font-bold text-[1rem]">
-                빠르고 효과적인 친밀감 형성을 돕는<br />
-                협력형 서비스, QRapo
-            </p>
-            <div>구글로 로그인하기</div>
-            <AuthButton />
-        </div>
-    );
+  return (
+    <div className="flex-container">
+      <img src="/Img/qrapo_logo.png" alt="logo" className="w-32" />
+      <p className="text-center text-[1rem] font-bold text-gray">
+        빠르고 효과적인 친밀감 형성을 돕는
+        <br />
+        협력형 서비스, QRapo
+      </p>
+      <div>구글로 로그인하기</div>
+      <AuthButton />
+    </div>
+  );
 };
 
 export default LoginPage;

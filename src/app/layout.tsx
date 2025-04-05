@@ -7,7 +7,6 @@ import { SessionProvider } from "next-auth/react";
 import Footer from "@/components/layout/Footer";
 import localFont from "next/font/local";
 
-
 const customFont = localFont({
   src: "../../public/font/KimjungchulGothic-Regular.ttf",
   weight: "400",
@@ -15,16 +14,16 @@ const customFont = localFont({
   variable: "--font-custom",
 });
 
-
 export default function Layout({ children }: { children: React.ReactNode }) {
-
   return (
     <SessionProvider>
       <html lang="ko">
-        <body className={`${customFont.className} flex-container w-full bg-gray-500 max-w-7xl mx-auto font-custom`}>
-          <Header/>
+        <body
+          className={`${customFont.className} flex-container bg-gray-500 mx-auto w-full max-w-7xl font-custom`}
+        >
+          <Header />
           <main className="flex-container bg-secondary">{children}</main>
-          <Footer/>
+          <Footer />
         </body>
       </html>
     </SessionProvider>

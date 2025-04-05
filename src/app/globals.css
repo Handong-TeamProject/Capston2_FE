@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 .flex-container {
-  @apply w-full flex flex-col items-center;
+  @apply flex w-full flex-col items-center;
 }
 
 @font-face {
@@ -13,6 +13,15 @@
   font-style: normal;
 }
 
-.object-hover{
-  @apply transition-all duration-500
+.object-hover {
+  @apply transition-all duration-500;
+}
+
+/* globals.css */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 }

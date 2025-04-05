@@ -1,8 +1,8 @@
 // src/app/pages/promise-creation.tsx
-import PromiseCreationPage from '../../components/Day4/PromiseCreationPage';
+import PromiseCreationPage from "../../components/Day4/PromiseCreationPage";
 
 const PromiseCreation: React.FC = () => {
-    return <PromiseCreationPage />;
+  return <PromiseCreationPage />;
 };
 
 export default PromiseCreation;

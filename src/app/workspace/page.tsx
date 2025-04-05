@@ -1,8 +1,8 @@
 // src/app/pages/balance-game.tsx
-import ProjectListPage from '../../components/etc/ProjectListPage';
+import ProjectListPage from "../../components/etc/ProjectListPage";
 
 const ProjectList: React.FC = () => {
-    return <ProjectListPage />;
+  return <ProjectListPage />;
 };
 
 export default ProjectList;
