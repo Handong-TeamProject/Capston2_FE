@@ -3,6 +3,8 @@
 import { signIn, signOut, useSession } from "next-auth/react";
 import React, { useState } from "react";
 import ConfirmModal from "../Modal/ConfirmModal";
+import { UserCircleIcon } from '@heroicons/react/24/outline'
+import Link from "next/link";
 
 export default function AuthButton() {
   const { data: session } = useSession();
@@ -30,6 +32,7 @@ export default function AuthButton() {
           >
             로그아웃
           </p>
+          <Link href = "/mypage"><UserCircleIcon className="w-6 h-6 text-boldGray ml-1 hover:text-orange object-hover" /></Link>
         </div>
       ) : (
         <button
