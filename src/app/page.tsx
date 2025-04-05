@@ -1,4 +1,4 @@
-import LandingPage from "@/components/etc/LandingPage";
+import LandingPage from "@/app/LandingPage";
 
 // src/app/page.tsx
 const Home: React.FC = () => {

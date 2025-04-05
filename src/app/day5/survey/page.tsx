@@ -1,5 +1,5 @@
 // src/app/pages/survey.tsx
-import SurveyPage from "../../components/Day5/SurveyPage";
+import SurveyPage from "./SurveyPage";
 
 const Survey: React.FC = () => {
   return <SurveyPage />;

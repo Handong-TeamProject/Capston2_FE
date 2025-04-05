@@ -2,7 +2,7 @@
 
 import { signIn, signOut, useSession } from "next-auth/react";
 import React, { useState } from "react";
-import ConfirmModal from "../common/ConfirmModal";
+import ConfirmModal from "../Modal/ConfirmModal";
 
 export default function AuthButton() {
   const { data: session } = useSession();

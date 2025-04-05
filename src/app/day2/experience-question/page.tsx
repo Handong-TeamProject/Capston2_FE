@@ -1,5 +1,5 @@
 // src/app/pages/experience-question.tsx
-import ExperienceQuestionPage from "../../components/Day2/ExperienceQuestionPage";
+import ExperienceQuestionPage from "./ExperienceQuestionPage";
 
 const ExperienceQuestion: React.FC = () => {
   return <ExperienceQuestionPage />;

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import ConfirmModal from "../common/ConfirmModal";
+import ConfirmModal from "../../components/Modal/ConfirmModal";
 import { useRouter } from "next/navigation";
 
 interface ProjectData {

@@ -1,5 +1,5 @@
 // src/app/pages/balance-game.tsx
-import ProjectDetailPage from "@/components/etc/ProjectDetailPage";
+import ProjectDetailPage from "@/app/project/ProjectDetailPage";
 
 interface ProjectPageProps {
   params: {

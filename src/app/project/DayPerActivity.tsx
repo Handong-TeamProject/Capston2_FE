@@ -3,12 +3,13 @@
 
 import React, { useState } from "react";
 import { dayDescription } from "@/data/dayDescription";
-import AlertModal from "../common/AlertModal";
+
 import { useRouter } from "next/navigation";
+import AlertModal from "@/components/Modal/AlertModal";
 
 interface DayInfo {
   day_status: number;
-  activity_status: number;
+  content_status: number;
 }
 
 function DayPerActivity({
@@ -48,17 +49,17 @@ function DayPerActivity({
             className={`object-hover mr-3 flex h-[150px] w-[250px] flex-shrink-0 flex-col justify-center rounded-lg px-5 py-3 shadow-md hover:scale-105 active:border ${
               getDayInfo.day_status < day ||
               (getDayInfo.day_status === day &&
-                getDayInfo.activity_status < activity.step)
+                getDayInfo.content_status < activity.step)
                 ? "bg-lightGray blur-sm"
                 : getDayInfo.day_status === day &&
-                    getDayInfo.activity_status === activity.step
+                    getDayInfo.content_status === activity.step
                   ? "bg-yellow text-white"
                   : "bg-beige90 text-orange"
             }`}
             onClick={() =>
               getDayInfo.day_status < day ||
               (getDayInfo.day_status === day &&
-                getDayInfo.activity_status < activity.step)
+                getDayInfo.content_status < activity.step)
                 ? openModal()
                 : router.push(activity.href)
             }

@@ -2,9 +2,9 @@
 
 // components/ProjectListPage.tsx
 import React, { useState } from "react";
-import Introduce from "../layout/Introduce";
-import { InputField, InputSpan, TextareaField } from "../normal/InputSpan";
-import ConfirmModal from "../common/ConfirmModal";
+import Introduce from "../../components/layout/Introduce";
+import { InputField, InputSpan, TextareaField } from "../../components/common/InputSpan";
+import ConfirmModal from "../../components/Modal/ConfirmModal";
 import ProjectCard from "./ProjectCard";
 
 const ProjectListPage: React.FC = () => {

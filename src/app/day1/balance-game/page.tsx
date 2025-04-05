@@ -1,5 +1,5 @@
 // src/app/pages/balance-game.tsx
-import BalanceGamePage from "../../components/Day1/BalanceGamePage";
+import BalanceGamePage from "./BalanceGamePage";
 
 const BalanceGame: React.FC = () => {
   return <BalanceGamePage />;

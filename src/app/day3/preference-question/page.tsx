@@ -1,5 +1,5 @@
 // src/app/pages/preference-question.tsx
-import PreferenceQuestionPage from "../../components/Day3/PreferenceQuestionPage";
+import PreferenceQuestionPage from "./PreferenceQuestionPage";
 
 const PreferenceQuestion: React.FC = () => {
   return <PreferenceQuestionPage />;

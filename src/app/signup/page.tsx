@@ -1,5 +1,5 @@
 // src/app/pages/signup.tsx
-import SignupPage from "../../components/etc/SignupPage";
+import SignupPage from "./SignupPage";
 
 const Signup: React.FC = () => {
   return <SignupPage />;

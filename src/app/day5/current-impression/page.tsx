@@ -1,5 +1,5 @@
 // src/app/pages/current-impression.tsx
-import CurrentImpressionPage from "../../components/Day5/CurrentImpressionPage";
+import CurrentImpressionPage from "./CurrentImpressionPage";
 
 const CurrentImpression: React.FC = () => {
   return <CurrentImpressionPage />;

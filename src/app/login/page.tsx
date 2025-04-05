@@ -1,5 +1,6 @@
 // src/app/pages/login.tsx
-import LoginPage from "../../components/etc/LoginPage";
+
+import LoginPage from "./LoginPage";
 
 const Login: React.FC = () => {
   return <LoginPage />;

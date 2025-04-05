@@ -5,19 +5,16 @@ import React, { useState } from "react";
 import DayPerActivity from "./DayPerActivity";
 import { dayDescription } from "@/data/dayDescription";
 import { projectInfo } from "@/data/projectInfo";
-import ConfirmModal from "../common/ConfirmModal";
-import AlertModal from "../common/AlertModal";
+import AlertModal from "@/components/Modal/AlertModal";
+import ConfirmModal from "@/components/Modal/ConfirmModal";
+
 
 function ProjectDetailPage() {
   interface DayInfo {
     day_status: number;
-    activity_status: number;
+    content_status: number;
   }
 
-  const getDayInfo: DayInfo = {
-    day_status: 3,
-    activity_status: 1,
-  };
 
   const [isEdit, setIsEdit] = useState(false);
   const [isUpdateModalOpen, setIsSelectedModalOpen] = useState(false);
@@ -25,6 +22,11 @@ function ProjectDetailPage() {
   const [isCancleModalOpen, setIsCancleModalOpen] = useState(false);
   const [isCopiedModalOpen, setIsCopiedModalOpen] = useState(false); // 복사 모달 상태 추가
   const [projectData, setProjectInfo] = useState(projectInfo);
+
+  const getDayInfo: DayInfo = {
+    day_status: projectData?.default?.day_status,
+    content_status: projectData?.default?.content_status,
+  };
 
   const openUpdateModal = () => setIsSelectedModalOpen(true);
   const closeUpdateModal = () => setIsSelectedModalOpen(false);

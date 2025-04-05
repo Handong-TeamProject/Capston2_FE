@@ -2,9 +2,9 @@ export const projectInfo = {
   default: {
     title: "인사이트 랩실",
     desc: "직장에서 동료들과의 관계를 더욱 원활하게 만들고 서로의 신뢰를 쌓기 위해 이 서비스를 활용해 팀 빌딩 활동을 진행하고 싶습니다.",
-    code: "Ex50d1C",
-    day_status: 1,
-    content_status: 1,
+    code: "Ex50d1C2",
+    day_status: 5,
+    content_status: 3,
     owner: 1,
   },
   schedule: {

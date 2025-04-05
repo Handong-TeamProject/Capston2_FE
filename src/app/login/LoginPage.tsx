@@ -3,7 +3,7 @@
 import React, { useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import AuthButton from "../Google/AuthButton";
+import AuthButton from "../../components/Google/AuthButton";
 
 const LoginPage: React.FC = () => {
   const { data: session, status } = useSession();
