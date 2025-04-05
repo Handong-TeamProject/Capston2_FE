@@ -20,7 +20,9 @@ function ProjectDetailPage() {
   const [isUpdateModalOpen, setIsSelectedModalOpen] = useState(false);
   const [isDeletedModalOpen, setIsDeletedModalOpen] = useState(false);
   const [isCancleModalOpen, setIsCancleModalOpen] = useState(false);
-  const [isCopiedModalOpen, setIsCopiedModalOpen] = useState(false); // 복사 모달 상태 추가
+  const [isCopiedModalOpen, setIsCopiedModalOpen] = useState(false); 
+  const [isDeleteFailModalOpen, setIsDeleteFailModalOpen] = useState(false); 
+  
   const [projectData, setProjectInfo] = useState(projectInfo);
 
   const getDayInfo: DayInfo = {
@@ -36,6 +38,8 @@ function ProjectDetailPage() {
 
   const openCancleModal = () => setIsCancleModalOpen(true);
   const closeCancleModal = () => setIsCancleModalOpen(false);
+  const openDeleteFailModal = () => setIsDeleteFailModalOpen(true);
+  const closeDeleteFailModal = () => setIsDeleteFailModalOpen(false);
 
   const handleClickUpdateButton = () => {
     if (isEdit) {
@@ -51,19 +55,28 @@ function ProjectDetailPage() {
     closeUpdateModal();
     setIsEdit(!isEdit);
   };
+  const [deleteMember, setDeleteMember] = useState(0);
 
   const handleDeleteMember = (index: number) => {
     alert("사용자가 삭제되었습니다.");
-    window.location.reload();
+    // window.location.reload();
     window.scrollTo(0, 0); // 페이지 상단으로 이동
     closeDeleteModal();
     // 삭제 로직
+        setProjectInfo((prev) => ({
+      ...prev,
+      members: prev.members.filter((member) => member.user_id !== deleteMember),
+        }));
+    setIsEdit(false);
     // 새로 유저 정보 가져오기
   };
 
-  const [deleteMember, setDeleteMember] = useState(0);
 
   const handleClickDeleteMember = (user_id: number) => {
+    if (user_id === projectData.default.owner) {
+      setIsDeleteFailModalOpen(true);
+      return 0;
+    }
     setDeleteMember(user_id);
     openDeleteModal();
   };
@@ -85,6 +98,8 @@ function ProjectDetailPage() {
       },
     }));
   };
+
+
 
   const handleCopyInviteCode = async () => {
     const textToCopy = projectData.default.code;
@@ -272,6 +287,12 @@ function ProjectDetailPage() {
         <AlertModal
           message="초대코드가 복사되었습니다."
           closeModal={() => setIsCopiedModalOpen(false)}
+        />
+      )}
+      {isDeleteFailModalOpen && ( // 복사 모달 추가
+        <AlertModal
+          message="이 구성원은 삭제할 수 없습니다."
+          closeModal={() => setIsDeleteFailModalOpen(false)}
         />
       )}
     </div>
