@@ -83,12 +83,43 @@ function ProjectDetailPage() {
     };
 
     const handleCopyInviteCode = async () => {
+        const textToCopy = projectData.default.code;
+
+        // clipboard API 사용 가능 여부 확인
+        if (navigator.clipboard && window.isSecureContext) {
+            try {
+                await navigator.clipboard.writeText(textToCopy);
+                setIsCopiedModalOpen(true);
+                setTimeout(() => setIsCopiedModalOpen(false), 2000);
+                return;
+            } catch (err) {
+                console.error("Clipboard API 실패", err);
+            }
+        }
+
+        // fallback 방식 (execCommand)
         try {
-            await navigator.clipboard.writeText(projectData.default.code);
-            setIsCopiedModalOpen(true);
-            setTimeout(() => setIsCopiedModalOpen(false), 2000); // 2초 후 모달 닫기
+            const textarea = document.createElement("textarea");
+            textarea.value = textToCopy;
+            textarea.style.position = "fixed";  // 화면 밖에 배치 (iOS에서 문제 방지)
+            textarea.style.opacity = "0";       // 사용자에게 보이지 않게
+            document.body.appendChild(textarea);
+            textarea.focus();
+            textarea.select();
+
+            const success = document.execCommand("copy");
+            document.body.removeChild(textarea);
+
+            if (success) {
+                setIsCopiedModalOpen(true);
+                setTimeout(() => setIsCopiedModalOpen(false), 2000);
+                window.scrollTo(0, 0); // 페이지 상단으로 이동
+            } else {
+                throw new Error("execCommand 실패");
+            }
         } catch (error) {
-            alert("초대코드 복사에 실패했습니다.");
+            console.error("Fallback 복사 실패:", error);
+            alert("초대코드 복사에 실패했습니다. 수동으로 복사해주세요.");
         }
     };
 
