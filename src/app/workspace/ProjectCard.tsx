@@ -9,7 +9,7 @@ interface ProjectData {
   day_status: string;
 }
 
-function ProjectCard({ data }: { data: ProjectData }) {
+function ProjectCard({ data, setProjectList }: { data: ProjectData, setProjectList: React.Dispatch<React.SetStateAction<ProjectData[]>> }) {
   const router = useRouter();
   const [isSelectedModalOpen, setIsSelectedModalOpen] = useState(false);
   const [isDeletedModalOpen, setIsDeletedModalOpen] = useState(false);
@@ -21,7 +21,7 @@ function ProjectCard({ data }: { data: ProjectData }) {
   const closeDeletededModal = () => setIsDeletedModalOpen(false);
 
   const handleSelectedProject = () => {
-    router.push(`/project/${data.id}`); // Next.js의 클라이언트 라우팅
+    router.push(`/project/${data.id}`); // Next.js client-side routing
   };
 
   const handleChangeDayStatus = (day_status: string) => {
@@ -48,40 +48,38 @@ function ProjectCard({ data }: { data: ProjectData }) {
   const getTextColor = (day_status: string) => {
     switch (day_status) {
       case "0":
-        return "text-blue bg-blue50"; // Example color for '0'
+        return "text-blue bg-blue50";
       case "6":
-        return "text-red bg-red50"; // Example color for '6'
+        return "text-red bg-red50";
       default:
-        return "text-green bg-green50"; // Example color for '1~5'
+        return "text-green bg-green50";
     }
   };
 
   const getButtonText = (day_status: string) => {
     switch (day_status) {
       case "6":
-        return "보러 가기"; // Example color for '6'
+        return "보러 가기";
       default:
-        return "진행하기"; // Example color for '1~5'
+        return "진행하기";
     }
   };
 
   const getButtonColor = (day_status: string) => {
     switch (day_status) {
       case "6":
-        return "bg-orange50"; // Example color for '6'
+        return "bg-orange50";
       default:
-        return "bg-orange"; // Example color for '1~5'
+        return "bg-orange";
     }
   };
 
   const deleteProject = () => {
+    setProjectList((prev) => prev.filter((project) => project.id !== data.id));
     alert("프로젝트가 삭제되었습니다.");
-    window.location.reload();
-    window.scrollTo(0, 0); // 페이지 상단으로 이동
     closeDeletededModal();
-    // handleDeleteProject();
-    //삭제 로직
   };
+
   return (
     <div className="w-100 flex flex-col justify-between rounded-2xl bg-baseGray px-10 py-8">
       <div>

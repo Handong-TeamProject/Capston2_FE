@@ -3,9 +3,11 @@
 // components/ProjectListPage.tsx
 import React, { useState } from "react";
 import Introduce from "../../components/layout/Introduce";
-import { InputField, InputSpan, TextareaField } from "../../components/common/InputSpan";
+
 import ConfirmModal from "../../components/Modal/ConfirmModal";
 import ProjectCard from "./ProjectCard";
+import { projectData } from "@/data/projectData";
+import { InputField, InputSpan, TextareaField } from "@/components/\bcommon/InputSpan";
 
 const ProjectListPage: React.FC = () => {
   const [isJoinModalOpen, setIsJoinModalOpen] = useState(false);
@@ -23,38 +25,7 @@ const ProjectListPage: React.FC = () => {
     desc: string;
     day_status: string;
   }
-  const [projectList, setProjectList] = useState<ProjectInfo[]>([
-    {
-      id: 1,
-      title: "10년지기 친구들",
-      desc: "소중한 친구들과의 관계를 더욱 발전시키기 위해 이 서비스를 통해 다양한 활동을 계획하고 서로의 관심사를 공유하며 친밀도를 높이고 싶습니다.",
-      day_status: "0",
-    },
-    {
-      id: 2,
-      title: "가족 모임",
-      desc: "가족들과의 소중한 시간을 계획하고 추억을 공유하며 더욱 돈독한 관계를 유지하기 위한 프로젝트입니다.",
-      day_status: "2",
-    },
-    {
-      id: 3,
-      title: "회사 동료들과의 협업",
-      desc: "회사 동료들과의 협업을 통해 프로젝트를 성공적으로 완수하고 팀워크를 강화하기 위한 프로젝트입니다.",
-      day_status: "6",
-    },
-    {
-      id: 4,
-      title: "동아리 활동",
-      desc: "동아리 멤버들과 함께 다양한 활동을 계획하고 즐기며 친목을 다지는 프로젝트입니다.",
-      day_status: "3",
-    },
-    {
-      id: 5,
-      title: "여행 계획",
-      desc: "친구들과 함께 여행을 계획하고 준비하며 추억을 쌓기 위한 프로젝트입니다.",
-      day_status: "5",
-    },
-  ]);
+  const [projectList, setProjectList] = useState<ProjectInfo[]>(projectData);
 
   const openJoinModal = () => setIsJoinModalOpen(true);
   const closeJoinModal = () => setIsJoinModalOpen(false);
@@ -85,6 +56,15 @@ const ProjectListPage: React.FC = () => {
     setProjectName("");
     setProjectDesc("");
     alert("프로젝트가 생성되었습니다!");
+
+    // 추가 로직: 새로운 프로젝트를 프로젝트 리스트에 추가
+    const newProject = {
+      id: projectList.length + 1,
+      title: projectName,
+      desc: projectDesc,
+      day_status: "0",
+    };
+    setProjectList([...projectList, newProject]);
   };
 
   const handleJoinProject = () => {
@@ -123,7 +103,7 @@ const ProjectListPage: React.FC = () => {
       {projectList.length >= 0 ? (
         <div className="mb-12 mt-4 grid grid-cols-1 gap-10 md:mb-20 md:mt-10 md:grid-cols-2 lg:grid-cols-3">
           {projectList.map((data, index) => (
-            <ProjectCard key={index} data={data} />
+            <ProjectCard key={index} data={data} setProjectList={setProjectList} />
           ))}
         </div>
       ) : (
