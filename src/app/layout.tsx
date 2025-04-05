@@ -19,7 +19,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     <SessionProvider>
       <html lang="ko">
         <body
-          className={`${customFont.className} flex-container bg-gray-500 mx-auto w-full max-w-7xl font-custom`}
+          className={`${customFont.className} flex-container bg-gray-500 mx-auto w-full max-w-5xl font-custom`}
         >
           <Header />
           <main className="flex-container bg-secondary">{children}</main>

@@ -4,7 +4,7 @@
 import React, { useState } from 'react';
 import Introduce from '../layout/Introduce';
 import { InputField, InputSpan, TextareaField } from '../normal/InputSpan';
-import AlertModal from '../common/AlertModal';
+import ConfirmModal from '../common/ConfirmModal';
 import ProjectCard from './ProjectCard';
 
 const ProjectListPage: React.FC = () => {
@@ -151,7 +151,7 @@ const ProjectListPage: React.FC = () => {
                             />
                         </div>
                         <div>
-                            <InputSpan text="참여 코드" />
+                            <InputSpan message = "참여 코드" />
                             <InputField
                                 value={projectCode} 
                                 onChange={setProjectCode} 
@@ -183,14 +183,14 @@ const ProjectListPage: React.FC = () => {
                             />
                         </div>
                         <div>
-                            <InputSpan text="라포 프로젝트명" />
+                            <InputSpan message = "라포 프로젝트명" />
                             <InputField
                                 value={projectName} 
                                 onChange={setProjectName} 
                             />
                         </div>
                         <div className='mt-4'>
-                            <InputSpan text="라포 프로젝트 설명" />
+                            <InputSpan message = "라포 프로젝트 설명" />
                             <TextareaField
                                 value={projectDesc} 
                                 onChange={setProjectDesc} 
@@ -209,12 +209,12 @@ const ProjectListPage: React.FC = () => {
 
             {/* 생성 확인 모달 */}
             {isConfirmCreateModalOpen && (
-                <AlertModal text = "생성하시겠습니까?" closeModal={closeConfirmCreateModal} handleAction={handleCreateProject}/>
+                <ConfirmModal message = "생성하시겠습니까?" closeModal={closeConfirmCreateModal} handleAction={handleCreateProject}/>
             )}
 
             {/* 참여 확인 모달 */}
             {isConfirmJoinModalOpen && (
-                <AlertModal text = "참여하시겠습니까?" closeModal={closeConfirmJoinModal} handleAction={handleJoinProject}/>
+                <ConfirmModal message = "참여하시겠습니까?" closeModal={closeConfirmJoinModal} handleAction={handleJoinProject}/>
             )}
         </div>
     );

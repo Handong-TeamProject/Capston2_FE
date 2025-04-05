@@ -2,7 +2,7 @@
 
 import { signIn, signOut, useSession } from "next-auth/react";
 import React, { useState } from "react";
-import AlertModal from "../common/AlertModal";
+import ConfirmModal from "../common/ConfirmModal";
 
 export default function AuthButton() {
     const { data: session } = useSession();
@@ -40,7 +40,7 @@ export default function AuthButton() {
 
             {/* 로그아웃 확인 모달 */}
             {isLogoutModalOpen && (
-                <AlertModal text = "로그아웃 하시겠습니까?" closeModal={closeLogoutModal} handleAction={handleLogout}/>
+                <ConfirmModal message = "로그아웃 하시겠습니까?" closeModal={closeLogoutModal} handleAction={handleLogout}/>
             )}
         </>
     );

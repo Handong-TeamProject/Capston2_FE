@@ -1,5 +1,5 @@
 import { useState } from "react";
-import AlertModal from "../common/AlertModal";
+import ConfirmModal from "../common/ConfirmModal";
 import { useRouter } from "next/navigation";
 
 interface ProjectData {
@@ -11,9 +11,9 @@ interface ProjectData {
 
 function ProjectCard({ data }: { data: ProjectData }) {
 
+    const router = useRouter();
     const [isSelectedModalOpen, setIsSelectedModalOpen] = useState(false);
     const [isDeletedModalOpen, setIsDeletedModalOpen] = useState(false);
-    const router = useRouter();
 
     const openSelectedModal = () => setIsSelectedModalOpen(true);
     const closeSelectedModal = () => setIsSelectedModalOpen(false);
@@ -98,10 +98,10 @@ function ProjectCard({ data }: { data: ProjectData }) {
             <button onClick={openSelectedModal} className={`w-full h-10 rounded-lg text-lg font-bold mt-6 object-hover hover:bg-baseGray  hover:border-2 hover:border-orange hover:text-orange ${getButtonColor(data.day_status)}`}>{getButtonText(data.day_status)}</button>
 
             {isSelectedModalOpen && (
-                <AlertModal text = "이동하시겠습니까?" closeModal={closeSelectedModal} handleAction={handleSelectedProject}/>
+                <ConfirmModal message = "이동하시겠습니까?" closeModal={closeSelectedModal} handleAction={handleSelectedProject}/>
             )}
             {isDeletedModalOpen && (
-                <AlertModal text = "정말 삭제하시겠습니까?" closeModal={closeDeletededModal} handleAction={deleteProject}/> 
+                <ConfirmModal message = "정말 삭제하시겠습니까?" closeModal={closeDeletededModal} handleAction={deleteProject}/> 
             )}
         </div>
     );

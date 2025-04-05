@@ -1,11 +1,11 @@
 import React from "react";
 
 interface InputSpanProps {
-    text: string;
+    message: string;
 }
 
-export const InputSpan: React.FC<InputSpanProps> = ({text}) => {
-    return <p className="text-black font-bold text-base md:text-lg" > {text}</p>;
+export const InputSpan: React.FC<InputSpanProps> = ({message}) => {
+    return <p className="text-black font-bold text-base md:text-lg" > {message}</p>;
 };
 
 interface InputFieldProps {

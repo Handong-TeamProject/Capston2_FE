@@ -1,7 +1,7 @@
 export const projectInfo = {
   default: {
     title: "인사이트 랩실",
-    desc: "인사이트 랩실 친해지기",
+    desc: "직장에서 동료들과의 관계를 더욱 원활하게 만들고 서로의 신뢰를 쌓기 위해 이 서비스를 활용해 팀 빌딩 활동을 진행하고 싶습니다.",
     code: "abcd",
     day_status: 1,
     content_status: 1,
@@ -20,7 +20,7 @@ export const projectInfo = {
   members: [
     {
       user_id: 1,
-      name: "정은다",
+      name: "김광일",
     },
     {
       user_id: 2,
@@ -28,11 +28,11 @@ export const projectInfo = {
     },
     {
       user_id: 3,
-      name: "정은다",
+      name: "변우석",
     },
     {
       user_id: 4,
-      name: "정은다",
+      name: "이민서",
     },
   ],
 };
