@@ -59,7 +59,7 @@ function ProjectDetailPage() {
     alert("프로젝트가 수정되었습니다.");
     window.scrollTo(0, 0); // 페이지 상단으로 이동
     closeUpdateModal();
-    setIsEdit(!isEdit);
+    setIsEdit(false);
   };
   const [deleteMember, setDeleteMember] = useState(0);
 
@@ -202,6 +202,12 @@ function ProjectDetailPage() {
                         : "text-lightGray hover:text-black"
                     } text-sm`}
                     onClick={handleClickUpdateButton}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        e.preventDefault(); // Enter 키의 기본 동작 방지
+                      }
+                    }
+                  }
                   >
                     {isEdit ? "저장하기" : "수정하기"}
                   </button>
