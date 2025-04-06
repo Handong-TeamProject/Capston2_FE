@@ -23,7 +23,7 @@ const LoginPage: React.FC = () => {
 
   return (
     <div className="flex-container">
-      <Image src="/Img/qrapo_logo.png" alt="logo" width={128} />
+      <Image src="/Img/qrapo_logo.png" alt="logo" width={128} height={50} />
       <p className="text-center text-[1rem] font-bold text-gray">
         빠르고 효과적인 친밀감 형성을 돕는
         <br />
