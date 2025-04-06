@@ -18,6 +18,12 @@ export default function AuthButton() {
     closeLogoutModal();
     signOut({ callbackUrl: "/" });
   };
+  // 구글 로그인 버튼 클릭 시 실행
+  const handleGoogleLogin = () => {
+    signIn("google", {
+      callbackUrl: "/auth/callback", // 우리가 만든 커스텀 페이지
+    });
+  };
 
   return (
     <>
@@ -36,7 +42,7 @@ export default function AuthButton() {
         </div>
       ) : (
         <button
-          onClick={() => signIn("google")}
+          onClick={() => handleGoogleLogin()}
           className="object-hover h-8 w-20 rounded bg-orange text-base text-white hover:bg-orange50"
         >
           시작하기
