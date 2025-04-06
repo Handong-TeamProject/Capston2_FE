@@ -91,7 +91,7 @@ const MyPage: React.FC = () => {
                 editInfo.gender === "남자"
                   ? "bg-blue50 border-blue"
                   : "bg-lightGray border-gray"
-              } border-2 rounded-lg g:w-24 lg:h-10 w-20 h-8 mr-2 lg:mr-3`}
+              } border-2 rounded-lg lg:w-24 lg:h-10 w-20 h-8 mr-2 lg:mr-3`}
               disabled={!isEditing}
             >
               남자
