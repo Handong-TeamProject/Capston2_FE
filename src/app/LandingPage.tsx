@@ -18,34 +18,34 @@ const LandingPage: React.FC = () => {
             <Link href="/workspace">프로젝트 목록 페이지</Link>
           </li>
           <li>
-            <Link href="/profile">프로필 목록 페이지</Link>
+            <Link href="/day1/profile">프로필 목록 페이지</Link>
           </li>
           <li>
-            <Link href="/balance-game">밸런스 게임 페이지</Link>
+            <Link href="/day1/balance-game">밸런스 게임 페이지</Link>
           </li>
           <li>
-            <Link href="/first-impression">첫인상 페이지</Link>
+            <Link href="/day1/first-impression">첫인상 페이지</Link>
           </li>
           <li>
-            <Link href="/experience-question">경험 질문 페이지</Link>
+            <Link href="/day2/experience-question">경험 질문 페이지</Link>
           </li>
           <li>
-            <Link href="/situation-question">상황 질문 페이지</Link>
+            <Link href="/day2/situation-question">상황 질문 페이지</Link>
           </li>
           <li>
-            <Link href="/preference-question">취향 질문 페이지</Link>
+            <Link href="/day3/preference-question">취향 질문 페이지</Link>
           </li>
           <li>
-            <Link href="/user-guide">나 사용법 페이지</Link>
+            <Link href="/day3/user-guide">나 사용법 페이지</Link>
           </li>
           <li>
-            <Link href="/promise-creation">약속 생성 페이지</Link>
+            <Link href="/day4/promise-creation">약속 생성 페이지</Link>
           </li>
           <li>
-            <Link href="/current-impression">현인상 페이지</Link>
+            <Link href="/day5/current-impression">현인상 페이지</Link>
           </li>
           <li>
-            <Link href="/survey">설문조사 페이지</Link>
+            <Link href="/day5/survey">설문조사 페이지</Link>
           </li>
         </ul>
       </nav>

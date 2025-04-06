@@ -3,7 +3,6 @@
 import Introduce from "@/components/layout/Introduce";
 import ConfirmModal from "@/components/Modal/ConfirmModal";
 import Image from "next/image";
-import Link from "next/link";
 import React, { useState, useEffect } from "react";
 
 const MyPage: React.FC = () => {

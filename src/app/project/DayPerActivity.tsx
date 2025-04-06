@@ -1,7 +1,7 @@
 // components/DayPerActivity.tsx
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import { dayDescription } from "@/data/dayDescription";
 
 import { useRouter } from "next/navigation";
@@ -23,13 +23,12 @@ function DayPerActivity({
   isModalOpen : boolean,
   setModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
+  const router = useRouter();
   const today = dayDescription[day - 1];
   if (!today) return null;
 
   const openModal = () => setModalOpen(true);
   const closeModal = () => setModalOpen(false);
-
-  const router = useRouter();
 
   return (
     <div className="mb-6">

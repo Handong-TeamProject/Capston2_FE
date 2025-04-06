@@ -18,7 +18,7 @@ function ConfirmModal({message, closeModal, handleAction} : ConfirmModalProps) {
         return() => {
             window.removeEventListener("keydown", handleKeyDown);
         };
-    }, [closeModal]);
+    }, [closeModal, handleAction]);
     return (
         <div
             className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">

@@ -1,9 +1,18 @@
-// NextAuth 및 필요한 인증 제공자를 가져옴
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 
-// NextAuth 핸들러 생성
+declare module "next-auth" {
+  interface Session {
+    user: {
+      id: string;
+      name?: string | null;
+      email?: string | null;
+      image?: string | null;
+    };
+  }
+}
+
 const handler = NextAuth({
   providers: [
     CredentialsProvider({
@@ -19,6 +28,22 @@ const handler = NextAuth({
     }),
   ],
   callbacks: {
+    async jwt({ token, user }) {
+      if (user) {
+        token.id = user.id;
+        token.name = user.name;
+      }
+      return token;
+    },
+    async session({ session, token }) {
+      if (token) {
+        session.user = {
+          id: token.id as string,
+          name: token.name as string,
+        };
+      }
+      return session;
+    },
     async redirect({ url, baseUrl }) {
       if (url === "/" || url.includes("/api/auth/signout")) {
         return baseUrl;
@@ -28,10 +53,9 @@ const handler = NextAuth({
   },
   session: {
     strategy: "jwt",
-    maxAge: 60 * 60 * 4,
+    maxAge: 1,
   },
   secret: process.env.NEXTAUTH_SECRET,
 });
 
-// HTTP 메서드에 핸들러 연결
 export { handler as GET, handler as POST };

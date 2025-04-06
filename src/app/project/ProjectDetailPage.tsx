@@ -1,7 +1,7 @@
 // components/ProjectDetailPage.tsx
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import DayPerActivity from "./DayPerActivity";
 import { dayDescription } from "@/data/dayDescription";
 import { projectInfo } from "@/data/projectInfo";
@@ -44,8 +44,6 @@ function ProjectDetailPage() {
 
   const openCancleModal = () => setIsCancleModalOpen(true);
   const closeCancleModal = () => setIsCancleModalOpen(false);
-  const openDeleteFailModal = () => setIsDeleteFailModalOpen(true);
-  const closeDeleteFailModal = () => setIsDeleteFailModalOpen(false);
 
   const handleClickUpdateButton = () => {
     if (isEdit) {
@@ -74,6 +72,7 @@ function ProjectDetailPage() {
       members: prev.members.filter((member) => member.user_id !== deleteMember),
         }));
     setIsEdit(false);
+    console.log(index, projectId);
     // 새로 유저 정보 가져오기
   };
 
@@ -151,7 +150,6 @@ function ProjectDetailPage() {
   return (
     <div className="w-full px-6 lg:px-0">
       <div className="flex w-full flex-col items-center">
-        <button onClick={() => alert(projectId)}>dsd</button>
         <div
           className="group flex cursor-pointer items-center justify-center"
           onClick={handleCopyInviteCode} // 클릭 이벤트 추가
