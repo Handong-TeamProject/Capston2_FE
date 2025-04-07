@@ -1,10 +1,11 @@
 "use client";
 
-import { signIn, signOut, useSession } from "next-auth/react";
+import {signOut, useSession } from "next-auth/react";
 import React, { useState } from "react";
 import ConfirmModal from "../Modal/ConfirmModal";
 import { UserCircleIcon } from '@heroicons/react/24/outline'
 import Link from "next/link";
+import { handleGoogleLogin } from "@/utils/GoogleLogin";
 
 export default function AuthButton() {
   const { data: session } = useSession();
@@ -17,12 +18,6 @@ export default function AuthButton() {
     alert("로그아웃 되었습니다!");
     closeLogoutModal();
     signOut({ callbackUrl: "/" });
-  };
-  // 구글 로그인 버튼 클릭 시 실행
-  const handleGoogleLogin = () => {
-    signIn("google", {
-      callbackUrl: "/auth/callback", // 우리가 만든 커스텀 페이지
-    });
   };
 
   return (

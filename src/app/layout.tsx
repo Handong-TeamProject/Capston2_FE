@@ -6,6 +6,7 @@ import "./globals.css";
 import { SessionProvider } from "next-auth/react";
 import Footer from "@/components/layout/Footer";
 import localFont from "next/font/local";
+import { usePathname } from "next/navigation";
 
 const customFont = localFont({
   src: "../../public/font/KimjungchulGothic-Regular.ttf",
@@ -15,15 +16,17 @@ const customFont = localFont({
 });
 
 export default function Layout({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname();
+  const isLanding = pathname === "/" || pathname === "/landing"; // 원하는 경로 지정
   return (
     <SessionProvider>
       <html lang="ko">
-        <body
+        <body 
           className={`${customFont.className} flex-container bg-gray-500 mx-auto w-full max-w-5xl font-custom`}
         >
-          <Header />
+          <Header/>
           <main className="flex-container bg-secondary">{children}</main>
-          <Footer />
+          {!isLanding && <Footer />}
         </body>
       </html>
     </SessionProvider>

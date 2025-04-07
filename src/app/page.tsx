@@ -1,4 +1,4 @@
-import LandingPage from "@/app/LandingPage";
+import LandingPage from "@/app/LandingPage/LandingPage";
 
 // src/app/page.tsx
 const Home: React.FC = () => {
