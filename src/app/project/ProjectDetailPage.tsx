@@ -281,7 +281,7 @@ function ProjectDetailPage() {
           </div>
         </div>
         <div className="box-border w-full md:w-3/4 md:pl-10">
-          <p className="mb-3 text-lg font-bold">| 컨텐츠</p>
+          <p className="mb-3 text-lg font-bold">| 컨텐츠</p>          
           {dayDescription.map((_, index) => (
             <DayPerActivity
               key={index}

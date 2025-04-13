@@ -1,8 +1,12 @@
 // components/ProfileListPage.tsx
 import React from "react";
 
-const ProfileListPage: React.FC = () => {
-  return <div></div>;
-};
+function ProfileListPage() {
+  return (
+    <div className = "w-full">
+      ProfileListPage
+    </div>
+  )
+}
 
 export default ProfileListPage;

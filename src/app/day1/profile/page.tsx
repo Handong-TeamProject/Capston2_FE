@@ -1,9 +1,8 @@
 // src/app/pages/user-guide.tsx
+import ProfileListPage from "./ProfileListPage";
 
-import UserGuidePage from "@/app/day3/user-guide/UserGuidePage";
-
-const UserGuide: React.FC = () => {
-  return <UserGuidePage />;
+const Profile: React.FC = () => {
+  return <ProfileListPage />;
 };
 
-export default UserGuide;
+export default Profile;

@@ -30,3 +30,4 @@
 .gradiant-yellow-ornage{
   @apply bg-clip-text text-transparent bg-gradient-to-r from-orange to-yellow
 }
+

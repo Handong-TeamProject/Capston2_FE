@@ -81,7 +81,7 @@ function ProjectCard({ data, setProjectList }: { data: ProjectData, setProjectLi
   };
 
   return (
-    <div className="w-100 flex flex-col justify-between rounded-2xl bg-baseGray px-10 py-8">
+    <div className="w-full flex flex-col justify-between rounded-2xl bg-baseGray px-10 py-8">
       <div>
         <div className="flex justify-between">
           <div

@@ -26,7 +26,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         >
           <Header/>
           <main className="flex-container bg-secondary">{children}</main>
-          {!isLanding && <Footer />}
+          {/* {!isLanding && <Footer />} */}
         </body>
       </html>
     </SessionProvider>

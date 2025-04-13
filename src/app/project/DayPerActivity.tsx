@@ -31,7 +31,7 @@ function DayPerActivity({
   const closeModal = () => setModalOpen(false);
 
   return (
-    <div className="mb-6">
+    <div className="mb-6 w-full bg-red ">
       <div className="flex items-start">
         <div
           className={`text-ls mr-2 rounded-md px-3 py-0.5 text-center font-bold text-white ${getDayInfo.day_status >= day ? "bg-orange" : "bg-beige"} `}
@@ -47,7 +47,7 @@ function DayPerActivity({
         {today.activity.map((activity, index) => (
           <div
             key={index}
-            className={`object-hover mr-3 flex h-[150px] w-[250px] flex-shrink-0 flex-col justify-center rounded-lg px-5 py-3 shadow-md hover:scale-105 active:border ${
+            className={`object-hover mr-3 flex box-border h-[150px] w-[250px] flex-shrink-0 flex-col justify-center rounded-lg px-5 py-3 shadow-md hover:scale-105 active:border ${
               getDayInfo.day_status < day ||
               (getDayInfo.day_status === day &&
                 getDayInfo.content_status < activity.step)
