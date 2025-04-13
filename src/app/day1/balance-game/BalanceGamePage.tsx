@@ -1,12 +1,13 @@
-// components/BalanceGamePage.tsx
+// components/ProfileListPage.tsx
+import ActivityDesc from "@/components/common/ActivityDesc";
 import React from "react";
 
-const BalanceGamePage: React.FC = () => {
+function BalanceGamePage() {
   return (
-    <div>
-      <h1>밸런스 게임 페이지</h1>
+    <div className="w-full px-6 lg:px-0">
+      <ActivityDesc day={0} activity={1}/>
     </div>
-  );
-};
+  )
+}
 
 export default BalanceGamePage;

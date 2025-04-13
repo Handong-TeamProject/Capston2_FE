@@ -1,12 +1,13 @@
-// components/FirstImpressionPage.tsx
+// components/ProfileListPage.tsx
+import ActivityDesc from "@/components/common/ActivityDesc";
 import React from "react";
 
-const FirstImpressionPage: React.FC = () => {
+function FirstImpressionPage() {
   return (
-    <div>
-      <h1>첫인상 페이지</h1>
+    <div className="w-full px-6 lg:px-0">
+      <ActivityDesc day={0} activity={2}/>
     </div>
-  );
-};
+  )
+}
 
 export default FirstImpressionPage;

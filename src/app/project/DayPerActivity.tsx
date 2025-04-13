@@ -31,7 +31,7 @@ function DayPerActivity({
   const closeModal = () => setModalOpen(false);
 
   return (
-    <div className="mb-6 w-full bg-red ">
+    <div className="mb-6 w-ful ">
       <div className="flex items-start">
         <div
           className={`text-ls mr-2 rounded-md px-3 py-0.5 text-center font-bold text-white ${getDayInfo.day_status >= day ? "bg-orange" : "bg-beige"} `}
