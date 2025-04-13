@@ -1,6 +1,6 @@
 'use client';
 
-import { handleGoogleLogin, StartButton } from '@/utils/GoogleLogin';
+import { StartButton } from '@/utils/GoogleLogin';
 // src/components/CallToAction.tsx
 import {motion} from 'framer-motion';
 
