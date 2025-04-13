@@ -50,7 +50,7 @@ const handler = NextAuth({
     },
     session: {
         strategy: "jwt",
-        maxAge: 60 * 60 * 24 * 7 // 예시: 7일
+        maxAge: 60 * 60 * 4
     },
     secret: process.env.NEXTAUTH_SECRET
 });

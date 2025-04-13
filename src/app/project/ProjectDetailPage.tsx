@@ -266,6 +266,18 @@ function ProjectDetailPage() {
                 ))}
               </div>
             </div>
+                  {/* { 
+                    projectData.default.day_status === 5 ?
+          <div className="box-border w-full md:w-3/4 md:pl-10">
+            <p className="mb-3 text-lg font-bold">| 약속 정보</p>
+            <div className="flex">
+                  <p>다같이 환호 공원 가자</p>
+                      <p className="ml-5 text-xs text-gray">자세히</p>
+            </div>
+          </div>
+                      : ""
+
+                  } */}
           </div>
         </div>
         <div className="box-border w-full md:w-3/4 md:pl-10">

@@ -101,7 +101,7 @@ const ProjectListPage: React.FC = () => {
       </div>
 
       {/* 메인 콘텐츠 섹션 */}
-      {projectList.length >= 0 ? (
+      {projectList.length > 0 ? (
         <div className="mb-12 mt-4 grid grid-cols-1 gap-10 md:mb-20 md:mt-10 md:grid-cols-2 lg:grid-cols-3">
           {projectList.map((data, index) => (
             <ProjectCard key={index} data={data} setProjectList={setProjectList} />

@@ -40,7 +40,7 @@ const SignupPage: React.FC<SignupPageProps> = ({ name, email }) => {
           <input
             type="text"
             value={name}
-            readOnly
+            // readOnly
             className="border rounded-lg px-2 py-1 bg-gray-100 text-gray-500"
           />
         </div>

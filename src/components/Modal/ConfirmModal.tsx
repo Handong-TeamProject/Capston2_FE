@@ -8,20 +8,22 @@ interface ConfirmModalProps {
 
 function ConfirmModal({message, closeModal, handleAction} : ConfirmModalProps) {
     useEffect(() => {
-        const handleKeyDown = (event : KeyboardEvent) => {
+        const handleKeyDown = (event: KeyboardEvent) => {
             if (event.key === "Enter") {
                 handleAction();
+            } else if (event.key === "Escape" || event.key === "Esc") {
+                closeModal();
             }
         };
 
         window.addEventListener("keydown", handleKeyDown);
-        return() => {
+        return () => {
             window.removeEventListener("keydown", handleKeyDown);
         };
     }, [closeModal, handleAction]);
     return (
         <div
-            className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+            className="fixed inset-0 z-20 flex items-center justify-center bg-black bg-opacity-50">
             <div className="w-72 rounded bg-white p-6 shadow-lg">
                 <h2 className="mb-4 text-base lg:text-lg font-bold">{message}</h2>
                 <div className="flex justify-end">
