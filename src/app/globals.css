@@ -35,3 +35,6 @@ input {
   @apply rounded outline outline-0 outline-orange focus:outline-orange focus:outline-2;
 }
 
+button{
+  @apply object-hover
+}
