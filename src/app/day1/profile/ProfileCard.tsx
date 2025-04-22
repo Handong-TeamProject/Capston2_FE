@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { useState } from "react";
 
 interface ProfileData {
@@ -38,7 +39,8 @@ function ProfileCard({index, profileType, data} : {
     data : ProfileData
 }) {
     
-    const [profilData, setProfileData] = useState(data);
+    // const [profilData, setProfileData] = useState(data);
+    const [profilData] = useState(data);
     const [initData, setInitData] = useState<ProfileData>({
         user_id: 0,
         profile_writing_status: false,
@@ -174,10 +176,13 @@ function ProfileCard({index, profileType, data} : {
         <div
             className="w-full rounded-3xl bg-beige90 h-52 md:h-60 flex items-center px-4 lg:px-8">
             <div className="flex flex-col items-center mr-4 lg:mr-8">
-                <img
+                <Image
                     src={`/Img/member${index + 1}.png`}
                     alt="user image"
-                    className="w-14 lg:w-20" />
+                    className="w-14 lg:w-20"
+                    width={20}
+                    height={20}
+                />
                 {
                     // isEdit ? (
                     //     <Button handler = {() => handleSubmit("write")} buttonText="제출하기"/>

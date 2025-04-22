@@ -24,7 +24,6 @@ function BalanceGamePage() {
     const handleAddQuestion = () => {
         if (window.confirm("문제를 추가하시겠습니까?")) {
             let newQuestion: BalanceQuestion;
-            let newIndex: number;
 
             do {
                 const randomNum = Math.floor(Math.random() * 30) + 1;

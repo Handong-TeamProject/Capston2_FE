@@ -3,14 +3,14 @@
 import ActivityDesc from "@/components/common/ActivityDesc";
 import React, {useState} from "react";
 import {profileDesc} from "@/data/day1/profileDesc";
-import {profileQuizAnswer} from "@/data/day1/profileQuizAnswer";
 import ProfileCard from "./ProfileCard";
 import EmptyProfile from "./EmptyProfile";
 
 function ProfileListPage() {
-    const user_id = 1;
-    const [ownerProfile, setOwnerProfile] = useState(profileDesc.owner);
-    const [memberProfiles, setMemberProfiles] = useState(profileDesc.members);
+    // const [ownerProfile, setOwnerProfile] = useState(profileDesc.owner);
+    // const [memberProfiles, setMemberProfiles] = useState(profileDesc.members);
+    const [ownerProfile] = useState(profileDesc.owner);
+    const [memberProfiles] = useState(profileDesc.members);
 
     return (
         <div className="w-full px-6 lg:px-0">
