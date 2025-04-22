@@ -22,7 +22,7 @@ const config: Config = {
         orange: "#FEA104",
         orange50: "#FEA10450",
         yellow: "#FFC941",
-        yellow50: "#FFC941",
+        yellow50: "#FFC94150",
         beige: "#FFE6B5",
         beige50: "#FFE6B5",
         beige90: "#FFFBF0",
