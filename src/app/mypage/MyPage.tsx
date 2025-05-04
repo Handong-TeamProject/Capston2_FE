@@ -52,7 +52,7 @@ const MyPage: React.FC = () => {
   return (
     <div className="w-full px-6 lg:px-0 flex-col flex">
       <div className="mt-16 flex w-full flex-col">
-        <Introduce title="나의 정보" desc="마이페이지에서는 나의 이름과 성별 정보를 수정할 수 있습니다." />
+        <Introduce title="나의 정보" desc="마이페이지에서는 나의 이름과 성별 정보를 수정할 수 있습니다." project_id={1000}/>
       </div>
       <div className="mt-10">
         <Image

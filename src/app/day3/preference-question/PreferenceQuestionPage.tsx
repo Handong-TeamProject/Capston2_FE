@@ -135,7 +135,8 @@ const PreferenceQuestionPage: React.FC = () => {
         }
     };
     
-    const [preferenceAnswers, setPreferenceAnswers] = useState(preferenceAnswerGetData);
+    // const [preferenceAnswers, setPreferenceAnswers] = useState(preferenceAnswerGetData);
+    const [preferenceAnswers] = useState(preferenceAnswerGetData);
     
     const handleGetResult = (index: number) => {
       toggleResult(index);

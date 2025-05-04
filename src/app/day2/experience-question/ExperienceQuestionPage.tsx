@@ -131,7 +131,8 @@ const ExperienceQuestionPage: React.FC = () => {
         }
     };
     
-    const [experienceAnswers, setExperienceAnswers] = useState(experienceAnswerGetData);
+    // const [experienceAnswers, setExperienceAnswers] = useState(experienceAnswerGetData);
+    const [experienceAnswers] = useState(experienceAnswerGetData);
     
     const handleGetResult = (index: number) => {
       toggleResult(index);
