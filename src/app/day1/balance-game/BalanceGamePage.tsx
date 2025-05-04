@@ -71,7 +71,7 @@ function BalanceGamePage() {
 
     return (
         <div className="w-full px-6 lg:px-0">
-            <ActivityDesc day={0} activity={1}/>
+            <ActivityDesc day={0} activity={1} project_id={1}/>
             <div className="flex flex-wrap -mx-2">
                 <div className="flex justify-end w-full">
                     <button

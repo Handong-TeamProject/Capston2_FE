@@ -15,7 +15,7 @@ function ProfileListPage() {
     return (
         <div className="w-full px-6 lg:px-0">
             <div>
-                <ActivityDesc day={0} activity={2}/>
+                <ActivityDesc day={0} activity={2} project_id={1}/>
             </div>
             <div className="flex flex-wrap -mx-2">
                 <div className="w-full md:w-1/2 px-3 mb-6">

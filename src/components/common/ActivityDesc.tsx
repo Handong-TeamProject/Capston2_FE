@@ -1,7 +1,7 @@
 import {dayDescription} from "@/data/dayDescription";
 import Introduce from "../layout/Introduce";
 
-function ActivityDesc({day, activity} : {day:number, activity:number}) {
+function ActivityDesc({day, activity, project_id} : {day:number, activity:number, project_id:number}) {
     return (
         <div className="mt-16 mb-6 lg:mb-16  flex w-full flex-col justify-between md:flex-row">
             <Introduce
@@ -10,7 +10,10 @@ function ActivityDesc({day, activity} : {day:number, activity:number}) {
                     .title}
                 desc={dayDescription[day]
                     .activity[activity]
-                    .desc}/>
+                    .desc}
+                project_id={project_id}
+            />
+                    
         </div>
     )
 }

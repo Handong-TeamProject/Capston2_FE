@@ -82,6 +82,7 @@ const ProjectListPage: React.FC = () => {
         <Introduce
           title="내가 속한 Rapos"
           desc="새로운 Rapo 프로젝트를 생성, 참여할 수 있으며, \\자신이 속한 Rapo 프로젝트의 리스트를 볼 수 있습니다."
+          project_id={1000}
         />
         <div className="my-3 mb-6 flex md:my-0">
           <button

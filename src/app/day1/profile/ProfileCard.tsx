@@ -180,8 +180,8 @@ function ProfileCard({index, profileType, data} : {
                     src={`/Img/member${index + 1}.png`}
                     alt="user image"
                     className="w-14 lg:w-20"
-                    width={20}
-                    height={20}
+                    width={48}
+                    height={48}
                 />
                 {
                     // isEdit ? (
