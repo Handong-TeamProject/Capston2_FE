@@ -10,18 +10,21 @@ export const dayDescription = [
         title: "우리 자기소개 해볼까?",
         desc: "각자의 프로필을 작성하고, 팀원들과 공유하면서 간단한 퀴즈를 통해 서로에 대해 가볍게 알아가자!",
         href: "/day1/profile",
+        aka : "프로필 작성"
       },
       {
         step: 2,
         title: "우린 얼마나 비슷할까?",
         desc: "다양한 질문의 밸런스 게임을 통해 서로의 성향을 비교하고, 얼마나 비슷한지 알아보자!",
         href: "/day1/balance-game",
+        aka : "밸런스 게임"
       },
       {
         step: 3,
         title: "우리의 모습은 어떨까?",
         desc: "서로의 첫인상을 공유하며, 각자의 생각을 통해 우리가 어떤 모습일지 알아보자!",
         href: "/day1/first-impression",
+        aka : "첫인상 작성"
       },
     ],
   },
@@ -37,12 +40,14 @@ export const dayDescription = [
         title: "나는 말이야 이랬었다?",
         desc: "다양한 질문을 통해서 본인의 경험 속에 담긴 이야기들을 나눠보자!",
         href: "/day2/experience-question",
+        aka : "경험 질문"
       },
       {
         step: 2,
         title: "지금 무슨 상황인거야?",
         desc: "주어진 특별한 상황에서 하나의 선택을 내리고, 다른 사람들의 선택과 비교하며 이야기를 나눠보자!",
         href: "/day2/situation-question",
+        aka : "상황 질문"
       },
     ],
   },
@@ -57,12 +62,14 @@ export const dayDescription = [
         title: "우린 어떤 취향일까?",
         desc: "다양한 취향 질문을 통해 서로의 공통점과 차이를 알아보고, 얼마나 비슷한지 확인해 보자!",
         href: "/day3/preference-question",
+        aka : "취향 질문"
       },
       {
         step: 2,
         title: "나 사용법",
         desc: "공통 질문을 통해 '나'라는 사람에 대한 사용법을 작성하고, 서로를 더 깊이 이해하는 시간을 가져보자!",
         href: "/day3/user-guide",
+        aka : "나 사용법"
       },
     ],
   },
@@ -77,6 +84,7 @@ export const dayDescription = [
         title: "우리 지금 만나, 아 당장 만나",
         desc: "함께 하고 싶은 활동을 이야기해보고, 새로운 추억을 쌓아주는 약속을 같이 정해보자!",
         href: "/day4/promise-creation",
+        aka : "약속 정하기"
       },
     ],
   },
@@ -91,12 +99,14 @@ export const dayDescription = [
         title: "우리의 모습은 어땠을까?",
         desc: "현인상과 첫인상을 비교하며 지난 5일 동안의 경험과 변화를 되돌아보자.",
         href: "/day5/current-impression",
+        aka : "현인상 작성"
       },
       {
         step: 2,
         title: "지난 5일 돌아보자",
         desc: "1일차부터 5일차까지 진행된 Rapo의 다양한 컨텐츠를 돌아보며 마무리 및 회고 해보자!",
         href: "/day5/survey",
+        aka : "마무리 회고"
       },
     ],
   },

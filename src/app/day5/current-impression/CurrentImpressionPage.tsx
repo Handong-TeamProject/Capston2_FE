@@ -122,7 +122,7 @@ function FirstImpressionPage() {
 
   return (
     <div className="w-full px-6 lg:px-0">
-      <ActivityDesc day={0} activity={2} project_id={1} />
+      <ActivityDesc day={4} activity={0} project_id={1} />
         {
         isWrite ? (
           <div className="w-full">
