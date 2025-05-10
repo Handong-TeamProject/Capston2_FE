@@ -1,4 +1,3 @@
-// components/ProfileListPage.tsx
 'use client';
 
 import ActivityDesc from "@/components/common/ActivityDesc";
@@ -6,8 +5,11 @@ import React, { useState } from "react";
 import { firstImpressionGetData } from '@/data/day1/firstImpressionGetData';
 import { impressionQuestionList } from '@/data/common/impressionQuestionList';
 import Image from "next/image";
-import { body } from "framer-motion/client";
 
+interface QuestionWithAnswerList {
+  question_id: number;
+  answer_list?: { user_id: number; answer: number }[];
+}
 interface PostImpressionData {
   project_id: number;
   user_id: number;
@@ -73,7 +75,9 @@ function FirstImpressionPage() {
     }
   }
 
-  const [impressionData, setImpressionData] = useState(firstImpressionGetData.question_list);
+  // const [impressionData, setImpressionData] = useState(firstImpressionGetData.question_list);
+
+  const [impressionData, setImpressionData] = useState<QuestionWithAnswerList[]>(firstImpressionGetData.question_list);
 
   const calculateVotes = (
     answerList: { user_id: number; answer: number }[],
@@ -95,7 +99,7 @@ function FirstImpressionPage() {
     return voteCounts;
   };
   
-  const questionPerData = calculateVotes(impressionData[currentQuestionIndex].answer_list, userList.map(user => user.user_id));
+  const questionPerData = calculateVotes(impressionData[currentQuestionIndex]?.answer_list  || [], userList.map(user => user.user_id));
 
   const indexColor = (index: number) => {
     switch (index) {
@@ -140,8 +144,8 @@ function FirstImpressionPage() {
                               <div key={index2} className="flex flex-col mx-2 h-full justify-end">
                                 <div
                                   className={`${indexColor(index2)} flex items-end justify-center text-white rounded-t-lg`}
-                                  style={{ height: `${calculateVotes(impressionData[index].answer_list, userList.map(user => user.user_id))[index2].votes * 30 + 30}px` }}
-                                >{calculateVotes(impressionData[index].answer_list, userList.map(user => user.user_id))[index2].votes}</div>
+                                  style={{ height: `${calculateVotes(impressionData[index].answer_list || [], userList.map(user => user.user_id))[index2].votes * 30 + 30}px` }}
+                                >{calculateVotes(impressionData[index].answer_list || [], userList.map(user => user.user_id))[index2].votes}</div>
                                 <p>{data.name}</p>
                               </div>
                             ))
