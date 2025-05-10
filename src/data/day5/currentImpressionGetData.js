@@ -34,7 +34,7 @@
 // }
 
 export const currentImpressionGetData = {
-    "is_done": true,
+    "is_done": false,
     "user_list": [
         {
             "user_id": 1,
