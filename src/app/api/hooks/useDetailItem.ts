@@ -15,9 +15,7 @@ export const fetchItemDetail = async (itemId : string | number): Promise<ItemDet
     try {
         const response = await api.get<ItemDetail>('/api/item', {
             headers: {
-                Authorization: 'Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhY2Nlc3NUb2tlbiIsImlkIj' +
-                        'o0LCJleHAiOjE3NDY1NDM4NTd9.7sjz1R1ViM6BU92P1KIoydxFfgpo7JLYjM0wYQu78eeZwV0eHPY' +
-                        'EcTD6Zs35BBZfJ5vRAymFLoc7Vwvwfy3HgA'
+                Authorization: 'Bearer/u0020eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhY2Nlc3NUb2tlbiIsImlkIjo0LCJleHAiOjE3NDY2MjA0MTd9.wM9AW5dFU2m2S4jld2MwxI5nijuzkL1mZCwuj6fJJx4HNTPv49xh2cC1ZzOtYKcFPIdtc5gmHJ0U-WvH8JawvQ'
             },
             params: {
                 id: itemId

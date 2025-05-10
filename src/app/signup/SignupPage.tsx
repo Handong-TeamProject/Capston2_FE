@@ -3,33 +3,54 @@
 import React, { useState } from 'react';
 import ConfirmModal from '@/components/Modal/ConfirmModal';
 import { useRouter } from 'next/navigation';
+import axios from 'axios';
 
 interface SignupPageProps {
   name: string;
   email: string;
+  password: string;
 }
 
-const SignupPage: React.FC<SignupPageProps> = ({ name, email }) => {
-  const [gender, setGender] = useState<string | null>(null);
+
+const SignupPage: React.FC<SignupPageProps> = ({ name, email, password }) => {
+  const [formData, setFormData] = useState({
+    name,
+    email,
+    password,
+    gender: null as string | null,
+  });
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModified, setIsModified] = useState(false);
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
 
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    setIsModified(true);
+  };
+
   const handleGenderSelection = (selectedGender: string) => {
-    setGender(selectedGender);
-    setIsModified(true); // 성별 선택 시 isModified를 true로 설정
+    setFormData((prev) => ({ ...prev, gender: selectedGender }));
+    setIsModified(true);
   };
 
   const router = useRouter();
 
-  const handleSignup = () => {
-    //  회원가입 api 로직 추가하기
+  const handleSignup = async () => {
+    // 회원가입 api 로직 추가하기
+    const response = await axios.post('http://localhost:8080/api/user/signup', {
+      username: formData.name,
+      password: formData.password,
+      email: formData.email,
+    });
+    console.log(response);
     alert('회원가입이 완료되었습니다.');
     closeModal();
-    router.push("/workspace")
+    // router.push("/workspace");
   };
+
 
   return (
     <div className="w-full first-letter:lg:w-2/5 px-6 lg:px-0 flex-col flex items-center">
@@ -39,8 +60,19 @@ const SignupPage: React.FC<SignupPageProps> = ({ name, email }) => {
           <label className="mr-3 w-20">이름</label>
           <input
             type="text"
-            value={name}
-            // readOnly
+            name="name"
+            value={formData.name}
+            onChange={handleChange}
+            className="border rounded-lg px-2 py-1 bg-gray-100 text-gray-500"
+          />
+        </div>
+        <div className="flex items-center mb-4">
+          <label className="mr-3 w-20">비밀번호</label>
+          <input
+            type="text"
+            name="password"
+            value={formData.password}
+            onChange={handleChange}
             className="border rounded-lg px-2 py-1 bg-gray-100 text-gray-500"
           />
         </div>
@@ -48,8 +80,10 @@ const SignupPage: React.FC<SignupPageProps> = ({ name, email }) => {
           <label className="mr-3 w-20">이메일</label>
           <input
             type="email"
-            value={email}
-            readOnly
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+            // readOnly
             className="border rounded-lg px-2 py-1 bg-gray-100 text-gray-500"
           />
         </div>
@@ -58,7 +92,7 @@ const SignupPage: React.FC<SignupPageProps> = ({ name, email }) => {
           <button
             onClick={() => handleGenderSelection('남자')}
             className={`${
-              gender === "남자"
+              formData.gender === "남자"
                 ? "bg-blue50 border-blue"
                 : "bg-lightGray border-gray"
             } border-2 rounded-lg lg:w-24 lg:h-10 w-20 h-8 mr-2 lg:mr-3`}
@@ -68,7 +102,7 @@ const SignupPage: React.FC<SignupPageProps> = ({ name, email }) => {
           <button
             onClick={() => handleGenderSelection('여자')}
             className={`${
-              gender === "여자"
+              formData.gender === "여자"
                 ? "bg-red50 border-red"
                 : "bg-lightGray border-gray"
             } border-2 rounded-lg lg:w-24 lg:h-10 w-20 h-8`}
@@ -81,7 +115,7 @@ const SignupPage: React.FC<SignupPageProps> = ({ name, email }) => {
           className={`${
             isModified ? "bg-orange hover:bg-orange50" : "bg-gray"
           } text-base h-10 mb-20 px-3 py-1 rounded-lg text-white`}
-          disabled={!gender}
+          disabled={!formData.gender}
         >
           회원가입
         </button>
