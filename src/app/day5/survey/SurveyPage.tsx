@@ -4,7 +4,7 @@ import ActivityDesc from "@/components/common/ActivityDesc";
 import { dayDescription } from "@/data/dayDescription";
 import { surveryGetData } from "@/data/day5/surveryGetData";
 // components/SurveyPage.tsx
-import React, { act, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 function SurveyPage() {
     const userList = surveryGetData?.user_list;
