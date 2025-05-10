@@ -36,7 +36,7 @@ function FirstImpressionPage() {
   const userList = currentImpressionGetData.user_list;
 
   const handleChangeQuestion = (value : number) => {
-    let currentQuestionIndexBefore = currentQuestionIndex;
+    const currentQuestionIndexBefore = currentQuestionIndex;
     setCurrentQuestionIndex(currentQuestionIndexBefore + value);
     // console.log(currentQuestionIndex);
   }
@@ -79,7 +79,8 @@ function FirstImpressionPage() {
 
   // const [impressionData, setImpressionData] = useState(currentImpressionGetData.question_list);
 
-  const [impressionData, setImpressionData] = useState<QuestionWithAnswerList[]>(currentImpressionGetData.question_list);
+  // const [impressionData, setImpressionData] = useState<QuestionWithAnswerList[]>(currentImpressionGetData.question_list);
+  const [impressionData] = useState<QuestionWithAnswerList[]>(currentImpressionGetData.question_list);
 
   const calculateVotes = (
     answerList: { user_id: number; answer: number }[],
