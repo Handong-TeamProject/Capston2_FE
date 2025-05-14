@@ -105,7 +105,7 @@ const KakaoMap = ({ searchKeyword, onSelectPlace }) => {
               key={index}
               className="flex flex-col w-full p-2 border-b border-gray-300 "
             >
-              <div className="my-1 flex items-center">{place?.category_group_name && <p className='text-xs sm:text-sm text-white px-2  bg-orange rounded mr-2'>{place.category_group_name}</p>}{place.place_name} <a href={place.place_url} className='ml-1'><Image className = "rounded-sm w-5 h-5" src = "/Img/kakaomap.png" alt = "kakao image" width={24} height={24}/></a></div>
+              <div className="my-1 flex items-center">{place?.category_group_name && <p className='text-xs sm:text-sm text-white px-2  bg-orange rounded mr-2'>{place.category_group_name}</p>}{place.place_name} <a href={place.place_url} className='ml-1' target='_blank'><Image className = "rounded-sm w-5 h-5" src = "/Img/kakaomap.png" alt = "kakao image" width={24} height={24}/></a></div>
               <div className='flex justify-between items-center'>
                 <div>
                   <div className="my-1 text-sm sm:text-base ">📍 {place.address_name}</div>

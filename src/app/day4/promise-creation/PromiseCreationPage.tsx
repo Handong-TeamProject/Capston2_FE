@@ -217,7 +217,7 @@ function PromiseCreationPage() {
                   <div className="w-full text-base sm:text-lg mb-4">
                     <p className="font-bold mb-2">활동 목록</p>
                     {/* <div className="h-[200px] overflow-scroll sm:h-auto sm:overflow-auto"> */}
-                    <div>
+                    <div className="h-[240px] overflow-scroll">
                       {
                         (step === 1 && !isWrite) ?
                         promiseActivityList[selectCategory].activities.map((activity, index) => (
