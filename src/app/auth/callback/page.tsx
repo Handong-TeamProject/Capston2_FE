@@ -29,7 +29,6 @@ const AuthCallbackPage = () => {
                 }
 
                 // 로그인 API 호출
-                // axios 대신 api 사용
                 const response = await api.post<{ refreshToken?: string }>(
                     "/user/login/google",
                     { accessToken }
