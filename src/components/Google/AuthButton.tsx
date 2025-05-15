@@ -17,6 +17,8 @@ export default function AuthButton() {
   const handleLogout = () => {
     alert("로그아웃 되었습니다!");
     closeLogoutModal();
+    sessionStorage.removeItem("refreshToken");
+    sessionStorage.removeItem("accessToken");
     signOut({ callbackUrl: "/" });
   };
 

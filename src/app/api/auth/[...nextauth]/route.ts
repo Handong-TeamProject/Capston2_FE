@@ -4,12 +4,20 @@ import GoogleProvider from "next-auth/providers/google";
 
 declare module "next-auth" {
     interface Session {
+        accessToken?: string; // ✅ accessToken 추가
         user: {
             id: string;
             name?: string | null;
             email?: string | null;
             image?: string | null;
         };
+    }
+    
+    interface JWT {
+        accessToken?: string; // ✅ JWT에도 추가 (옵션)
+        id?: string;
+        name?: string;
+        email?: string;
     }
 }
 
@@ -28,7 +36,11 @@ const handler = NextAuth({
         })
     ],
     callbacks: {
-        async jwt({token, user}) {
+        async jwt({ token, user, account }) {
+            if (account) {
+                token.accessToken = account.access_token as string; // ✅ 추가: accessToken 저장
+                // console.log("🟡 account 값 출력:", account); // ✅ 콘솔에 출력
+            }
             if (user) {
                 token.id = user.id;
                 token.name = user.name;
@@ -41,8 +53,9 @@ const handler = NextAuth({
                 session.user = {
                     id: token.id as string,
                     name: token.name as string,
-                    email: token.email as string
+                    email: token.email as string,
                 };
+                session.accessToken = token.accessToken as string; // ✅ 추가: accessToken 세션에 포함
             }
             return session;
         }
