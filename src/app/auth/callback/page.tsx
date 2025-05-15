@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { getSession } from "next-auth/react";
-import api from "@/app/api/api"; 
+import { api } from "@/app/api/api"; 
 import { accessTokenUser } from "@/app/api/hooks/token";
 
 const AuthCallbackPage = () => {

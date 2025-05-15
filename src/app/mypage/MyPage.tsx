@@ -4,6 +4,7 @@ import Introduce from "@/components/layout/Introduce";
 import ConfirmModal from "@/components/Modal/ConfirmModal";
 import Image from "next/image";
 import React, { useState, useEffect } from "react";
+import {getAccessApi} from "@/app/api/api";
 
 const MyPage: React.FC = () => {
   const initMyInfo = {
@@ -48,6 +49,24 @@ const MyPage: React.FC = () => {
       editInfo.name !== myInfo.name || editInfo.gender !== myInfo.gender
     );
   }, [editInfo, myInfo]);
+
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      try {
+        const api_access = getAccessApi(); // 클라이언트 전용 인스턴스
+        const response = await api_access.get("/user", { params: { id: 16 } });
+        console.log("User info:", response.data);
+        // if (response && response.data) {
+        //   // setMyInfo(response.data);
+        //   // setEditInfo(response.data);
+        // }
+      } catch (error) {
+        console.error("Failed to fetch user info:", error);
+      }
+    };
+
+    fetchUserInfo();
+  }, []);
 
   return (
     <div className="w-full px-6 lg:px-0 flex-col flex">
