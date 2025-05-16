@@ -5,17 +5,24 @@ import ConfirmModal from "@/components/Modal/ConfirmModal";
 import Image from "next/image";
 import React, { useState, useEffect } from "react";
 import {getAccessApi} from "@/app/api/api";
+import { fetchUserInfo, putUserInfo } from "../api/hooks/user";
 
 const MyPage: React.FC = () => {
+  interface MyInfo {
+    name: string;
+    gender: string;
+    email: string;
+    password?: string;
+  }
   const initMyInfo = {
-    name: "정은다",
-    gender: "여자",
-    email: "test@gmail.com"
+    name: "",
+    gender: "",
+    email: ""
   };
 
-  const [myInfo, setMyInfo] = useState(initMyInfo);
+  const [myInfo, setMyInfo] = useState<MyInfo>(initMyInfo);
   const [isEditing, setIsEditing] = useState(false);
-  const [editInfo, setEditInfo] = useState(initMyInfo);
+  const [editInfo, setEditInfo] = useState<MyInfo>(initMyInfo);
   const [isUpdateModalOpen, setIsSelectedModalOpen] = useState(false);
   const [isModified, setIsModified] = useState(false);
 
@@ -28,6 +35,7 @@ const MyPage: React.FC = () => {
   };
 
   const handleSave = () => {
+    putUserInfo(editInfo);
     alert("정보가 수정되었습니다.");
     closeUpdateModal();
     setMyInfo(editInfo);
@@ -43,30 +51,17 @@ const MyPage: React.FC = () => {
     setEditInfo({ ...editInfo, gender });
   };
 
+
   useEffect(() => {
+    fetchUserInfo(setMyInfo, setEditInfo);
+  }, []);
+
+    useEffect(() => {
     // Check if the edited info is different from the original info
     setIsModified(
       editInfo.name !== myInfo.name || editInfo.gender !== myInfo.gender
     );
   }, [editInfo, myInfo]);
-
-  useEffect(() => {
-    const fetchUserInfo = async () => {
-      try {
-        const api_access = getAccessApi(); // 클라이언트 전용 인스턴스
-        const response = await api_access.get("/user", { params: { id: 16 } });
-        console.log("User info:", response.data);
-        // if (response && response.data) {
-        //   // setMyInfo(response.data);
-        //   // setEditInfo(response.data);
-        // }
-      } catch (error) {
-        console.error("Failed to fetch user info:", error);
-      }
-    };
-
-    fetchUserInfo();
-  }, []);
 
   return (
     <div className="w-full px-6 lg:px-0 flex-col flex">

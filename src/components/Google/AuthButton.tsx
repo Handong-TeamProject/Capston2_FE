@@ -1,33 +1,58 @@
 "use client";
 
-import {signOut, useSession } from "next-auth/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ConfirmModal from "../Modal/ConfirmModal";
-import { UserCircleIcon } from '@heroicons/react/24/outline'
+import { UserCircleIcon } from '@heroicons/react/24/outline';
 import Link from "next/link";
-import { handleGoogleLogin } from "@/utils/GoogleLogin";
+import GoogleLoginButton from "@/components/Google/GoogleLoginButton";
 
 export default function AuthButton() {
-  const { data: session } = useSession();
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [username, setUsername] = useState<string | null>(null);
+
+  const updateLoginState = () => {
+    const token = sessionStorage.getItem("accessToken");
+    const name = sessionStorage.getItem("username");
+    setIsLoggedIn(!!token);
+    if (name) setUsername(name);
+  };
+
+  useEffect(() => {
+    updateLoginState();
+
+    // ✅ 로그인 완료 이벤트 리스너 등록
+    const handleLogin = () => {
+      updateLoginState();
+    };
+
+    window.addEventListener("loginSuccess", handleLogin);
+
+    return () => {
+      window.removeEventListener("loginSuccess", handleLogin);
+    };
+  }, []);
 
   const openLogoutModal = () => setIsLogoutModalOpen(true);
   const closeLogoutModal = () => setIsLogoutModalOpen(false);
 
   const handleLogout = () => {
     alert("로그아웃 되었습니다!");
-    closeLogoutModal();
     sessionStorage.removeItem("refreshToken");
     sessionStorage.removeItem("accessToken");
-    signOut({ callbackUrl: "/" });
+    sessionStorage.removeItem("username");
+    setIsLoggedIn(false);
+    setUsername(null);
+    closeLogoutModal();
+    window.location.href = "/";
   };
 
   return (
     <>
-      {session ? (
+      {isLoggedIn ? (
         <div className="flex flex-row items-center font-bold">
           <p className="mr-1 hidden md:block">
-            반갑습니다, {session.user?.name}님 |{" "}
+            반갑습니다, {username ?? "사용자"}님 |{" "}
           </p>
           <p
             onClick={openLogoutModal}
@@ -35,18 +60,14 @@ export default function AuthButton() {
           >
             로그아웃
           </p>
-          <Link href = "/mypage"><UserCircleIcon className="w-6 h-6 text-boldGray ml-1 hover:text-orange object-hover" /></Link>
+          <Link href="/mypage">
+            <UserCircleIcon className="w-6 h-6 text-boldGray ml-1 hover:text-orange object-hover" />
+          </Link>
         </div>
       ) : (
-        <button
-          onClick={() => handleGoogleLogin()}
-          className="object-hover h-8 w-20 rounded bg-orange text-base text-white hover:bg-orange50"
-        >
-          시작하기
-        </button>
+        <GoogleLoginButton />
       )}
 
-      {/* 로그아웃 확인 모달 */}
       {isLogoutModalOpen && (
         <ConfirmModal
           message="로그아웃 하시겠습니까?"

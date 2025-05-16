@@ -1,27 +1,32 @@
-import { api } from "@/app/api/api";
+// libs/hooks/token.ts
+import axios from "axios";
 
-export async function accessTokenUser() {
+export async function accessTokenUser(): Promise<string | null> {
     try {
-        const response = await api.post("/auth", null, {
+        const refreshToken = sessionStorage.getItem("refreshToken") || "";
+
+        // 👇 인터셉터 없는 axios 직접 사용
+        const response = await axios.post("http://localhost:8080/api/auth", null, {
             headers: {
-                "RefreshToken": sessionStorage.getItem("refreshToken") || ""
-            }
+                "RefreshToken": refreshToken
+            },
+            withCredentials: true
         });
-        
-        const accessToken = response.headers.get("authorization");
+
+        // 👇 응답 헤더에서 accessToken 추출 (key는 소문자!)
+        const accessToken = response.headers["authorization"];
 
         if (!accessToken) {
-            alert("로그인 실패!");
-        } else {
-            sessionStorage.setItem("accessToken", accessToken);
-            return true;
+            alert("로그인 실패: accessToken 없음");
+            return null;
         }
 
-    } catch (error : any) {
-        alert("error!!");
-        alert(JSON.stringify(
-            error.response
-                ?.data || error
-        ));
+        sessionStorage.setItem("accessToken", accessToken);
+        return accessToken;
+
+    } catch (error: any) {
+        alert("accessToken 재발급 중 오류 발생");
+        window.location.href = "/";
+        return null;
     }
 }

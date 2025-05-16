@@ -1,6 +1,6 @@
 "use client"
 
-import { StartButton } from '@/utils/GoogleLogin';
+import GoogleLoginButton from '@/components/Google/GoogleLoginButton';
 import {motion} from 'framer-motion';
 
 export default function Hero() {
@@ -29,7 +29,7 @@ export default function Hero() {
                     <span
                         className="bg-clip-text text-transparent bg-gradient-to-r from-orange to-yellow">빠르게 라포 형성과 관계 발전을 도와주는 서비스</span>
                 </p>    
-                <StartButton/>
+                <GoogleLoginButton/>
             </motion.div>
         </header>
     );
