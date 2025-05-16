@@ -1,14 +1,16 @@
 "use client";
 
 // components/ProjectListPage.tsx
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Introduce from "../../components/layout/Introduce";
 
 import ConfirmModal from "../../components/Modal/ConfirmModal";
 import ProjectCard from "./ProjectCard";
-import { projectData } from "@/data/projectData";
+// import { projectData } from "@/data/projectData";
 import { InputField, InputSpan, TextareaField } from "@/components/common/InputSpan";
 import Image from "next/image";
+import { getAccessApi } from "../api/api";
+import { getProjectList, joinProject } from "../api/hooks/workspace";
 
 const ProjectListPage: React.FC = () => {
   const [isJoinModalOpen, setIsJoinModalOpen] = useState(false);
@@ -26,7 +28,7 @@ const ProjectListPage: React.FC = () => {
     desc: string;
     day_status: string;
   }
-  const [projectList, setProjectList] = useState<ProjectInfo[]>(projectData);
+  const [projectList, setProjectList] = useState<ProjectInfo[]>([]);
 
   const openJoinModal = () => setIsJoinModalOpen(true);
   const closeJoinModal = () => setIsJoinModalOpen(false);
@@ -51,29 +53,53 @@ const ProjectListPage: React.FC = () => {
     setProjectDesc("");
   };
 
-  const handleCreateProject = () => {
+  const handleCreateProject = async () => {
+
+    const postProject = async () => {
+      try {
+        const api_access = getAccessApi(); // 클라이언트 전용 인스턴스
+        const response = await api_access.post("/item", {
+          title: projectName,
+          content: projectDesc,
+        });
+        console.log("Project created:", response.data);
+        if (response.status === 200) {
+        } else {
+          alert("프로젝트 생성에 실패했습니다.");
+        }
+      } catch (error) {
+        console.error("Failed to create project:", error);
+        alert("프로젝트 생성에 실패했습니다.");
+      }
+    };
+
+    await postProject();;
+    
+    // 모달 닫기 및 상태 초기화
     closeConfirmCreateModal();
     closeCreateModal();
     setProjectName("");
     setProjectDesc("");
-    alert("프로젝트가 생성되었습니다!");
-
+    
     // 추가 로직: 새로운 프로젝트를 프로젝트 리스트에 추가
-    const newProject = {
-      id: projectList.length + 1,
-      title: projectName,
-      desc: projectDesc,
-      day_status: "0",
-    };
-    setProjectList([...projectList, newProject]);
+    getProjectList(setProjectList);
   };
 
   const handleJoinProject = () => {
+
+    joinProject(projectCode);   
+    
     closeConfirmJoinModal();
     closeJoinModal();
     setProjectCode("");
     alert("프로젝트에 참여하였습니다!");
+
+    getProjectList(setProjectList);
   };
+
+  useEffect(() => {
+    getProjectList(setProjectList);
+    }, []);
 
   return (
     <div className="w-full px-6 lg:px-0">

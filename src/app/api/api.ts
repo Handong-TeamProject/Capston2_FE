@@ -21,7 +21,7 @@ export const getAccessApi = () => {
         headers: {
             'Content-Type': 'application/json',
             ...(token && {
-                Authorization: `Bearer ${token}`
+                Authorization: `${token}`
             }) // ✅ 토큰 있을 때만 추가
         },
         withCredentials: true
