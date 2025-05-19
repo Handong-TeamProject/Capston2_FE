@@ -24,6 +24,7 @@ function attachInterceptors(instance: ReturnType<typeof axios.create>) {
                     };
                     return axios(originalRequest); // 요청 재시도
                 } else {
+                    window.dispatchEvent(new Event("logout")); // ✅ 이벤트 전파
                     window.location.href = "/"; // 재발급 실패 시 로그인 이동
                 }
             }
@@ -31,6 +32,7 @@ function attachInterceptors(instance: ReturnType<typeof axios.create>) {
             // ✅ 403: 권한 없음 → 사용자에게 알림 또는 메인으로 이동
             if (status === 403) {
                 alert("접근 권한이 없습니다.");
+                window.dispatchEvent(new Event("logout"));
                 window.location.href = "/";
             }
 
