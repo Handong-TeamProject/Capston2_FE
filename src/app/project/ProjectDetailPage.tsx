@@ -12,23 +12,21 @@ import Image from "next/image";
 import { getProjectInfo } from "@/app/api/hooks/project";
 
 export interface ProjectMember {
-  user_id: number;
   name: string;
+  id: number;
 }
 
-export interface ProjectDefault {
+export interface ProjectInfo {
   title: string;
   desc: string;
   code: string;
   day_status: number;
   content_status: number;
   owner: number;
+  users : ProjectMember[];
 }
 
-export interface ProjectInfo {
-  default: ProjectDefault;
-  members: ProjectMember[];
-}
+
 
 function ProjectDetailPage() {
   interface DayInfo {
@@ -36,12 +34,6 @@ function ProjectDetailPage() {
     content_status: number;
   }
   
-
-  interface ProjectMember {
-    user_id: number;
-    name: string;
-  }
-
 
 
   const params = useParams<{ projectId: string }>();
@@ -59,8 +51,8 @@ function ProjectDetailPage() {
   const [projectData, setProjectInfo] = useState<ProjectInfo>({} as ProjectInfo);
 
   const getDayInfo: DayInfo = {
-    day_status: projectData?.default?.day_status,
-    content_status: projectData?.default?.content_status,
+    day_status: projectData?.day_status,
+    content_status: projectData?.content_status,
   };
 
   const openUpdateModal = () => setIsSelectedModalOpen(true);
@@ -96,7 +88,7 @@ function ProjectDetailPage() {
     // 삭제 로직
         setProjectInfo((prev) => ({
       ...prev,
-      members: prev.members.filter((member) => member.user_id !== deleteMember),
+      members: prev.users.filter((user) => user.id !== deleteMember),
         }));
     setIsEdit(false);
     console.log(index, projectId);
@@ -105,7 +97,7 @@ function ProjectDetailPage() {
 
 
   const handleClickDeleteMember = (user_id: number) => {
-    if (user_id === projectData.default.owner) {
+    if (user_id === projectData.owner) {
       setIsDeleteFailModalOpen(true);
       return 0;
     }
@@ -125,7 +117,7 @@ function ProjectDetailPage() {
     setProjectInfo((prev) => ({
       ...prev,
       default: {
-        ...prev.default,
+        ...prev,
         desc: updatedDesc,
       },
     }));
@@ -134,7 +126,7 @@ function ProjectDetailPage() {
 
 
   const handleCopyInviteCode = async () => {
-    const textToCopy = projectData.default.code;
+    const textToCopy = projectData.code;
 
     // clipboard API 사용 가능 여부 확인
     if (navigator.clipboard && window.isSecureContext) {
@@ -180,20 +172,25 @@ function ProjectDetailPage() {
         const response = await getProjectInfo(projectId);
         console.log("받은 응답:", response);
         setProjectInfo({
-          default: {
             title: response.title,
             desc: response.content, // 서버의 content → 프론트의 desc로 대응
             code: response.code,
             day_status: response.daystatus,
             content_status: response.contentstatus,
             owner: response.owner,
-          },
-          members: response.members ?? [], // null이면 빈 배열로 대체
+            users: response.users
+              ? response.users.map((member: { userName:string , id : number}) => ({
+                name: member.userName,
+                id : member.id,
+                }))
+              : [], // null이면 빈 배열로 대체
         });
       }
     };
     fetchProjectInfo();
   }, []);
+
+  const [hovered, setHovered] = useState(false);
 
   return (
     <div className="w-full px-6 lg:px-0">
@@ -201,28 +198,23 @@ function ProjectDetailPage() {
         <div
           className="group flex cursor-pointer items-center justify-center"
           onClick={handleCopyInviteCode} // 클릭 이벤트 추가
-          onMouseEnter={(e) => {
-            const img = e.currentTarget.querySelector("img");
-            if (img) img.src = "/Img/pasteAfter.png";
-          }}
-          onMouseLeave={(e) => {
-            const img = e.currentTarget.querySelector("img");
-            if (img) img.src = "/Img/pasteBefore.png";
-          }}
+          onMouseEnter={() => setHovered(true)}
+          onMouseLeave={() => setHovered(false)}
         >
           <Image
-            src="/Img/pasteBefore.png"
-            alt="cancel"
+            src={hovered ? "/Img/pasteAfter.png" : "/Img/pasteBefore.png"}
+            alt="paste"
             className="mr-2 h-3"
             width={12}
             height={12}
           />
-          <p className="text-xs text-lightGray group-hover:text-orange">
+
+          <p className="text-xs text-lightGray group-hover:text-orange mb-1">
             초대코드 복사하기
           </p>
         </div>
         <p className="text-xl font-bold md:text-2xl">
-          {projectData?.default?.title}
+          {projectData?.title}
         </p>
         <hr className="my-4 w-4/5 border-[1.5px] border-lightGray md:my-6 md:border-2" />
       </div>
@@ -262,12 +254,12 @@ function ProjectDetailPage() {
               {isEdit ? (
                 <textarea
                   className="box-border h-[100px] w-full resize-none border p-[0.1rem] text-sm text-gray outline-none focus:border-orange md:text-base"
-                  value={projectData?.default?.desc}
+                  value={projectData?.desc}
                   onChange={handleChangeDescription}
                 />
               ) : (
                 <p className="w-full text-sm text-gray md:text-base">
-                  {projectData?.default?.desc}
+                  {projectData?.desc}
                 </p>
               )}
             </div>
@@ -276,18 +268,18 @@ function ProjectDetailPage() {
             <div>
               <p className="text-lg font-bold">| 구성원</p>
               <div className="flex flex-wrap text-xs text-gray md:text-base">
-                {projectData.members?.map((member, index) => (
+                {projectData.users?.map((member, index) => (
                   <div className="mb-3 flex w-1/4 md:w-1/2" key={index}>
                     <div className="pt-4">
                       <div className="text-center">
                         <Image
                           src={`/Img/member${index + 1}.png`}
-                          alt={member.name}
+                          alt={member?.name || "member"}
                           className="rounded-full md:h-16 md:w-16"
                           width={48}
                           height={48}
                         />
-                        <p>{member.name}</p>
+                        <p>{member?.name}</p>
                       </div>
                     </div>
                     {isEdit && (
@@ -305,7 +297,7 @@ function ProjectDetailPage() {
                           width={24}
                           height={24}
                           onClick={() =>
-                            handleClickDeleteMember(member.user_id)
+                            handleClickDeleteMember(member.id)
                           }
                         />
                       </div>
