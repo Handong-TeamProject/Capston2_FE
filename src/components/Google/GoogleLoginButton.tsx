@@ -49,9 +49,9 @@ export default function GoogleLoginButton() {
     return (
         <button
             onClick={() => login()}
-            className="bg-white text-black border px-4 py-2 rounded hover:bg-gray-100"
+            className="text-white bg-orange px-3 py-1 rounded hover:bg-gray-100 hover:bg-orange50"
         >
-            Google로 로그인
+            시작하기
         </button>
     );
 }

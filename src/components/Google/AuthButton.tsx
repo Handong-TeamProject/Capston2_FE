@@ -19,17 +19,20 @@ export default function AuthButton() {
   };
 
   useEffect(() => {
-    updateLoginState();
-
-    // ✅ 로그인 완료 이벤트 리스너 등록
-    const handleLogin = () => {
-      updateLoginState();
+    const handleLogin = () => updateLoginState();
+    const handleLogout = () => {
+      setIsLoggedIn(false);
+      setUsername(null);
     };
-
+  
+    updateLoginState();
+  
     window.addEventListener("loginSuccess", handleLogin);
-
+    window.addEventListener("logout", handleLogout); // ✅ 추가
+  
     return () => {
       window.removeEventListener("loginSuccess", handleLogin);
+      window.removeEventListener("logout", handleLogout); // ✅ 추가
     };
   }, []);
 
@@ -49,7 +52,7 @@ export default function AuthButton() {
 
   return (
     <>
-      {isLoggedIn ? (
+      {isLoggedIn? (
         <div className="flex flex-row items-center font-bold">
           <p className="mr-1 hidden md:block">
             반갑습니다, {username ?? "사용자"}님 |{" "}
