@@ -17,7 +17,7 @@ function attachInterceptors(instance: ReturnType<typeof axios.create>) {
                 const newToken = await accessTokenUser();
 
                 if (newToken) {
-                    sessionStorage.setItem("accessToken", newToken);
+                    sessionStorage.setItem("accessToken", newToken.startsWith("Bearer/u0020") ? newToken.slice("Bearer/u0020".length) : newToken);
                     originalRequest.headers = {
                         ...originalRequest.headers,
                         Authorization: newToken, // 'Bearer ' 포함 여부는 서버에 따라
@@ -62,7 +62,7 @@ export const getAccessApi = () => {
         baseURL: 'http://localhost:8080/api',
         headers: {
             'Content-Type': 'application/json',
-            ...(token && { Authorization: token }),
+            ...(token && { Authorization: `Bearer/u0020${token}` }), // Bearer 포함 여부는 서버에 따라
         },
         withCredentials: true,
     });

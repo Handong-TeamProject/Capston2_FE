@@ -1,7 +1,7 @@
 // components/ProjectDetailPage.tsx
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import DayPerActivity from "./DayPerActivity";
 import { dayDescription } from "@/data/dayDescription";
 import { projectInfo } from "@/data/projectInfo";
@@ -9,13 +9,40 @@ import AlertModal from "@/components/Modal/AlertModal";
 import ConfirmModal from "@/components/Modal/ConfirmModal";
 import { useParams } from "next/navigation";
 import Image from "next/image";
+import { getProjectInfo } from "@/app/api/hooks/project";
 
+export interface ProjectMember {
+  user_id: number;
+  name: string;
+}
+
+export interface ProjectDefault {
+  title: string;
+  desc: string;
+  code: string;
+  day_status: number;
+  content_status: number;
+  owner: number;
+}
+
+export interface ProjectInfo {
+  default: ProjectDefault;
+  members: ProjectMember[];
+}
 
 function ProjectDetailPage() {
   interface DayInfo {
     day_status: number;
     content_status: number;
   }
+  
+
+  interface ProjectMember {
+    user_id: number;
+    name: string;
+  }
+
+
 
   const params = useParams<{ projectId: string }>();
   const projectId = params?.projectId || "";
@@ -29,7 +56,7 @@ function ProjectDetailPage() {
   const [isDeleteFailModalOpen, setIsDeleteFailModalOpen] = useState(false); 
   const [isModalOpen, setModalOpen] = useState(false);
   
-  const [projectData, setProjectInfo] = useState(projectInfo);
+  const [projectData, setProjectInfo] = useState<ProjectInfo>({} as ProjectInfo);
 
   const getDayInfo: DayInfo = {
     day_status: projectData?.default?.day_status,
@@ -146,6 +173,27 @@ function ProjectDetailPage() {
       alert("초대코드 복사에 실패했습니다. 수동으로 복사해주세요.");
     }
   };
+  useEffect(() => {
+    const fetchProjectInfo = async () => {
+      const projectId = sessionStorage.getItem("projectId");
+      if (projectId) {
+        const response = await getProjectInfo(projectId);
+        console.log("받은 응답:", response);
+        setProjectInfo({
+          default: {
+            title: response.title,
+            desc: response.content, // 서버의 content → 프론트의 desc로 대응
+            code: response.code,
+            day_status: response.daystatus,
+            content_status: response.contentstatus,
+            owner: response.owner,
+          },
+          members: response.members ?? [], // null이면 빈 배열로 대체
+        });
+      }
+    };
+    fetchProjectInfo();
+  }, []);
 
   return (
     <div className="w-full px-6 lg:px-0">
@@ -174,7 +222,7 @@ function ProjectDetailPage() {
           </p>
         </div>
         <p className="text-xl font-bold md:text-2xl">
-          {projectData.default.title}
+          {projectData?.default?.title}
         </p>
         <hr className="my-4 w-4/5 border-[1.5px] border-lightGray md:my-6 md:border-2" />
       </div>
@@ -214,12 +262,12 @@ function ProjectDetailPage() {
               {isEdit ? (
                 <textarea
                   className="box-border h-[100px] w-full resize-none border p-[0.1rem] text-sm text-gray outline-none focus:border-orange md:text-base"
-                  value={projectData.default.desc}
+                  value={projectData?.default?.desc}
                   onChange={handleChangeDescription}
                 />
               ) : (
                 <p className="w-full text-sm text-gray md:text-base">
-                  {projectData.default.desc}
+                  {projectData?.default?.desc}
                 </p>
               )}
             </div>
@@ -228,7 +276,7 @@ function ProjectDetailPage() {
             <div>
               <p className="text-lg font-bold">| 구성원</p>
               <div className="flex flex-wrap text-xs text-gray md:text-base">
-                {projectData.members.map((member, index) => (
+                {projectData.members?.map((member, index) => (
                   <div className="mb-3 flex w-1/4 md:w-1/2" key={index}>
                     <div className="pt-4">
                       <div className="text-center">

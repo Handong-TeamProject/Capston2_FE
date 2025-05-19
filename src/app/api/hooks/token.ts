@@ -8,7 +8,7 @@ export async function accessTokenUser(): Promise<string | null> {
         // 👇 인터셉터 없는 axios 직접 사용
         const response = await axios.post("http://localhost:8080/api/auth", null, {
             headers: {
-                "RefreshToken": refreshToken
+                "RefreshToken": `Bearer/u0020${refreshToken}`
             },
             withCredentials: true
         });
@@ -21,7 +21,7 @@ export async function accessTokenUser(): Promise<string | null> {
             return null;
         }
 
-        sessionStorage.setItem("accessToken", accessToken);
+        sessionStorage.setItem("accessToken", accessToken.startsWith("Bearer/u0020") ? accessToken.slice("Bearer/u0020".length) : accessToken);
         return accessToken;
 
     } catch (error: any) {

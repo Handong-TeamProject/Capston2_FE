@@ -21,6 +21,7 @@ function ProjectCard({ data, setProjectList }: { data: ProjectData, setProjectLi
   const closeDeletededModal = () => setIsDeletedModalOpen(false);
 
   const handleSelectedProject = () => {
+    sessionStorage.setItem("projectId", String(data.id));
     router.push(`/project/${data.id}`); // Next.js client-side routing
   };
 
