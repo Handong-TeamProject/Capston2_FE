@@ -4,6 +4,7 @@ import { useGoogleLogin } from "@react-oauth/google";
 import { useRouter } from "next/navigation";
 import { api } from "@/app/api/api";
 import { accessTokenUser } from "@/app/api/hooks/token";
+import { fetchUserInfo } from "@/app/api/hooks/user";
 
 export default function GoogleLoginButton() {
     const router = useRouter();
@@ -11,6 +12,7 @@ export default function GoogleLoginButton() {
     const login = useGoogleLogin({
         onSuccess: async (tokenResponse) => {
             const accessToken = tokenResponse.access_token;
+
             if (!accessToken) {
                 alert("구글 로그인 실패: accessToken 없음");
                 return;
@@ -20,6 +22,7 @@ export default function GoogleLoginButton() {
                 const response = await api.post<{ refreshToken: string }>("/user/login/google", {
                     accessToken: accessToken,
                 });
+                
 
                 const refreshToken = response.data.refreshToken;
                 if (!refreshToken) {
@@ -32,6 +35,7 @@ export default function GoogleLoginButton() {
                 const success = await accessTokenUser();
                 if (success) {
                     // ✅ 로그인 완료 이벤트 발생
+                    await fetchUserInfo(null, null);
                     window.dispatchEvent(new Event("loginSuccess"));
                     router.replace("/workspace");
                 } else {

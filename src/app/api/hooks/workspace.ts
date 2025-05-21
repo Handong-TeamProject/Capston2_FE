@@ -11,7 +11,7 @@ export const getProjectList = async (setProjectList:any) => {
     try {
         const api_access = getAccessApi(); // 클라이언트 전용 인스턴스
         const response = await api_access.get("/item/list",);
-        console.log("item info:", response.data);
+        // console.log("item info:", response.data);
         if (Array.isArray(response.data)) {
             const mappedList: ProjectInfo[] = response
                 .data

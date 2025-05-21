@@ -24,12 +24,19 @@ export const fetchUserInfo = async (setMyInfo : any, setEditInfo : any) => {
         });
         // console.log("User info:", response.data);
 
-        setMyInfo(
-            {name: response.data.name, email: response.data.username, gender: response.data.gender}
-        )
-        setEditInfo(
-            {name: response.data.name, email: response.data.username, gender: response.data.gender}
-        )
+
+        if (response.data) {
+            if (setMyInfo !== null && setEditInfo != null) {   
+                setMyInfo(
+                    { name: response.data.name, email: response.data.username, gender: response.data.gender }
+                )
+                setEditInfo(
+                    { name: response.data.name, email: response.data.username, gender: response.data.gender }
+                )
+            } else {
+                sessionStorage.setItem("username", response.data.name);
+            }
+        }
 
     } catch (error) {
         console.error("Failed to fetch user info:", error);
