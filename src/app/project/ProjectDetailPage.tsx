@@ -9,7 +9,7 @@ import AlertModal from "@/components/Modal/AlertModal";
 import ConfirmModal from "@/components/Modal/ConfirmModal";
 import { useParams } from "next/navigation";
 import Image from "next/image";
-import { getProjectInfo } from "@/app/api/hooks/project";
+import { getProjectInfo, putProjectInfo, } from "@/app/api/hooks/project";
 
 export interface ProjectMember {
   name: string;
@@ -73,10 +73,24 @@ function ProjectDetailPage() {
   };
 
   const handleUpdateProject = () => {
-    alert("프로젝트가 수정되었습니다.");
-    window.scrollTo(0, 0); // 페이지 상단으로 이동
-    closeUpdateModal();
-    setIsEdit(false);
+
+    const usePutProjectInfo = async () => {
+      const projectId = sessionStorage.getItem("projectId");
+      if (projectId) {
+        const sendProjectInfo:putProjectInfo = {
+          id: projectId,
+          title: projectData.title,
+          content: projectData.desc,
+        };
+        const response = await putProjectInfo(sendProjectInfo);
+        console.log("받은 응답:", response);
+        alert("프로젝트가 수정되었습니다.");
+        window.scrollTo(0, 0); // 페이지 상단으로 이동
+        closeUpdateModal();
+        setIsEdit(false);
+      }
+    };
+    usePutProjectInfo();
   };
   const [deleteMember, setDeleteMember] = useState(0);
 
@@ -116,10 +130,7 @@ function ProjectDetailPage() {
     const updatedDesc = e.target.value;
     setProjectInfo((prev) => ({
       ...prev,
-      default: {
-        ...prev,
-        desc: updatedDesc,
-      },
+      desc: updatedDesc,
     }));
   };
 
@@ -271,7 +282,7 @@ function ProjectDetailPage() {
                 {projectData.users?.map((member, index) => (
                   <div className="mb-3 flex w-1/4 md:w-1/2" key={index}>
                     <div className="pt-4">
-                      <div className="text-center">
+                      <div className="text-center flex flex-col items-center">
                         <Image
                           src={`/Img/member${index + 1}.png`}
                           alt={member?.name || "member"}
