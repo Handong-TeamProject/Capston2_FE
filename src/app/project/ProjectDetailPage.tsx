@@ -190,7 +190,7 @@ function ProjectDetailPage() {
       const projectId = sessionStorage.getItem("projectId");
       if (projectId) {
         const response = await getProjectInfo(projectId);
-        // console.log("받은 응답:", response);
+        console.log("받은 응답:", response);
         const responseProjectInfo = {
           title: response.title,
           desc: response.content, // 서버의 content → 프론트의 desc로 대응

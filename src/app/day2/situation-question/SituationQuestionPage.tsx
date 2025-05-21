@@ -2,89 +2,123 @@
 
 'use client';
 
+import { getQuestionAsnwerList, getQuestionList, postQuestion, postQuestionAsnwer, QuestionAnswerPostApiReqeust, QuestionApiResponse, QuestionPostApiReqeust } from "@/app/api/hooks/question";
 import ActivityDesc from "@/components/common/ActivityDesc";
 import {situationQuestionList} from "@/data/common/situationQuestionList";
-import { situationQuestionGetData } from "@/data/day2/situationQuestionGetData";
-import { situationAnswerGetData } from "@/data/day2/situationAnswerGetData";
 
 import Image from "next/image";
-import React, {useState} from "react";
-
-type ExperienceQuestion = {
-    "question_number": number,
-    "writing_status": boolean
-};
+import React, {useEffect, useState} from "react";
 
 
-const SituationQuestionPage: React.FC = () => {
 
-    const [balanceQuestions, setExperienceQuestions] = useState<ExperienceQuestion[]>(
-        situationQuestionGetData
-    );
+function SituationQuestionPage() {
+
+    const [situationQuestions, setSituationQuestions] = useState<QuestionApiResponse[]>([]);
     const [isWriting, setIsWriting] = useState<boolean[]>(
-      situationQuestionGetData.map(() => false)
+      situationQuestions.map(() => false)
     );
     // 답변 데이터를 저장할 상태 추가
     const [writingData, setWritingData] = useState<string[]>(
-      situationQuestionGetData.map(() => "")
+      situationQuestions.map(() => "")
     );
     const [isResults, setIsResults] = useState<boolean[]>(
-        situationQuestionGetData.map(() => false)
+      situationQuestions.map(() => false)
     );
+    const fetchData = async () => {
+      try {
+        const projectId = sessionStorage.getItem("projectId");
+        if (!projectId) {
+          console.error("Project ID not found in session storage.");
+          return;
+        }
+        const response = await getQuestionList(projectId, "2");
+        // console.log(response);
+        if (Array.isArray(response)) {
+            setSituationQuestions(response.reverse().map((item: QuestionApiResponse) => ({
+            id: item.id,
+            itemId: item.itemId,
+            topic: item.topic,
+            itemuserId: item.itemuserId,
+            questionnum: item.questionnum,
+            qanswers: item.qanswers,
+            writing_status: item.writing_status,
+            })));
+        } else {
+          console.error("Response is not an array:", response);
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+  
+    useEffect(() => {
+      
+      fetchData();
+    }, []);
+  
+    useEffect(() => {
+      if (situationQuestions.length > 0) {
+        setIsWriting(situationQuestions.map(() => false));
+        setWritingData(situationQuestions.map(() => ""));
+        // setIsResults(situationQuestions.map(() => false));
+      }
+    }, [situationQuestions]);
 
-    const handleAddQuestion = () => {
+    const handleAddQuestion = async () => {
+      
         if (window.confirm("문제를 추가하시겠습니까?")) {
-            if (balanceQuestions.length == 30) {
+            if (situationQuestions.length == 30) {
               alert("더 이상 추가할 수 없습니다!");
               return 0;
             }
 
-            let newQuestion: ExperienceQuestion;
-
+            let newQuestion: QuestionPostApiReqeust;
+            const projectId = sessionStorage.getItem("projectId");
+            if (!projectId) {
+                console.error("Project ID not found in session storage.");
+                return;
+            }
             do {
                 const randomNum = Math.floor(Math.random() * 30) + 1;
                 newQuestion = {
-                    question_number: randomNum,
-                    writing_status: false
+                  questionnum: randomNum,
+                  itemId: projectId,
+                  topic : 2,
+                  
                 };
             } while (
-                balanceQuestions.some((quiz) => quiz.question_number === newQuestion.question_number)
+                situationQuestions.some((quiz) => quiz.questionnum === newQuestion.questionnum)
             );
 
-            setExperienceQuestions((prev) => [
-                ...prev,
-                newQuestion
-            ]);
             setIsResults((prev) => [
                 ...prev,
                 false
             ]); // 결과 보기 상태도 함께 추가
+            await postQuestion(newQuestion);
+            const response = await getQuestionList(projectId, "2");
+            fetchData();
+          
             alert("문제를 추가합니다.");
         }
     };
   
     const categoryColors: { [key: string]: { base: string; dark: string } } = {
-      "미래와 선택": { base: "#ADD8E6", dark: "#4682B4" },       // 연한 파랑 / 짙은 파랑
-      "초능력": { base: "#DA70D6", dark: "#8A2BE2" },             // 연보라 / 진보라
-      "동물과의 소통": { base: "#98FB98", dark: "#2E8B57" },      // 연녹색 / 어두운 초록
-      "음식": { base: "#FFDAB9", dark: "#FF8C00" },                // 복숭아색 / 주황
-      "명성": { base: "#F4A460", dark: "#D2691E" },                // 사막색 / 갈색
-      "기억": { base: "#E6E6FA", dark: "#9370DB" },                // 라벤더 / 중간보라
-      "역사": { base: "#CD853F", dark: "#8B4513" },                // 탄색 / 초콜릿색
-      "감정": { base: "#FFC0CB", dark: "#FF1493" },                // 핑크 / 진한 핑크
-      "영화": { base: "#FFE4B5", dark: "#CD853F" },                // 밀가루색 / 탄색
-      "시간여행": { base: "#AFEEEE", dark: "#5F9EA0" },            // 밝은 청록 / 회색청록
-      "신체 변화": { base: "#FFB6C1", dark: "#FF1493" },           // 연한 핑크 / 핫핑크
-      "사회 규칙": { base: "#20B2AA", dark: "#008080" },           // 연한 청록 / 진한 청록
-      "현실 변환": { base: "#B0E0E6", dark: "#4682B4" },           // 밝은 청색 / 강한 파랑
-      "패션": { base: "#FF69B4", dark: "#C71585" },                // 핑크 / 자홍색
-      "언어": { base: "#00CED1", dark: "#008B8B" },                // 청록 / 진청록
-      "꿈": { base: "#D8BFD8", dark: "#9370DB" },                  // 연보라 / 보라
-      "영화 주인공": { base: "#FFE4E1", dark: "#FA8072" },         // 미스트 로즈 / 연어색
-      "기억 조작": { base: "#FAFAD2", dark: "#DAA520" },           // 연한 황색 / 골드
-      "인터넷": { base: "#87CEFA", dark: "#4682B4" },              // 연한 하늘색 / 스틸블루
-      "우주": { base: "#191970", dark: "#000080" },                // 미드나잇 블루 / 네이비
-      "default": { base: "#D3D3D3", dark: "#696969" }              // 연한 회색 / 다크 그레이
+      "감동": { base: "#FFC0CB", dark: "#FF69B4" },
+      "웃음": { base: "#FFD700", dark: "#FFA500" },
+      "도전": { base: "#FF7F50", dark: "#FF4500" },
+      "실수": { base: "#87CEFA", dark: "#4682B4" },
+      "여행": { base: "#90EE90", dark: "#228B22" },
+      "관계": { base: "#BA55D3", dark: "#800080" },
+      "무서운 경험": { base: "#708090", dark: "#2F4F4F" },
+      "자랑스러운 순간": { base: "#FFA500", dark: "#FF8C00" },
+      "뜻밖의 경험": { base: "#40E0D0", dark: "#008B8B" },
+      "친절": { base: "#FF69B4", dark: "#C71585" },
+      "선물": { base: "#00CED1", dark: "#008B8B" },
+      "학교": { base: "#6A5ACD", dark: "#483D8B" },
+      "특별한 하루": { base: "#20B2AA", dark: "#008080" },
+      "음악": { base: "#9370DB", dark: "#663399" },
+      "책": { base: "#CD5C5C", dark: "#8B0000" },
+      "default": { base: "#D3D3D3", dark: "#696969" }
     };
   
     const getCategoryColors = (category: string) => {
@@ -120,10 +154,18 @@ const SituationQuestionPage: React.FC = () => {
           return;
         }
         if (window.confirm("제출하시겠습니까?")) {
+            let newQuestionAsnwer : QuestionAnswerPostApiReqeust
+
+            newQuestionAsnwer = {
+                questionId: situationQuestions[index].id,
+                itemuserId: situationQuestions[index].itemuserId,
+                answer: writingData[index],
+            };  
+            postQuestionAsnwer(newQuestionAsnwer);
             alert("제출되었습니다.");
 
             // writing_status를 true로 바꾸는 부분 추가
-            setExperienceQuestions((prev) => {
+            setSituationQuestions((prev) => {
                 const copy = [...prev];
                 copy[index] = {
                     ...copy[index],
@@ -136,19 +178,36 @@ const SituationQuestionPage: React.FC = () => {
         }
     };
     
-    // const [situationAnswers, setExperienceAnswers] = useState(situationAnswerGetData);
-    const [situationAnswers] = useState(situationAnswerGetData);
+
     
-    const handleGetResult = (index: number) => {
+    const handleGetResult = async (index: number) => {
       toggleResult(index);
       // api 호출해서 각 답변 가져오기
+      const response = await getQuestionAsnwerList(situationQuestions[index].itemId, situationQuestions[index].id, situationQuestions[index].itemuserId);
+      // console.log(response);
+      setSituationQuestions((prev) => {
+        const copy = [...prev];
+        copy[index] = {
+          ...copy[index],
+          qanswers: response,
+        };
+        return copy;
+      }
+      );
+      setIsResults((prev) => {
+        const copy = [...prev];
+        copy[index] = true;
+        return copy;
+      }
+      );
     }
+
 
 
 
     return (
         <div className="w-full px-6 lg:px-0">
-            <ActivityDesc day={1} activity={1} project_id = {1}/>
+            <ActivityDesc day={1} activity={1} project_id={1}/>
             <div className="flex flex-wrap -mx-2">
                 <div className="flex justify-end w-full">
                     <button
@@ -166,16 +225,16 @@ const SituationQuestionPage: React.FC = () => {
 
                 <div className="flex flex-wrap w-full mt-4">
                   {
-                    balanceQuestions.length > 0 ? (
-                        balanceQuestions.map((quiz, index) => {
+                    situationQuestions.length > 0 ? (
+                        situationQuestions.map((quiz, index) => {
                             const question = situationQuestionList.find(
-                                (question) => question.question_number === quiz.question_number
+                                (question) => question.question_number === quiz.questionnum
                             );
                             
                             const colors = getCategoryColors(question?.category || '');
                             return (
 
-                                <div className="w-full md:w-1/2 lg:w-1/3 p-4 h-[400px]" key={quiz.question_number}>
+                                <div className="w-full md:w-1/2 lg:w-1/3 p-4 h-[400px]" key={quiz.id}>
                                   <div className={`w-full h-full bg-beige90 rounded-2xl flex flex-col p-6 justify-between box-border border transition-colors duration-300 ease-in-out ${ isWriting[index] ? "border-orange" : "border-transparent"}`}>
                                             <div>
                                               <div className="w-full flex justify-between ">
@@ -209,9 +268,9 @@ const SituationQuestionPage: React.FC = () => {
                                                 isResults[index] ? (
                                                   <div className="overflow-y-auto h-full ">
                                                     {
-                                                      situationAnswers.map((answer, answerIndex) => (
+                                                      (situationQuestions[index].qanswers != null) && situationQuestions[index].qanswers.map((answer, answerIndex) => (
                                                         <div key={answerIndex}>
-                                                          <p className="font-extrabold text-lg">{answer.name}</p>
+                                                          <p className="font-extrabold text-lg">{answer.userName}</p>
                                                           <input className="bg-lightGray w-full mb-2 mt-1 h-8 pl-1 text-sm rounded-md flex items-center" value={answer?.answer} readOnly/>
                                                         </div>
                                                       ))

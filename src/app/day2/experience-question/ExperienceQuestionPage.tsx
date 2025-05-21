@@ -2,63 +2,102 @@
 
 'use client';
 
+import { getQuestionAsnwerList, getQuestionList, postQuestion, postQuestionAsnwer, QuestionAnswerPostApiReqeust, QuestionApiResponse, QuestionPostApiReqeust } from "@/app/api/hooks/question";
 import ActivityDesc from "@/components/common/ActivityDesc";
 import {experienceQuestionList} from "@/data/common/experienceQuestionList";
-import { experienceQuestionGetData } from "@/data/day2/experienceQuestionGetData";
-import { experienceAnswerGetData } from "@/data/day2/experienceAnswerGetData";
 
 import Image from "next/image";
-import React, {useState} from "react";
-
-type ExperienceQuestion = {
-    "question_number": number,
-    "writing_status": boolean
-};
+import React, {useEffect, useState} from "react";
 
 
-const ExperienceQuestionPage: React.FC = () => {
 
-    const [balanceQuestions, setExperienceQuestions] = useState<ExperienceQuestion[]>(
-        experienceQuestionGetData
-    );
+function ExperienceQuestionPage() {
+
+    const [experienceQuestions, setExperienceQuestions] = useState<QuestionApiResponse[]>([]);
     const [isWriting, setIsWriting] = useState<boolean[]>(
-      experienceQuestionGetData.map(() => false)
+      experienceQuestions.map(() => false)
     );
     // 답변 데이터를 저장할 상태 추가
     const [writingData, setWritingData] = useState<string[]>(
-      experienceQuestionGetData.map(() => "")
+      experienceQuestions.map(() => "")
     );
     const [isResults, setIsResults] = useState<boolean[]>(
-        experienceQuestionGetData.map(() => false)
+      experienceQuestions.map(() => false)
     );
+    const fetchData = async () => {
+      try {
+        const projectId = sessionStorage.getItem("projectId");
+        if (!projectId) {
+          console.error("Project ID not found in session storage.");
+          return;
+        }
+        const response = await getQuestionList(projectId, "1");
+        // console.log(response);
+        if (Array.isArray(response)) {
+            setExperienceQuestions(response.reverse().map((item: QuestionApiResponse) => ({
+            id: item.id,
+            itemId: item.itemId,
+            topic: item.topic,
+            itemuserId: item.itemuserId,
+            questionnum: item.questionnum,
+            qanswers: item.qanswers,
+            writing_status: item.writing_status,
+            })));
+        } else {
+          console.error("Response is not an array:", response);
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+  
+    useEffect(() => {
+      
+      fetchData();
+    }, []);
+  
+    useEffect(() => {
+      if (experienceQuestions.length > 0) {
+        setIsWriting(experienceQuestions.map(() => false));
+        setWritingData(experienceQuestions.map(() => ""));
+        // setIsResults(experienceQuestions.map(() => false));
+      }
+    }, [experienceQuestions]);
 
-    const handleAddQuestion = () => {
+    const handleAddQuestion = async () => {
+      
         if (window.confirm("문제를 추가하시겠습니까?")) {
-            if (balanceQuestions.length == 30) {
+            if (experienceQuestions.length == 30) {
               alert("더 이상 추가할 수 없습니다!");
               return 0;
             }
 
-            let newQuestion: ExperienceQuestion;
-
+            let newQuestion: QuestionPostApiReqeust;
+            const projectId = sessionStorage.getItem("projectId");
+            if (!projectId) {
+                console.error("Project ID not found in session storage.");
+                return;
+            }
             do {
                 const randomNum = Math.floor(Math.random() * 30) + 1;
                 newQuestion = {
-                    question_number: randomNum,
-                    writing_status: false
+                  questionnum: randomNum,
+                  itemId: projectId,
+                  topic : 1,
+                  
                 };
             } while (
-                balanceQuestions.some((quiz) => quiz.question_number === newQuestion.question_number)
+                experienceQuestions.some((quiz) => quiz.questionnum === newQuestion.questionnum)
             );
 
-            setExperienceQuestions((prev) => [
-                ...prev,
-                newQuestion
-            ]);
             setIsResults((prev) => [
                 ...prev,
                 false
             ]); // 결과 보기 상태도 함께 추가
+            await postQuestion(newQuestion);
+            const response = await getQuestionList(projectId, "1");
+            fetchData();
+          
             alert("문제를 추가합니다.");
         }
     };
@@ -115,6 +154,14 @@ const ExperienceQuestionPage: React.FC = () => {
           return;
         }
         if (window.confirm("제출하시겠습니까?")) {
+            let newQuestionAsnwer : QuestionAnswerPostApiReqeust
+
+            newQuestionAsnwer = {
+                questionId: experienceQuestions[index].id,
+                itemuserId: experienceQuestions[index].itemuserId,
+                answer: writingData[index],
+            };  
+            postQuestionAsnwer(newQuestionAsnwer);
             alert("제출되었습니다.");
 
             // writing_status를 true로 바꾸는 부분 추가
@@ -131,13 +178,30 @@ const ExperienceQuestionPage: React.FC = () => {
         }
     };
     
-    // const [experienceAnswers, setExperienceAnswers] = useState(experienceAnswerGetData);
-    const [experienceAnswers] = useState(experienceAnswerGetData);
+
     
-    const handleGetResult = (index: number) => {
+    const handleGetResult = async (index: number) => {
       toggleResult(index);
       // api 호출해서 각 답변 가져오기
+      const response = await getQuestionAsnwerList(experienceQuestions[index].itemId, experienceQuestions[index].id, experienceQuestions[index].itemuserId);
+      // console.log(response);
+      setExperienceQuestions((prev) => {
+        const copy = [...prev];
+        copy[index] = {
+          ...copy[index],
+          qanswers: response,
+        };
+        return copy;
+      }
+      );
+      setIsResults((prev) => {
+        const copy = [...prev];
+        copy[index] = true;
+        return copy;
+      }
+      );
     }
+
 
 
 
@@ -161,16 +225,16 @@ const ExperienceQuestionPage: React.FC = () => {
 
                 <div className="flex flex-wrap w-full mt-4">
                   {
-                    balanceQuestions.length > 0 ? (
-                        balanceQuestions.map((quiz, index) => {
+                    experienceQuestions.length > 0 ? (
+                        experienceQuestions.map((quiz, index) => {
                             const question = experienceQuestionList.find(
-                                (question) => question.question_number === quiz.question_number
+                                (question) => question.question_number === quiz.questionnum
                             );
                             
                             const colors = getCategoryColors(question?.category || '');
                             return (
 
-                                <div className="w-full md:w-1/2 lg:w-1/3 p-4 h-[400px]" key={quiz.question_number}>
+                                <div className="w-full md:w-1/2 lg:w-1/3 p-4 h-[400px]" key={quiz.id}>
                                   <div className={`w-full h-full bg-beige90 rounded-2xl flex flex-col p-6 justify-between box-border border transition-colors duration-300 ease-in-out ${ isWriting[index] ? "border-orange" : "border-transparent"}`}>
                                             <div>
                                               <div className="w-full flex justify-between ">
@@ -204,9 +268,9 @@ const ExperienceQuestionPage: React.FC = () => {
                                                 isResults[index] ? (
                                                   <div className="overflow-y-auto h-full ">
                                                     {
-                                                      experienceAnswers.map((answer, answerIndex) => (
+                                                      (experienceQuestions[index].qanswers != null) && experienceQuestions[index].qanswers.map((answer, answerIndex) => (
                                                         <div key={answerIndex}>
-                                                          <p className="font-extrabold text-lg">{answer.name}</p>
+                                                          <p className="font-extrabold text-lg">{answer.userName}</p>
                                                           <input className="bg-lightGray w-full mb-2 mt-1 h-8 pl-1 text-sm rounded-md flex items-center" value={answer?.answer} readOnly/>
                                                         </div>
                                                       ))
