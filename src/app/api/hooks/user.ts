@@ -19,10 +19,10 @@ export const fetchUserInfo = async (setMyInfo : any, setEditInfo : any) => {
 
         const response = await api_access.get<UserResponse>("/user", {
             params: {
-                id: 12
+                id: 0
             }
         });
-        // console.log("User info:", response.data);
+        console.log("User info:", response.data);
 
 
         if (response.data) {
@@ -37,6 +37,7 @@ export const fetchUserInfo = async (setMyInfo : any, setEditInfo : any) => {
                 sessionStorage.setItem("username", response.data.name);
             }
         }
+        return response;
 
     } catch (error) {
         console.error("Failed to fetch user info:", error);

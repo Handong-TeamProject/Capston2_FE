@@ -35,9 +35,17 @@ export default function GoogleLoginButton() {
                 const success = await accessTokenUser();
                 if (success) {
                     // ✅ 로그인 완료 이벤트 발생
-                    await fetchUserInfo(null, null);
-                    window.dispatchEvent(new Event("loginSuccess"));
-                    router.replace("/workspace");
+                    const response = await fetchUserInfo(null, null);
+                    if (response) {
+                        // console.log("User info:", response);
+                        window.dispatchEvent(new Event("loginSuccess"));
+
+                        if (response.data.gender === null) {
+                            router.replace("/signup");   
+                        } else {
+                            router.replace("/workspace");
+                        }
+                    }
                 } else {
                     alert("accessToken 발급 실패");
                 }

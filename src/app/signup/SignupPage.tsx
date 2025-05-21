@@ -1,15 +1,17 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ConfirmModal from '@/components/Modal/ConfirmModal';
 import { useRouter } from 'next/navigation';
+import { putUserInfo } from '../api/hooks/user';
 
 interface SignupPageProps {
-  name: string;
+  loadName: string;
   email: string;
 }
 
-const SignupPage: React.FC<SignupPageProps> = ({ name, email }) => {
+const SignupPage: React.FC<SignupPageProps> = ({ loadName, email }) => {
+  const [name, setName] = useState(loadName);
   const [gender, setGender] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModified, setIsModified] = useState(false);
@@ -26,10 +28,27 @@ const SignupPage: React.FC<SignupPageProps> = ({ name, email }) => {
 
   const handleSignup = () => {
     //  회원가입 api 로직 추가하기
+    if (!gender) {
+      alert('성별을 선택해주세요.');
+      return;
+    }
+    // 회원가입 정보
+    const editInfo = {
+      name: name,
+      email: email,
+      gender: gender
+    }
+    putUserInfo(editInfo);
     alert('회원가입이 완료되었습니다.');
     closeModal();
     router.push("/workspace")
   };
+
+  useEffect(() => {
+    if (loadName) {
+      setName(loadName);
+    }
+  }, [loadName]);
 
   return (
     <div className="w-full first-letter:lg:w-2/5 px-6 lg:px-0 flex-col flex items-center">
@@ -40,6 +59,7 @@ const SignupPage: React.FC<SignupPageProps> = ({ name, email }) => {
           <input
             type="text"
             value={name}
+            onChange={(e) => setName(e.target.value)} 
             // readOnly
             className="border rounded-lg px-2 py-1 bg-gray-100 text-gray-500"
           />

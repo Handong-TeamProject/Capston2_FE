@@ -6,18 +6,19 @@ import AuthButton from "@/components/Google/AuthButton";
 import { useEffect, useState } from "react";
 
 function Header() {
-  const [href, setHref] = useState("/");
 
-  useEffect(() => {
-    const token = sessionStorage.getItem("accessToken");
-    setHref(token ? "/workspace" : "/");
-  }, []);
+  const handleMovePage = () => {
+    const isLogin = sessionStorage.getItem("refreshToken");
+    if (isLogin) {
+      window.location.href = "/workspace";
+    } else {
+      window.location.href = "/";
+    }
+  }
 
   return (
     <div className="bg-gray-50 flex w-full items-center justify-between px-6 py-3 lg:px-0">
-      <Link href={href}>
-        <Image src="/Img/qrapo_logo.png" alt="logo" width={80} height={40} />
-      </Link>
+      <Image src="/Img/qrapo_logo.png" alt="logo" width={80} height={40} onClick={handleMovePage} />
       <AuthButton />
     </div>
   );

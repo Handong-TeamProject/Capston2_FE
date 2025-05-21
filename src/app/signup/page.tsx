@@ -4,21 +4,23 @@
 
 import { useEffect, useState } from "react";
 import SignupPage from "./SignupPage";
+import { fetchUserInfo } from "../api/hooks/user";
 
 const Signup: React.FC = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
 
   useEffect(() => {
-    const info = sessionStorage.getItem("signupInfo");
-    if (info) {
-      const { name, email } = JSON.parse(info);
-      setName(name);
-      setEmail(email);
-      sessionStorage.removeItem("signupInfo"); // 한번 쓰고 제거
+    const loadUserInfo = async () => {
+      const response = await fetchUserInfo(null, null);
+      if (response) {
+        setName(response?.data?.name);
+        setEmail(response?.data?.username);
+      } 
     }
+    loadUserInfo();
   }, []);
-  return <SignupPage name={name} email={email} />;
+  return <SignupPage loadName={name} email={email} />;
 };
 
 export default Signup;
