@@ -49,6 +49,7 @@ function ProjectDetailPage() {
   const [isModalOpen, setModalOpen] = useState(false);
   
   const [projectData, setProjectInfo] = useState<ProjectInfo>({} as ProjectInfo);
+  const [editProjectData, setEditProjectInfo] = useState<ProjectInfo>(projectData);
 
   const getDayInfo: DayInfo = {
     day_status: projectData?.day_status,
@@ -79,12 +80,16 @@ function ProjectDetailPage() {
       if (projectId) {
         const sendProjectInfo:putProjectInfo = {
           id: projectId,
-          title: projectData.title,
-          content: projectData.desc,
+          title: editProjectData.title,
+          content: editProjectData.desc,
         };
         const response = await putProjectInfo(sendProjectInfo);
-        console.log("받은 응답:", response);
+        // console.log("받은 응답:", response);
         alert("프로젝트가 수정되었습니다.");
+        setProjectInfo((prev) => ({
+          ...prev,
+          desc: editProjectData.desc,
+        }));
         window.scrollTo(0, 0); // 페이지 상단으로 이동
         closeUpdateModal();
         setIsEdit(false);
@@ -105,7 +110,7 @@ function ProjectDetailPage() {
       members: prev.users.filter((user) => user.id !== deleteMember),
         }));
     setIsEdit(false);
-    console.log(index, projectId);
+    // console.log(index, projectId);
     // 새로 유저 정보 가져오기
   };
 
@@ -122,13 +127,17 @@ function ProjectDetailPage() {
   const handleUpdateCancle = () => {
     closeCancleModal();
     setIsEdit(false);
+    setEditProjectInfo((prev) => ({
+      ...prev,
+      desc: projectData.desc,
+    }));
   };
 
   const handleChangeDescription = (
     e: React.ChangeEvent<HTMLTextAreaElement>,
   ) => {
     const updatedDesc = e.target.value;
-    setProjectInfo((prev) => ({
+    setEditProjectInfo((prev) => ({
       ...prev,
       desc: updatedDesc,
     }));
@@ -181,21 +190,25 @@ function ProjectDetailPage() {
       const projectId = sessionStorage.getItem("projectId");
       if (projectId) {
         const response = await getProjectInfo(projectId);
-        console.log("받은 응답:", response);
+        // console.log("받은 응답:", response);
+        const responseProjectInfo = {
+          title: response.title,
+          desc: response.content, // 서버의 content → 프론트의 desc로 대응
+          code: response.code,
+          day_status: response.daystatus,
+          content_status: response.contentstatus,
+          owner: response.owner,
+          users: response.users
+            ? response.users.map((member: { userName: string, id: number }) => ({
+              name: member.userName,
+              id: member.id,
+            }))
+            : [], // null이면 빈 배열로 대체
+        };
         setProjectInfo({
-            title: response.title,
-            desc: response.content, // 서버의 content → 프론트의 desc로 대응
-            code: response.code,
-            day_status: response.daystatus,
-            content_status: response.contentstatus,
-            owner: response.owner,
-            users: response.users
-              ? response.users.map((member: { userName:string , id : number}) => ({
-                name: member.userName,
-                id : member.id,
-                }))
-              : [], // null이면 빈 배열로 대체
+          ...responseProjectInfo,
         });
+        setEditProjectInfo({...responseProjectInfo,});
       }
     };
     fetchProjectInfo();
@@ -265,7 +278,7 @@ function ProjectDetailPage() {
               {isEdit ? (
                 <textarea
                   className="box-border h-[100px] w-full resize-none border p-[0.1rem] text-sm text-gray outline-none focus:border-orange md:text-base"
-                  value={projectData?.desc}
+                  value={editProjectData?.desc}
                   onChange={handleChangeDescription}
                 />
               ) : (
