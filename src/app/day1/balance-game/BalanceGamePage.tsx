@@ -3,7 +3,6 @@
 import ActivityDesc from "@/components/common/ActivityDesc";
 import {balanceQuestionList} from "@/data/common/balanceQuestionList";
 import {balanceQuiz} from "@/data/day1/balanceQuizList";
-import {balanaceQuizAnswerList} from "@/data/day1/balanceQuizAnswerList";
 import Image from "next/image";
 import React, {useEffect, useState} from "react";
 import { BalanceAnswerPostApiReqeust, BalanceApiResponse, BalancePostApiReqeust, getBalanceAsnwerList, getBalanceList, postBalance, postBalanceAsnwer } from "@/app/api/hooks/balanace";
@@ -50,7 +49,7 @@ function BalanceGamePage() {
                 balanceQuestions.some((quiz) => quiz.balancequestion === newQuestion.balancequestion)
             );
 
-            const reponse = await postBalance(newQuestion);
+            await postBalance(newQuestion);
             fetchBalanceQuestions();
         
             setIsResults((prev) => [
@@ -63,8 +62,7 @@ function BalanceGamePage() {
 
     const handleSelect = async (index: number, selection: string) => {
         if (window.confirm("선택하시겠습니까?")) {
-            let newBalanceAnswer: BalanceAnswerPostApiReqeust;
-            newBalanceAnswer = {
+            const newBalanceAnswer: BalanceAnswerPostApiReqeust= {
                 balancegameId: balanceQuestions[index].id,
                 itemuserId: balanceQuestions[index].itemuserId,
                 chosenanswer: selection === "case1" ? 1 : 2
@@ -88,8 +86,6 @@ function BalanceGamePage() {
     
 
     useEffect(() => {   
-        const projectId = sessionStorage.getItem("projectId");
-
         fetchBalanceQuestions();
     }, []);
 

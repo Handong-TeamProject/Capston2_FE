@@ -28,7 +28,7 @@ export default function Hero() {
                 <p className="text-xl md:text-2xl font-light mb-8 ">
                     <span
                         className="bg-clip-text text-transparent bg-gradient-to-r from-orange to-yellow">빠르게 라포 형성과 관계 발전을 도와주는 서비스</span>
-                </p>    
+                </p> 
                 <GoogleLoginButton/>
             </motion.div>
         </header>

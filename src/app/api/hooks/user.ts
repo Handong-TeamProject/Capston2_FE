@@ -7,7 +7,10 @@ interface MyInfo {
     password?: string;
 }
 
-export const fetchUserInfo = async (setMyInfo : any, setEditInfo : any) => {
+export const fetchUserInfo = async (
+    setMyInfo: React.Dispatch<React.SetStateAction<{ name: string, email: string, gender: string }>>,
+    setEditInfo: React.Dispatch<React.SetStateAction<{ name: string, email: string, gender: string }>>
+) => {
     try {
         const api_access = getAccessApi(); // 클라이언트 전용 인스턴스
 
@@ -47,7 +50,7 @@ export const fetchUserInfo = async (setMyInfo : any, setEditInfo : any) => {
 export const putUserInfo = async (editInfo : MyInfo) => {
     try {
         const api_access = getAccessApi(); // 클라이언트 전용 인스턴스
-        const response = await api_access.put("/user", {
+        await api_access.put("/user", {
             name: editInfo.name,
             gender: editInfo.gender,
             email:editInfo.email,

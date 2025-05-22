@@ -1,3 +1,4 @@
+import { SetStateAction } from "react";
 import {getAccessApi} from "../api";
 
 interface ProjectInfo {
@@ -7,7 +8,7 @@ interface ProjectInfo {
     day_status: string;
 }
 
-export const getProjectList = async (setProjectList:any) => {
+export const getProjectList = async (setProjectList:React.Dispatch<SetStateAction<ProjectInfo[]>>) => {
     try {
         const api_access = getAccessApi(); // 클라이언트 전용 인스턴스
         const userId = -100;
@@ -35,7 +36,7 @@ export const getProjectList = async (setProjectList:any) => {
 export const joinProject = async (code:string) => {
     try {
         const api_access = getAccessApi(); // 클라이언트 전용 인스턴스
-        const response = await api_access.post("/item/join", { inputCode: code } );
+        await api_access.post("/item/join", { inputCode: code } );
     } catch (error) {
         console.error("Failed to fetch user info:", error);
     }

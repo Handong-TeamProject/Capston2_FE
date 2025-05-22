@@ -2,6 +2,8 @@
 import axios from 'axios';
 import { accessTokenUser } from './hooks/token'; // 상대 경로 주의
 
+const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8080/api'; // 기본값 설정
+
 // ✅ 인터셉터 함수 정의
 function attachInterceptors(instance: ReturnType<typeof axios.create>) {
     instance.interceptors.response.use(
@@ -46,7 +48,7 @@ function attachInterceptors(instance: ReturnType<typeof axios.create>) {
 // ✅ 기본 API 인스턴스
 export const api = attachInterceptors(
     axios.create({
-        baseURL: 'http://localhost:8080/api',
+        baseURL: BASE_URL,
         headers: {
             'Content-Type': 'application/json',
         },
@@ -61,7 +63,7 @@ export const getAccessApi = () => {
     const token = sessionStorage.getItem('accessToken');
 
     const accessApi = axios.create({
-        baseURL: 'http://localhost:8080/api',
+        baseURL: BASE_URL,
         headers: {
             'Content-Type': 'application/json',
             ...(token && { Authorization: `Bearer/u0020${token}` }), // Bearer 포함 여부는 서버에 따라

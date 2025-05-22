@@ -12,7 +12,7 @@ const Signup: React.FC = () => {
 
   useEffect(() => {
     const loadUserInfo = async () => {
-      const response = await fetchUserInfo(null, null);
+      const response = await fetchUserInfo(() => null, () => null);
       if (response) {
         setName(response?.data?.name);
         setEmail(response?.data?.username);

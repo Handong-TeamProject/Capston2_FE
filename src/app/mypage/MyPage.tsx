@@ -4,7 +4,6 @@ import Introduce from "@/components/layout/Introduce";
 import ConfirmModal from "@/components/Modal/ConfirmModal";
 import Image from "next/image";
 import React, { useState, useEffect } from "react";
-import {getAccessApi} from "@/app/api/api";
 import { fetchUserInfo, putUserInfo } from "../api/hooks/user";
 
 const MyPage: React.FC = () => {

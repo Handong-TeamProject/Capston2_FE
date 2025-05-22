@@ -95,7 +95,7 @@ function ExperienceQuestionPage() {
                 false
             ]); // 결과 보기 상태도 함께 추가
             await postQuestion(newQuestion);
-            const response = await getQuestionList(projectId, "1");
+            await getQuestionList(projectId, "1");
             fetchData();
           
             alert("문제를 추가합니다.");
@@ -154,9 +154,7 @@ function ExperienceQuestionPage() {
           return;
         }
         if (window.confirm("제출하시겠습니까?")) {
-            let newQuestionAsnwer : QuestionAnswerPostApiReqeust
-
-            newQuestionAsnwer = {
+            const newQuestionAsnwer : QuestionAnswerPostApiReqeust = {
                 questionId: experienceQuestions[index].id,
                 itemuserId: experienceQuestions[index].itemuserId,
                 answer: writingData[index],

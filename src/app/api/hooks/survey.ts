@@ -10,7 +10,7 @@ export interface SurveryPutApiRequest {
     q6: string | null;
     itemId: string | null;
     userId: string | null;
-    // joinedAt: string | null; // ISO string format for LocalDateTime
+    // joinedAt: string | null;  ISO string format for LocalDateTime
     mbti?: string | null; // Optional fields
     area?: string | null;
     major?: string | null;
@@ -25,15 +25,17 @@ export interface SurveryPutApiRequest {
     step1answer3?: number | null;
     step2answer1?: number | null;
     step2answer2?: number | null;
-    writing_status : boolean;
+    writing_status: boolean;
 }
 
 export const getSurveyInfo = async (id : string): Promise<SurveryPutApiRequest> => {
     try {
         const api_access = getAccessApi(); // 클라이언트 전용 인스턴스
-        const response = await api_access.get("/itemuser", {params: {
-                id : id
-            }});
+        const response = await api_access.get("/itemuser", {
+            params: {
+                id: id
+            }
+        });
 
         // ⬇️ response.data를 명시적으로 타입 단언
         return response.data as SurveryPutApiRequest;
@@ -46,7 +48,7 @@ export const getSurveyInfo = async (id : string): Promise<SurveryPutApiRequest> 
 export const putSurveryInfo = async (surveryPutData : SurveryPutApiRequest) => {
     try {
         const api_access = getAccessApi(); // 클라이언트 전용 인스턴스
-        const response = await api_access.put("/itemuser", surveryPutData);
+        await api_access.put("/itemuser", surveryPutData);
         // console.log("success", response.data);
 
     } catch (error) {

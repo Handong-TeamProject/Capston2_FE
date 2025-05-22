@@ -1,9 +1,6 @@
 "use client";
-
-import Link from "next/link";
 import Image from "next/image";
 import AuthButton from "@/components/Google/AuthButton";
-import { useEffect, useState } from "react";
 
 function Header() {
 

@@ -35,7 +35,7 @@ export default function GoogleLoginButton() {
                 const success = await accessTokenUser();
                 if (success) {
                     // ✅ 로그인 완료 이벤트 발생
-                    const response = await fetchUserInfo(null, null);
+                    const response = await fetchUserInfo(() => null, () => null);
                     if (response) {
                         // console.log("User info:", response);
                         window.dispatchEvent(new Event("loginSuccess"));

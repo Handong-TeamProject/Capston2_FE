@@ -4,10 +4,8 @@
 import React, { useEffect, useState } from "react";
 import DayPerActivity from "./DayPerActivity";
 import { dayDescription } from "@/data/dayDescription";
-import { projectInfo } from "@/data/projectInfo";
 import AlertModal from "@/components/Modal/AlertModal";
 import ConfirmModal from "@/components/Modal/ConfirmModal";
-import { useParams } from "next/navigation";
 import Image from "next/image";
 import { getProjectInfo, putProjectInfo, } from "@/app/api/hooks/project";
 
@@ -33,11 +31,7 @@ function ProjectDetailPage() {
     day_status: number;
     content_status: number;
   }
-  
 
-
-  const params = useParams<{ projectId: string }>();
-  const projectId = params?.projectId || "";
   
 
   const [isEdit, setIsEdit] = useState(false);
@@ -73,33 +67,30 @@ function ProjectDetailPage() {
     setIsEdit(!isEdit);
   };
 
-  const handleUpdateProject = () => {
 
-    const usePutProjectInfo = async () => {
-      const projectId = sessionStorage.getItem("projectId");
-      if (projectId) {
-        const sendProjectInfo:putProjectInfo = {
-          id: projectId,
-          title: editProjectData.title,
-          content: editProjectData.desc,
-        };
-        const response = await putProjectInfo(sendProjectInfo);
-        // console.log("받은 응답:", response);
-        alert("프로젝트가 수정되었습니다.");
-        setProjectInfo((prev) => ({
-          ...prev,
-          desc: editProjectData.desc,
-        }));
-        window.scrollTo(0, 0); // 페이지 상단으로 이동
-        closeUpdateModal();
-        setIsEdit(false);
-      }
-    };
-    usePutProjectInfo();
+  const handleUpdateProject = async () => {
+    const projectId = sessionStorage.getItem("projectId");
+    if (projectId) {
+      const sendProjectInfo:putProjectInfo = {
+        id: projectId,
+        title: editProjectData.title,
+        content: editProjectData.desc,
+      };
+      await putProjectInfo(sendProjectInfo);
+      alert("프로젝트가 수정되었습니다.");
+      setProjectInfo((prev) => ({
+        ...prev,
+        desc: editProjectData.desc,
+      }));
+      window.scrollTo(0, 0); // 페이지 상단으로 이동
+      closeUpdateModal();
+      setIsEdit(false);
+    }
   };
+
   const [deleteMember, setDeleteMember] = useState(0);
 
-  const handleDeleteMember = (index: number) => {
+  const handleDeleteMember = () => {
     alert("사용자가 삭제되었습니다.");
     // window.location.reload();
     window.scrollTo(0, 0); // 페이지 상단으로 이동
@@ -368,7 +359,7 @@ function ProjectDetailPage() {
         <ConfirmModal
           message="정말 삭제하시겠습니까?"
           closeModal={closeDeleteModal}
-          handleAction={() => handleDeleteMember(deleteMember)}
+          handleAction={() => handleDeleteMember()}
         />
       )}
       {isCancleModalOpen && (

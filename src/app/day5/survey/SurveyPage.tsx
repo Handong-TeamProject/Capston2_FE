@@ -8,8 +8,14 @@ import React, { useEffect, useState } from "react";
 import { getSurveyInfo, putSurveryInfo } from "@/app/api/hooks/survey";
 import { getProjectInfo } from "@/app/api/hooks/project";
 
+// 예: 사용자 리스트 타입 지정
+interface User {
+  userName: string; // 백엔드 응답에 따라 다르게 지정
+  user_id: number;
+}
+
 function SurveyPage() {
-    const [userList, setUserList] = useState<any[]>([]);
+    const [userList, setUserList] = useState<User[]>([]);
     const improve = ['변화 없음', '약간 향상', '향상', '매우 향상'];
     const satisfaction = ['불만족', '약간 불만족', '만족', '매우 만족']; 
     const [isWrite, setIsWrite] = useState(false);
@@ -132,8 +138,11 @@ function SurveyPage() {
 
           const response2 = await getProjectInfo(projectId);
           if (response2.users && Array.isArray(response2.users)) {
-            // console.log("User data:", response2.users);
-            setUserList(response2.users);
+            const convertedUsers: User[] = response2.users.map((user: { id: number; userName: string }) => ({
+              user_id: user.id,
+              userName: user.userName
+            }));
+            setUserList(convertedUsers);
           }
 
         }
