@@ -7,7 +7,13 @@ export interface ProjectApiResponse {
   daystatus: number;
   contentstatus: number;
   owner: number;
-  users: { userName : string, id : number }[] | null;
+  users: { userName: string, id: number }[] | null;
+  q1: number;
+  q2: number;
+  q3: number;
+  q4: number;
+  q5: number;
+  q6: string | null;
 }
 
 export const getProjectInfo = async (id: string): Promise<ProjectApiResponse> => {

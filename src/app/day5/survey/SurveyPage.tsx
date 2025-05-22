@@ -5,13 +5,16 @@ import { dayDescription } from "@/data/dayDescription";
 import { surveryGetData } from "@/data/day5/surveryGetData";
 // components/SurveyPage.tsx
 import React, { useEffect, useState } from "react";
+import { getSurveyInfo, putSurveryInfo } from "@/app/api/hooks/survey";
+import { getProjectInfo } from "@/app/api/hooks/project";
 
 function SurveyPage() {
-    const userList = surveryGetData?.user_list;
+    const [userList, setUserList] = useState<any[]>([]);
     const improve = ['변화 없음', '약간 향상', '향상', '매우 향상'];
     const satisfaction = ['불만족', '약간 불만족', '만족', '매우 만족']; 
-    const [isWrite, setIsWrite] = useState(surveryGetData?.is_done);
-    interface InputData {
+    const [isWrite, setIsWrite] = useState(false);
+  interface InputData {
+      id: number;
       project_id: number;
       user_id: number;
       q1: number;
@@ -25,6 +28,7 @@ function SurveyPage() {
     const [inputData, setInputData] = useState<InputData>(
       !isWrite
       ? {
+        id : 1,
         project_id: 1,
         user_id: 1,
         q1: -1,
@@ -34,7 +38,8 @@ function SurveyPage() {
         q5: -1,
         q6: "",
         }
-      : {
+        : {
+        id : 1,
         project_id: 1,
         user_id: 1,
         q1: Number(surveryGetData?.answer_list[0] ?? -1),
@@ -77,15 +82,69 @@ function SurveyPage() {
 
     
     const handleSubmbit = () => {
+      // console.log("inputData", inputData);  
       if (!isValid) {
         alert("모든 필드를 입력해주세요!");
         return;
       }
       if (window.confirm("제출하시겠습니까?")) {
+        putSurveryInfo({
+          id: String(inputData.id),
+          q1: inputData.q1 ,
+          q2: inputData.q2 ,
+          q3: inputData.q3 ,
+          q4: inputData.q4 ,
+          q5: inputData.q5 ,
+          q6: inputData.q6,
+          itemId: String(inputData.project_id),
+          userId: String(inputData.user_id),
+          writing_status : true,
+        });
         alert("제출되었습니다.");
         setIsWrite(true);
       }
     }
+    const fetchSurveyData = async () => {
+      try {
+        const projectId = sessionStorage.getItem("projectId");
+        if (projectId !== null) {
+
+          // APi 호출
+          const response = await getSurveyInfo(projectId);
+          // console.log("Survey data:", response);
+
+          setInputData({
+            id:Number(response.id),
+            project_id: Number(response.itemId ?? 1),
+            user_id: Number(response.userId ?? 1),
+            q1: Number(response.q1 ?? -1),
+            q2: Number(response.q2 ?? -1),
+            q3: Number(response.q3 ?? -1),
+            q4: Number(response.q4 ?? -1),
+            q5: Number(response.q5 ?? -1),
+            q6: String(response.q6 ?? ""),
+            });
+
+          // isWrite 상태 변경
+          if (response.writing_status){
+            setIsWrite(true);
+          }
+
+          const response2 = await getProjectInfo(projectId);
+          if (response2.users && Array.isArray(response2.users)) {
+            // console.log("User data:", response2.users);
+            setUserList(response2.users);
+          }
+
+        }
+      } catch (error) {
+        console.error("Error fetching survey data:", error);
+      }
+    }
+
+    useEffect(() => {
+        fetchSurveyData();
+    }, []);
     useEffect(() => {
       if (isWrite) {
         window.scrollTo({ top: 0, behavior: 'smooth' }); // 부드럽게 스크롤
@@ -101,7 +160,7 @@ function SurveyPage() {
                 {
                     dayDescription?.map(
                       (data, index) => (
-                        <div key={index} className={`border ${!isWrite &&'lg:hover:border-orange lg:hover:bg-orange50'} ${index === inputData.q1 && 'bg-orange50 border-orange'} object-lg:hover rounded-2xl p-2 ${index < 4 && 'mb-3'}`} onClick={ () => !isWrite && handleSelectValue(1, index)}>
+                        <div key={index} className={`border ${!isWrite &&'lg:hover:border-orange lg:hover:bg-orange50'} ${(index) === inputData.q1 && 'bg-orange50 border-orange'} object-lg:hover rounded-2xl p-2 ${index < 4 && 'mb-3'}`} onClick={ () => !isWrite && handleSelectValue(1, index)}>
                           <p className="text-lg font-bold mb-2">{index + 1}일차</p>
                           <div className="flex flex-col sm:flex-row gap-2">
                             {
@@ -123,8 +182,8 @@ function SurveyPage() {
                   {
                     userList?.map((user, index) => (
                       <div className={`w-1/2 sm:w-auto flex justify-center items-center sm:justify-normal sm:items-start ${index < 2 && 'mb-4'}`} key={index}>
-                        <button key = {index} className={`border rounded-md px-2 mr-2 w-24 h-8 text-sm sm:text-base lg:hover:bg-lightGray ${index === inputData.q2 ? 'border-boldGray bg-orange' : 'bg-white'}` } onClick={ () => !isWrite && handleSelectValue(2, index)}>
-                            {user?.name}
+                        <button key = {index} className={`border rounded-md px-2 mr-2 min-w-24 h-8 text-sm sm:text-base lg:hover:bg-lightGray ${index === inputData.q2 ? 'border-boldGray bg-orange' : 'bg-white'}` } onClick={ () => !isWrite && handleSelectValue(2, index)}>
+                            {user?.userName}
                         </button>
                       </div>
                     ))
