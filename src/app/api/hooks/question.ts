@@ -69,7 +69,7 @@ export const postQuestion = async (newQuestionInfo: QuestionPostApiReqeust) => {
   try {
     const api_access = getAccessApi(); // 클라이언트 전용 인스턴스
     const response = await api_access.post("/question", newQuestionInfo);
-    // console.log("success", response.data);
+    console.log("success", response.data);
 
   } catch (error) {
     console.error("Failed to fetch user info:", error);
@@ -81,7 +81,7 @@ export const postQuestionAsnwer = async (newQuestionAsnwer: QuestionAnswerPostAp
     try {
       const api_access = getAccessApi(); // 클라이언트 전용 인스턴스
       const response = await api_access.post("/qanswer", newQuestionAsnwer);
-    //   console.log("success", response.data);
+      console.log("success", response.data);
   
     } catch (error) {
       console.error("Failed to fetch user info:", error);

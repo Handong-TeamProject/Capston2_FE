@@ -5,41 +5,54 @@ import {balanceQuestionList} from "@/data/common/balanceQuestionList";
 import {balanceQuiz} from "@/data/day1/balanceQuizList";
 import {balanaceQuizAnswerList} from "@/data/day1/balanceQuizAnswerList";
 import Image from "next/image";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
+import { BalanceAnswerPostApiReqeust, BalanceApiResponse, BalancePostApiReqeust, getBalanceAsnwerList, getBalanceList, postBalance, postBalanceAsnwer } from "@/app/api/hooks/balanace";
 
-type BalanceQuestion = {
-    balance_id: number;
-    balance_question: number;
-    select: string;
-};
 
 function BalanceGamePage() {
-    const [balanceQuestions, setBalanceQuestions] = useState<BalanceQuestion[]>(
-        balanceQuiz
-    );
+    const [balanceQuestions, setBalanceQuestions] = useState<BalanceApiResponse[]>([]);
     const [isResults, setIsResults] = useState<boolean[]>(balanceQuiz.map(
         () => false
     ));
+    
+    const fetchBalanceQuestions = async () => {
+        const projectId = sessionStorage.getItem("projectId");
+        if (projectId !== null) {
+            const response = await getBalanceList(projectId);
+            if (Array.isArray(response)) {
+                setBalanceQuestions(response.reverse().map((item: BalanceApiResponse) => ({
+                id: item.id,
+                itemId: item.itemId,
+                balancequestion: item.balancequestion,
+                itemuserId: item.itemuserId,
+                writing_status: item.writing_status,
+                chosenanswer: item.chosenanswer,
+                banswer: item.banswer,
+                })));
+            } else {
+                console.error("Response is not an array:", response);
+            }
+        }
+    };
 
-    const handleAddQuestion = () => {
+    const handleAddQuestion = async () => {
         if (window.confirm("문제를 추가하시겠습니까?")) {
-            let newQuestion: BalanceQuestion;
+            let newQuestion: BalancePostApiReqeust;
+            const projectId = sessionStorage.getItem("projectId");
 
             do {
                 const randomNum = Math.floor(Math.random() * 30) + 1;
                 newQuestion = {
-                    balance_id: balanceQuestions.length + 1,
-                    balance_question: randomNum,
-                    select: ""
+                    balancequestion: randomNum,
+                    itemId: projectId ? projectId : ""
                 };
             } while (
-                balanceQuestions.some((quiz) => quiz.balance_question === newQuestion.balance_question)
+                balanceQuestions.some((quiz) => quiz.balancequestion === newQuestion.balancequestion)
             );
 
-            setBalanceQuestions((prev) => [
-                ...prev,
-                newQuestion
-            ]);
+            const reponse = await postBalance(newQuestion);
+            fetchBalanceQuestions();
+        
             setIsResults((prev) => [
                 ...prev,
                 false
@@ -48,16 +61,20 @@ function BalanceGamePage() {
         }
     };
 
-    const handleSelect = (id : number, selection : string) => {
+    const handleSelect = async (index: number, selection: string) => {
         if (window.confirm("선택하시겠습니까?")) {
-            setBalanceQuestions((prev) => prev.map(
-                (quiz) => quiz.balance_id === id
-                    ? {
-                        ...quiz,
-                        select: selection
-                    }
-                    : quiz
-            ));
+            let newBalanceAnswer: BalanceAnswerPostApiReqeust;
+            newBalanceAnswer = {
+                balancegameId: balanceQuestions[index].id,
+                itemuserId: balanceQuestions[index].itemuserId,
+                chosenanswer: selection === "case1" ? 1 : 2
+            };
+            console.log("newBalanceAnswer", newBalanceAnswer);
+
+            const response = await postBalanceAsnwer(newBalanceAnswer);
+            console.log("response", response);
+
+            fetchBalanceQuestions();
         }
     };
 
@@ -68,6 +85,35 @@ function BalanceGamePage() {
             return copy;
         });
     };
+    
+
+    useEffect(() => {   
+        const projectId = sessionStorage.getItem("projectId");
+
+        fetchBalanceQuestions();
+    }, []);
+
+    const handleGetResult = async (index: number) => {
+        toggleResult(index);
+        // api 호출해서 각 답변 가져오기
+        const response = await getBalanceAsnwerList(balanceQuestions[index].itemId, balanceQuestions[index].id, balanceQuestions[index].itemuserId);
+        // console.log(response);
+        setBalanceQuestions((prev) => {
+        const copy = [...prev];
+        copy[index] = {
+            ...copy[index],
+            banswer: response,
+        };
+        return copy;
+        }
+        );
+        setIsResults((prev) => {
+        const copy = [...prev];
+        copy[index] = true;
+        return copy;
+        }
+        );
+    }
 
     return (
         <div className="w-full px-6 lg:px-0">
@@ -91,17 +137,17 @@ function BalanceGamePage() {
                     {
                         balanceQuestions.map((quiz, index) => {
                             const matchedQuestion = balanceQuestionList.find(
-                                (q) => q.balance_question === quiz.balance_question
+                                (q) => q.balance_question === quiz.balancequestion
                             );
 
                             return (
-                                <div className="w-full md:w-1/2 lg:w-1/3 p-4 h-[400px]" key={quiz.balance_id}>
+                                <div className="w-full md:w-1/2 lg:w-1/3 p-4 h-[400px]" key={quiz.id}>
                                     {
                                         isResults[index]
                                             ? (
                                                 <div
-                                                    className="w-full h-full bg-beige rounded-2xl flex flex-col justify-center">
-                                                    <div className="flex flex-col items-center justify-center text-center">
+                                                    className="w-full h-full bg-beige90 rounded-2xl flex flex-col justify-center">
+                                                    <div className="flex flex-col items-center justify-center text-center px-4">
                                                         <div className="pb-16">
                                                             <p className="text-orange mb-2 text-xl font-bold">
                                                                 {
@@ -109,26 +155,25 @@ function BalanceGamePage() {
                                                                         ?.question1
                                                                 }
                                                             </p>
-                                                            <div className="flex justify-between w-full">
+                                                            <div className="flex justify-center w-full">
                                                                 {
-                                                                    balanaceQuizAnswerList
-                                                                        .filter((q) => q.select === "case1")
-                                                                        .map((q, idx) => (<p key={idx}>{q.name}</p>))
+                                                                    balanceQuestions[index].banswer && balanceQuestions[index].banswer
+                                                                        .filter((q) => q.chosenanswer === "1")
+                                                                        .map((q, idx) => (<p className="rounded px-1 border border-orange text-orange bg-white  mx-2" key={idx}>{q.userName}</p>))
                                                                 }
                                                             </div>
                                                         </div>
                                                         <div>
                                                             <p className="text-black mb-2 text-xl font-bold">
                                                                 {
-                                                                    matchedQuestion
-                                                                        ?.question2
+                                                                    matchedQuestion?.question2
                                                                 }
                                                             </p>
                                                             <div className="flex justify-center">
-                                                                {
-                                                                    balanaceQuizAnswerList
-                                                                        .filter((q) => q.select === "case2")
-                                                                        .map((q, idx) => (<p key={idx}>{q.name}</p>))
+                                                            {
+                                                                    balanceQuestions[index].banswer && balanceQuestions[index].banswer
+                                                                        .filter((q) => q.chosenanswer === "2")
+                                                                        .map((q, idx) => (<p className="rounded px-1 border bg-white  mx-2" key={idx}>{q.userName}</p>))
                                                                 }
                                                             </div>
                                                         </div>
@@ -144,7 +189,7 @@ function BalanceGamePage() {
                                             )
                                             : (
                                                 <div
-                                                    className="w-full h-full bg-beige rounded-2xl flex flex-col justify-center">
+                                                    className="w-full h-full bg-beige90 rounded-2xl flex flex-col justify-center">
                                                     <div className="flex flex-col items-center justify-center text-center">
                                                         <p className="text-orange text-xl font-bold w-4/5">
                                                             {
@@ -161,17 +206,17 @@ function BalanceGamePage() {
                                                         </p>
                                                     </div>
                                                     {
-                                                        quiz.select === ""
+                                                        quiz.writing_status === false
                                                             ? (
                                                                 <div className="w-full flex justify-center mt-10">
                                                                     <button
                                                                         className="hover:bg-orange50 bg-orange text-white px-4 py-2 rounded-md mr-4"
-                                                                        onClick={() => handleSelect(quiz.balance_id, "case1")}>
+                                                                        onClick={() => handleSelect(index, "case1")}>
                                                                         선택하기
                                                                     </button>
                                                                     <button
                                                                         className="hover:bg-boldGray bg-black text-white px-4 py-2 rounded-md"
-                                                                        onClick={() => handleSelect(quiz.balance_id, "case2")}>
+                                                                        onClick={() => handleSelect(index, "case2")}>
                                                                         선택하기
                                                                     </button>
                                                                 </div>
@@ -179,8 +224,8 @@ function BalanceGamePage() {
                                                             : (
                                                                 <div className="w-full flex justify-center mt-10">
                                                                     <button
-                                                                        className={`hover:bg-orange50 ${quiz.select === "case1" ? 'bg-orange' : "bg-black"} text-white px-4 py-2 rounded-md`}
-                                                                        onClick={() => toggleResult(index)}>
+                                                                        className={`hover:bg-orange50 ${quiz.chosenanswer === 1 ? 'bg-orange' : "bg-black"} text-white px-4 py-2 rounded-md`}
+                                                                        onClick={() => handleGetResult(index)}>
                                                                         결과보기
                                                                     </button>
                                                                 </div>
