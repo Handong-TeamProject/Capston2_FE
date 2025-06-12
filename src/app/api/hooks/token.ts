@@ -1,7 +1,7 @@
 // libs/hooks/token.ts
 import axios from "axios";
 
-const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:8080/api'; // 기본값 설정
+const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL; // 기본값 설정
 
 export async function accessTokenUser(): Promise<string | null> {
     try {
