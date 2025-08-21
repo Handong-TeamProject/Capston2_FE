@@ -36,7 +36,7 @@ export const fetchUserInfo = async (
                 setEditInfo(
                     { name: response.data.name, email: response.data.username, gender: response.data.gender }
                 )
-            } else {
+            // } else {
                 sessionStorage.setItem("username", response.data.name);
             }
         }
