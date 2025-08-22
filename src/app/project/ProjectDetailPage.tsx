@@ -12,6 +12,7 @@ import { getProjectInfo, putProjectInfo, } from "@/app/api/hooks/project";
 export interface ProjectMember {
   name: string;
   id: number;
+  userrole: string;
 }
 
 export interface ProjectInfo {
@@ -20,7 +21,7 @@ export interface ProjectInfo {
   code: string;
   day_status: number;
   content_status: number;
-  owner: number;
+  owner: string;
   users : ProjectMember[];
 }
 
@@ -106,8 +107,8 @@ function ProjectDetailPage() {
   };
 
 
-  const handleClickDeleteMember = (user_id: number) => {
-    if (user_id === projectData.owner) {
+  const handleClickDeleteMember = (userrole: string, user_id:number) => {
+    if (userrole === projectData.owner) {
       setIsDeleteFailModalOpen(true);
       return 0;
     }
@@ -181,7 +182,7 @@ function ProjectDetailPage() {
       const projectId = sessionStorage.getItem("projectId");
       if (projectId) {
         const response = await getProjectInfo(projectId);
-        // console.log("받은 응답:", response);
+        console.log("받은 응답:", response);
         const responseProjectInfo = {
           title: response.title,
           desc: response.content, // 서버의 content → 프론트의 desc로 대응
@@ -190,9 +191,11 @@ function ProjectDetailPage() {
           content_status: response.contentstatus,
           owner: response.owner,
           users: response.users
-            ? response.users.map((member: { userName: string, id: number }) => ({
+            ? response.users.map((member: { userName: string, id: number, userrole : string }) => ({
               name: member.userName,
               id: member.id,
+              userrole: member.userrole,
+              
             }))
             : [], // null이면 빈 배열로 대체
         };
@@ -239,32 +242,33 @@ function ProjectDetailPage() {
             <div>
               <div className="flex items-start justify-between">
                 <p className="mb-2 text-lg font-bold">| 프로젝트 소개</p>
-                <div>
-                  {isEdit && (
+                { projectData.owner === 'owner' &&
+                  <div>
+                    {isEdit && (
+                      <button
+                        className="mr-2 text-sm text-black hover:text-lightGray"
+                        onClick={() => openCancleModal()}
+                      >
+                        취소하기
+                      </button>
+                    )}
                     <button
-                      className="mr-2 text-sm text-black hover:text-lightGray"
-                      onClick={() => openCancleModal()}
-                    >
-                      취소하기
-                    </button>
-                  )}
-                  <button
-                    className={`${
-                      isEdit
-                        ? "text-orange hover:text-orange50"
-                        : "text-lightGray hover:text-black"
-                    } text-sm`}
-                    onClick={handleClickUpdateButton}
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter") {
-                        e.preventDefault(); // Enter 키의 기본 동작 방지
+                      className={`${isEdit
+                          ? "text-orange hover:text-orange50"
+                          : "text-lightGray hover:text-black"
+                        } text-sm`}
+                      onClick={handleClickUpdateButton}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                          e.preventDefault(); // Enter 키의 기본 동작 방지
+                        }
                       }
-                    }
-                  }
-                  >
-                    {isEdit ? "저장하기" : "수정하기"}
-                  </button>
-                </div>
+                      }
+                    >
+                      {isEdit ? "저장하기" : "수정하기"}
+                    </button>
+                  </div>
+                }
               </div>
               {isEdit ? (
                 <textarea
@@ -312,7 +316,7 @@ function ProjectDetailPage() {
                           width={24}
                           height={24}
                           onClick={() =>
-                            handleClickDeleteMember(member.id)
+                            handleClickDeleteMember(member.userrole, member.id)
                           }
                         />
                       </div>

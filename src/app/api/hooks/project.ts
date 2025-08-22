@@ -6,8 +6,8 @@ export interface ProjectApiResponse {
   code: string;
   daystatus: number;
   contentstatus: number;
-  owner: number;
-  users: { userName: string, id: number }[] | null;
+  owner: string;
+  users: { userName: string, id: number, userrole : string }[] | null;
   q1: number;
   q2: number;
   q3: number;
