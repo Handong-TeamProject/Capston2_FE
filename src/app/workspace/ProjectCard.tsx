@@ -1,6 +1,7 @@
 import { useState } from "react";
 import ConfirmModal from "../../components/Modal/ConfirmModal";
 import { useRouter } from "next/navigation";
+import { getAccessApi } from "../api/api";
 
 interface ProjectData {
   id: number;
@@ -75,11 +76,66 @@ function ProjectCard({ data, setProjectList }: { data: ProjectData, setProjectLi
     }
   };
 
-  const deleteProject = () => {
+  const deleteProject = async () => {
+
+    const postProject = async () => {
+      try {
+        const api_access = getAccessApi(); // 클라이언트 전용 인스턴스
+        const response = await api_access.delete("/itemuser", {
+          data: { id: data.id }
+        } as any);    
+
+        if (response.status === 200) {
+          console.log("삭제 완료");
+        } else {
+          alert("프로젝트 삭제에 실패했습니다.");
+        }
+
+        return response;
+      } catch (error) {
+        console.error("Failed to create project:", error);
+        alert("프로젝트 삭제에 실패했습니다.");
+      }
+    };
+
+    const response = await postProject()
+    console.log(response);
     setProjectList((prev) => prev.filter((project) => project.id !== data.id));
     alert("프로젝트가 삭제되었습니다.");
     closeDeletededModal();
   };
+
+  // const handleCreateProject = async () => {
+  
+  //     const postProject = async () => {
+  //       try {
+  //         const api_access = getAccessApi(); // 클라이언트 전용 인스턴스
+  //         const response = await api_access.post("/item", {
+  //           title: projectName,
+  //           content: projectDesc,
+  //         });
+  //         console.log("Project created:", response.data);
+  //         if (response.status === 200) {
+  //         } else {
+  //           alert("프로젝트 생성에 실패했습니다.");
+  //         }
+  //       } catch (error) {
+  //         console.error("Failed to create project:", error);
+  //         alert("프로젝트 생성에 실패했습니다.");
+  //       }
+  //     };
+  
+  //     await postProject();;
+      
+  //     // 모달 닫기 및 상태 초기화
+  //     closeConfirmCreateModal();
+  //     closeCreateModal();
+  //     setProjectName("");
+  //     setProjectDesc("");
+      
+  //     // 추가 로직: 새로운 프로젝트를 프로젝트 리스트에 추가
+  //     getProjectList(setProjectList);
+  //   };
 
   return (
     <div className="w-full flex flex-col justify-between rounded-2xl bg-baseGray px-10 py-8">
