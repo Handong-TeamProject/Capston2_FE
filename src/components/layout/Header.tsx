@@ -15,7 +15,7 @@ function Header() {
 
   return (
     <div className="bg-gray-50 flex w-full items-center justify-between px-6 py-3 lg:px-0">
-      <Image src="/Img/qrapo_logo.png" alt="logo" width={80} height={40} onClick={handleMovePage} />
+      <Image src="/Img/qrapo_logo.png" alt="logo" width={80} height={40} onClick={handleMovePage} className="w-[auto] h-[auto]" />
       <AuthButton />
     </div>
   );
