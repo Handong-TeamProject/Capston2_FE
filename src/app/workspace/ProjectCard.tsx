@@ -78,7 +78,7 @@ function ProjectCard({ data, setProjectList }: { data: ProjectData, setProjectLi
 
   const deleteProject = async () => {
 
-    const postProject = async () => {
+    const deleteProjectInfo = async () => {
       try {
         const api_access = getAccessApi(); // 클라이언트 전용 인스턴스
         const response = await api_access.delete("/itemuser", {
@@ -98,7 +98,7 @@ function ProjectCard({ data, setProjectList }: { data: ProjectData, setProjectLi
       }
     };
 
-    const response = await postProject()
+    const response = await deleteProjectInfo()
     console.log(response);
     setProjectList((prev) => prev.filter((project) => project.id !== data.id));
     alert("프로젝트가 삭제되었습니다.");

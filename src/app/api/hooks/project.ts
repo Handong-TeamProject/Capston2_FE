@@ -7,7 +7,7 @@ export interface ProjectApiResponse {
   daystatus: number;
   contentstatus: number;
   owner: string;
-  users: { userName: string, id: number, userrole : string }[] | null;
+  users: { userName: string, userId: number, userrole : string }[] | null;
   q1: number;
   q2: number;
   q3: number;

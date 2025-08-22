@@ -8,10 +8,11 @@ import AlertModal from "@/components/Modal/AlertModal";
 import ConfirmModal from "@/components/Modal/ConfirmModal";
 import Image from "next/image";
 import { getProjectInfo, putProjectInfo, } from "@/app/api/hooks/project";
+import { getAccessApi } from "../api/api";
 
 export interface ProjectMember {
   name: string;
-  id: number;
+  userId: number;
   userrole: string;
 }
 
@@ -91,16 +92,39 @@ function ProjectDetailPage() {
 
   const [deleteMember, setDeleteMember] = useState(0);
 
-  const handleDeleteMember = () => {
+  const handleDeleteMember = async () => {
+
+    const deleteProjectInfo = async () => {
+          try {
+            const api_access = getAccessApi(); // 클라이언트 전용 인스턴스
+            const response = await api_access.delete("/itemuser/member", {
+              data: { id: sessionStorage.getItem("projectId"), deleteMember : deleteMember }
+            } as any);    
+    
+            if (response.status === 200) {
+              console.log("삭제 완료");
+            } else {
+              alert("프로젝트 삭제에 실패했습니다.");
+            }
+    
+            return response;
+          } catch (error) {
+            console.error("Failed to create project:", error);
+            alert("프로젝트 삭제에 실패했습니다.");
+          }
+    };
+
+    const response = await deleteProjectInfo();
+    console.log(response);
     alert("사용자가 삭제되었습니다.");
     // window.location.reload();
     window.scrollTo(0, 0); // 페이지 상단으로 이동
     closeDeleteModal();
     // 삭제 로직
-        setProjectInfo((prev) => ({
+    setProjectInfo((prev) => ({
       ...prev,
-      members: prev.users.filter((user) => user.id !== deleteMember),
-        }));
+      members: prev.users.filter((user) => user.userId !== deleteMember),
+    }));
     setIsEdit(false);
     // console.log(index, projectId);
     // 새로 유저 정보 가져오기
@@ -191,9 +215,9 @@ function ProjectDetailPage() {
           content_status: response.contentstatus,
           owner: response.owner,
           users: response.users
-            ? response.users.map((member: { userName: string, id: number, userrole : string }) => ({
+            ? response.users.map((member: { userName: string, userId: number, userrole : string }) => ({
               name: member.userName,
-              id: member.id,
+              userId: member.userId,
               userrole: member.userrole,
               
             }))
@@ -316,7 +340,7 @@ function ProjectDetailPage() {
                           width={24}
                           height={24}
                           onClick={() =>
-                            handleClickDeleteMember(member.userrole, member.id)
+                            handleClickDeleteMember(member.userrole, member.userId)
                           }
                         />
                       </div>
