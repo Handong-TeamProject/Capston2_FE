@@ -1,68 +1,76 @@
+import { getProfileInfo, MyProfile, putProfileInfo } from "@/app/api/hooks/profile";
+import AlertModal from "@/components/Modal/AlertModal";
+import ConfirmModal from "@/components/Modal/ConfirmModal";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-interface ProfileData {
-    user_id: number;
-    profile_writing_status: boolean;
-    name?: string;
-    age?: number;
-    area?: string;
-    mbti?: string;
-    major?: string;
-    tmi?: string;
-    quiz_question?: string;
-    apply_status?: boolean;
-}
 
-const handleReturnValue = (text : string) => {
-    switch (text) {
-        case "이름":
-            return "name";
-        case "지역":
-            return "area";
-        case "MBTI":
-            return "mbti";
-        case "직업/전공":
-            return "major";
-        case "관심사/TMI":
-            return "tmi";
-        case "나이":
-            return "age";
-        default:
-            return undefined;
-    }
-}
-
-function ProfileCard({index, profileType, data} : {
-    index: number;
-    profileType: string;
-    data : ProfileData
-}) {
-    
+function ProfileCard() {
     // const [profilData, setProfileData] = useState(data);
-    const [profilData] = useState(data);
-    const [initData, setInitData] = useState<ProfileData>({
-        user_id: 0,
-        profile_writing_status: false,
-        name: profilData.name,
-        age: 0,
+    const [myProfile, setMyProfile] = useState<MyProfile>({
+        id:0,
+        userId: 0,
+        itemId: 0,
+        writing_status: false,
+        userName: "",
+        age: "",
         area: "",
         mbti: "",
         major: "",
         tmi: "",
-        quiz_question: "",
+        quizquestion: "",
         apply_status: false,
     });
-    const [isEdit, setSetIsEdit] = useState(false);
+    
+    const [isEdit, setIsEdit] = useState(false);
     const [isResult, setIsResult] = useState(false);
     const [quizAnswer, setQuizAnswer] = useState("");
+    const [isWriteModalOpen, setIsWriteModalOpen] = useState(false);
+    const [isWriteSuccessModalOpen, setIsWriteSuccessModalOpen] = useState(false);
+    const [isCheckModalOpen, setIsCheckModalOpen] = useState(false);
 
-    const handleChangeColors = (buttonText : string) => {
+    useEffect(() => {
+        const fetchProjectInfo = async () => {
+            const projectId = sessionStorage.getItem("projectId");
+            if (projectId) {
+                const response = await getProfileInfo(projectId);
+                console.log("받은 응답:", response);
+                const initMyProfile = {
+                    id : response.id,
+                    writing_status: response.writing_status,
+                    itemId: response.itemId,
+                    userId: response.userId,
+                    quizquestion: response.quizquestion,
+                    mbti: response.mbti,
+                    area: response.area,
+                    major: response.major,
+                    age: response.age,
+                    tmi: response.tmi,
+                    userName: response.userName,
+                    apply_status: false
+                    //     ? response.users.map((member: { userName: string, userId: number, userrole : string }) => ({
+                    //         name: member.userName,
+                    //         userId: member.userId,
+                    //         userrole: member.userrole,
+                    //         }))
+                    //     : [], // null이면 빈 배열로 대체
+                };
+
+                setMyProfile(
+                    initMyProfile,
+                );
+                // setEditProjectInfo({...responseProjectInfo,});
+            }
+        };
+        fetchProjectInfo();
+    }, []);
+
+    const handleChangeColors = (buttonText: string) => {
         switch (buttonText) {
             case "작성하기":
                 return "hover:bg-orange50 bg-orange text-white";
             case "제출하기":
-                return "hover:bg-orange bg-orange50 text-white";
+                return `${(handleMyInoValidation()) ? 'bg-orange hover:bg-orange50' : 'bg-orange50'}  text-white`;
             case "완료하기":
                 return "hover:bg-orange bg-orange50 text-white";
             case "취소하기":
@@ -78,186 +86,223 @@ function ProfileCard({index, profileType, data} : {
         }
     };
 
-    const Button = ({handler, buttonText} : {
-        handler: () => void;
-        buttonText: string;
-    }) => (
-        <button
-            onClick={handler}
-            className={`rounded-md w-20 lg:w-24 h-8 mt-4 text-sm lg:text-lg object-hover ${handleChangeColors(buttonText)}`}>
-            {buttonText}
-        </button>
-    );
-
-
-
-    const RowInput = ({ text1, text2, data}: { text1: string; text2: string; data: ProfileData;}) => {
-        
-        return (
-            <div className="w-full flex gap-3 mb-1 text-sm lg:text-base">
-                <div className="w-1/3">
-                    <p className="text-orange  font-bold mb-1">{text1}</p>
-                    {
-                        profileType === "owner_before" ? (
-                            isEdit ? (
-                                <input type="text" className="w-full" value={String(data[handleReturnValue(text1) as keyof ProfileData]) ?? ""} onChange={(e) =>
-                                    setInitData((prev) => ({
-                                        ...prev,
-                                        [handleReturnValue(text1) as keyof ProfileData]: e.target.value,
-                                    }))
-                                }/>
-                            ) : (
-                                <p>{String(data[handleReturnValue(text1) as keyof ProfileData]) ?? ""}</p>
-                            )
-                        ) : (
-                            handleReturnValue(text1) === profilData.quiz_question ? (
-                                isEdit ? (
-                                    <input type="text" className="w-full" autoFocus value={quizAnswer} onChange={(e) => setQuizAnswer(e.target.value)}/>
-                                ) : (
-                                    <p className="text-white bg-gray rounded-md text-center w-1/2">Quiz</p>
-                                )
-                            ) : (
-                                <p>{String(data[handleReturnValue(text1) as keyof ProfileData]) ?? ""}</p>
-                            )
-                        )
-                    }
-                    
-
-                </div>
-                <div className="w-2/3">
-                    <p className="text-orange font-bold mb-1">{text2}</p>
-                    {
-                        profileType === "owner_before" ? (
-                            isEdit ? (
-                                <input type="text" className="w-full" value={String(data[handleReturnValue(text2) as keyof ProfileData]) ?? ""} onChange={(e) =>
-                                    setInitData((prev) => ({
-                                        ...prev,
-                                        [handleReturnValue(text2) as keyof ProfileData]: e.target.value,
-                                    }))
-                                }/>
-                            ) : (
-                                <p>{String(data[handleReturnValue(text2) as keyof ProfileData]) ?? ""}</p>
-                            )
-                        ) : (
-                            handleReturnValue(text2) === profilData.quiz_question ? (
-                                isEdit ? (
-                                    <input type="text" className="w-full" autoFocus value={quizAnswer} onChange={(e) => setQuizAnswer(e.target.value)}/>
-                                ) : (
-                                    <p className="text-white bg-gray rounded-md text-center w-1/2">Quiz</p>
-                                )
-                            ) : (
-                                <p>{String(data[handleReturnValue(text2) as keyof ProfileData]) ?? ""}</p>
-                            )
-                        )
-                    }
-
-                </div>
-            </div>
-            
-        )
-    }
-
-    const handleSubmit = (submitType: string) => {
-        if (window.confirm("정말로 제출하시겠습니까?")) {
-            if (submitType === "write") {
-                // write api code
-                data.profile_writing_status = true;
-                setSetIsEdit(false);
-            } else if (submitType === "quiz") {
-                // quiz api code
-                profilData.apply_status = true;
-                setSetIsEdit(false);
-            }
-
-            alert("제출되었습니다.");
+    const handleMyInoValidation = () =>  {
+        if (myProfile.area?.length > 0 && myProfile.age?.length > 0 && myProfile.major?.length > 0 && myProfile.mbti?.length > 0 && myProfile.tmi?.length > 0
+        ) {
+            return true;
+        } else {
+            return false;
         }
     }
-    return (
-        <div
-            className="w-full rounded-3xl bg-beige90 h-52 md:h-60 flex items-center px-4 lg:px-8">
-            <div className="flex flex-col items-center mr-4 lg:mr-8">
-                <Image
-                    src={`/Img/member${index + 1}.png`}
-                    alt="user image"
-                    className="w-14 lg:w-20"
-                    width={48}
-                    height={48}
-                />
-                {
-                    // isEdit ? (
-                    //     <Button handler = {() => handleSubmit("write")} buttonText="제출하기"/>
-                    // ) : (
-                    //     <Button handler = {() => setSetIsEdit(!isEdit)} buttonText="작성하기"/>
-                    // )   
-                    profileType === "owner_before" ? (
-                        isEdit ? (
-                            <Button handler = {() => handleSubmit("write")} buttonText="제출하기"/>
-                        ) : (
-                            <Button handler = {() => setSetIsEdit(!isEdit)} buttonText="작성하기"/>
-                        )
-                    ) :profileType === "owner_after" ? (
-                        isEdit ? (
-                            <Button handler = {() => setSetIsEdit(!isEdit)} buttonText="닫기"/>
-                        ) : (
-                            <Button handler = {() => setSetIsEdit(!isEdit)} buttonText="현황보기"/>
-                        )
-                    ) : (
-                        profileType === "apply" ? (
-                            isEdit ? (
-                            <Button handler = {() => setIsResult(!isResult)} buttonText="닫기"/>
-                        ) : (
-                            <Button handler = {() => setIsResult(!isResult)} buttonText="현황보기"/>
-                        )
-                        ) : (
-                            isEdit ? (
-                            <Button handler = {() => handleSubmit("write")} buttonText="제출하기"/>
-                        ) : (
-                            <Button handler = {() => setSetIsEdit(!isEdit)} buttonText="맞춰보기"/>
-                        )
-                        )
-                    )
-                }
+    const handleCheckMyInfo = () => {
+        if (handleMyInoValidation()) {
+            setIsWriteModalOpen(true);
+        } else {
+            setIsCheckModalOpen(true);
+        }   
 
-            </div>
+    }
+    const handleWriteMyInfo = async () => {
+
+        const putProfile = {
+            id : myProfile.id,
+            quizquestion: ["mbti", "area", "major", "age", "tmi"][Math.floor(Math.random() * 5)],
+            mbti: myProfile.mbti,
+            area: myProfile.area,
+            major: myProfile.major,
+            age: myProfile.age,
+            tmi: myProfile.tmi,
+        };
+        const response = await putProfileInfo(putProfile);
+        setIsEdit(false);
+        setIsWriteModalOpen(false);
+        setIsWriteSuccessModalOpen(true);
+        setMyProfile((prev) => ({...prev, writing_status :  true}))
+
+    }
+    
+    return (
+        <div className="w-full rounded-3xl bg-beige90 h-52 md:h-60 flex items-center px-4 lg:px-8">
+            {/* <p>이름 : {myProfile.userName || ""}</p> */}
+
             {
-                isResult ? (
-                    <div className="w-full flex">
-                        <div className="w-1/2 text-sm lg:text-base">
-                            <p className="text-orange">퀴즈 정답</p>
-                            <p>ISFJ</p>
+                isResult === false ?
+                    <>
+                        <div className="flex flex-col items-center mr-4 lg:mr-8">
+                            <Image
+                                src={`/Img/member${1}.png`}
+                                alt="user image"
+                                className="w-14 lg:w-20"
+                                width={48}
+                                height={48}
+                            />
+                            {
+                                myProfile.writing_status === false ?
+                                    isEdit ?
+                                        <button
+                                            className={`rounded-md w-20 lg:w-24 h-8 mt-4 text-sm lg:text-lg object-hover ${handleChangeColors('제출하기')}`}
+                                            onClick={() => handleCheckMyInfo()}
+                                        >제출하기</button>
+                                        :
+                                        <button
+                                            className={`rounded-md w-20 lg:w-24 h-8 mt-4 text-sm lg:text-lg object-hover ${handleChangeColors('작성하기')}`}
+                                            onClick={() => setIsEdit(true)}
+                                        >작성하기</button>
+                                    :
+                                    <button
+                                        className={`rounded-md w-20 lg:w-24 h-8 mt-4 text-sm lg:text-lg object-hover ${handleChangeColors('현황보기')}`}
+                                        onClick={() => setIsResult(true)}
+                                    >현황보기</button>
+                            }
                         </div>
-                        <div className="w-1/2 text-sm lg:text-base">
-                            <div className="mb-1">
-                                <p className="text-orange font-bold">김광일님의 답변</p>
-                                <p>MBTI</p>
+                        
+                        <div className="flex flex-col w-full">
+                            <div className="w-full flex gap-3 mb-1 text-sm lg:text-base">
+                                <div className="w-1/3">
+                                    <p className="text-orange font-bold mb-1">이름</p>
+                                    <input
+                                        type="text"
+                                        className="w-full"
+                                        readOnly
+                                        value={myProfile.userName}
+                                        onChange={(e) =>
+                                            setMyProfile((prev) => ({
+                                                ...prev,
+                                                userName: e.target.value,
+                                            }))
+                                        }
+                                    />
+                                </div>
+                                <div className="w-1/3">
+                                    <p className="text-orange  font-bold mb-1">지역</p>
+                                    <input
+                                        type="text"
+                                        className="w-full"
+                                        readOnly = {!isEdit}
+                                        value={myProfile.area || ""}
+                                        onChange={(e) =>
+                                            setMyProfile((prev) => ({
+                                                ...prev,
+                                                area: e.target.value,
+                                            }))
+                                        }
+                                    />
+                                </div>
                             </div>
-                            <div className="mb-1">
-                                <p className="text-orange font-bold">김광일님의 답변</p>
-                                <p>MBTI</p>
+                            <div className="w-full flex gap-3 mb-1 text-sm lg:text-base">
+                                <div className="w-1/3">
+                                    <p className="text-orange  font-bold mb-1">나이</p>
+                                    <input
+                                        type="text"
+                                        className="w-full"
+                                        readOnly = {!isEdit}
+                                        value={myProfile.age || ""}
+                                        onChange={(e) =>
+                                            setMyProfile((prev) => ({
+                                                ...prev,
+                                                age: e.target.value,
+                                            }))
+                                        }
+                                    />
+                                </div>
+                                <div className="w-1/3">
+                                    <p className="text-orange  font-bold mb-1">직업/전공</p>
+                                    <input
+                                        type="text"
+                                        className="w-full"
+                                        readOnly = {!isEdit}
+                                        value={myProfile.major || ""}
+                                        onChange={(e) =>
+                                            setMyProfile((prev) => ({
+                                                ...prev,
+                                                major: e.target.value,
+                                            }))
+                                        }
+                                    />
+                                </div>
                             </div>
-                            <div className="mb-1">
-                                <p className="text-orange font-bold">김광일님의 답변</p>
-                                <p>MBTI</p>
+                            <div className="w-full flex gap-3 mb-1 text-sm lg:text-base">
+                                <div className="w-1/3">
+                                    <p className="text-orange  font-bold mb-1">MBTI</p>
+                                    <input
+                                        type="text"
+                                        className="w-full"
+                                        readOnly = {!isEdit}
+                                        value={myProfile.mbti || ""}
+                                        onChange={(e) =>
+                                            setMyProfile((prev) => ({
+                                                ...prev,
+                                                mbti: e.target.value,
+                                            }))
+                                        }
+                                    />
+                                </div>
+                                <div className="w-1/3">
+                                    <p className="text-orange  font-bold mb-1">관심사/TMI</p>
+                                    <input
+                                        type="text"
+                                        className="w-full"
+                                        readOnly = {!isEdit}
+                                        value={myProfile.tmi || ""}
+                                        onChange={(e) =>
+                                            setMyProfile((prev) => ({
+                                                ...prev,
+                                                tmi: e.target.value,
+                                            }))
+                                        }
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                        {isWriteModalOpen && (
+                            <ConfirmModal
+                                message="정말 작성하시겠습니까?"
+                                closeModal={() => setIsWriteModalOpen(false)}
+                                handleAction={() => handleWriteMyInfo()}
+                            />
+                        )}
+                        {isWriteSuccessModalOpen && ( // 복사 모달 추가
+                            <AlertModal
+                                message="작성되었습니다!"
+                                closeModal={() => setIsWriteSuccessModalOpen(false)}
+                            />
+                        )}
+                        {isCheckModalOpen && ( // 복사 모달 추가
+                            <AlertModal
+                                message="모든 필드를 작성해주세요!"
+                                closeModal={() => setIsCheckModalOpen(false)}
+                            />
+                        )}
+                    </>
+                : 
+                    <div className="w-full flex flex-col">
+                        <div className="w-full flex justify-between mb-2 items-center">
+                            <p className="font-bold text-lg">{myProfile.userName}님의 퀴즈 결과</p>
+                            <Image src="/Img/cancleBefore.png" onClick={() => setIsResult(false)} alt="cancle" width={30} height={30} className="w-[30px] h-[30px] cursor-pointer" />
+                        </div>
+                        <div className="w-full flex">
+                            <div className="w-1/2 text-sm lg:text-base">
+                                <p className="text-orange">퀴즈 정답</p>
+                                <p>{myProfile.mbti}</p>
+                            </div>
+                            <div className="w-1/2 text-sm lg:text-base">
+                                <div className="mb-1">
+                                    <p className="text-orange font-bold">김광일님의 답변</p>
+                                    <p>MBTI</p>
+                                </div>
+                                <div className="mb-1">
+                                    <p className="text-orange font-bold">김광일님의 답변</p>
+                                    <p>MBTI</p>
+                                </div>
+                                <div className="mb-1">
+                                    <p className="text-orange font-bold">김광일님의 답변</p>
+                                    <p>MBTI</p>
+                                </div>
                             </div>
                         </div>
                     </div>
-                ) : (
-                    profileType === "owner_before" ? (
-                            <div className="flex flex-col w-full">
-                                <RowInput data={initData} text1="이름" text2="지역"/>
-                                <RowInput data={initData} text1 = "나이" text2 = "직업/전공"/>
-                                <RowInput data={initData} text1 = "MBTI" text2 = "관심사/TMI"/>
-                            </div>
-                        ) : (
-                            <div className="flex flex-col w-full">
-                                <RowInput data={profilData} text1="이름" text2="지역"/>
-                                <RowInput data={profilData} text1 = "나이" text2 = "직업/전공"/>
-                                <RowInput data={profilData} text1 = "MBTI" text2 = "관심사/TMI"/>
-                            </div>
-                    )
-                )    
             }
         </div>
-    );
+    )
 }
 export default ProfileCard;

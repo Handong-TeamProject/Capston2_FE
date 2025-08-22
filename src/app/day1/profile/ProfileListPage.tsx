@@ -4,12 +4,12 @@ import ActivityDesc from "@/components/common/ActivityDesc";
 import React, {useState} from "react";
 import {profileDesc} from "@/data/day1/profileDesc";
 import ProfileCard from "./ProfileCard";
+import ProfileCard2 from "./ProfileCard2";
 import EmptyProfile from "./EmptyProfile";
 
 function ProfileListPage() {
-    // const [ownerProfile, setOwnerProfile] = useState(profileDesc.owner);
+    // const [myProfile, setMyProfile] = useState(profileDesc.owner);
     // const [memberProfiles, setMemberProfiles] = useState(profileDesc.members);
-    const [ownerProfile] = useState(profileDesc.owner);
     const [memberProfiles] = useState(profileDesc.members);
 
     return (
@@ -19,11 +19,36 @@ function ProfileListPage() {
             </div>
             <div className="flex flex-wrap -mx-2">
                 <div className="w-full md:w-1/2 px-3 mb-6">
-                    {
-                        ownerProfile.profile_writing_status === true
-                            ? (<ProfileCard index={1} profileType="owner_after" data={ownerProfile}/>)
-                            : (<ProfileCard index={1} profileType="owner_before" data={ownerProfile}/>)
-                    }
+                    <ProfileCard />
+                    {/* <ProfileCard2 index={0} profileType="" data=
+                        {
+                        {
+                            userId: 0,
+                            itemId: 0,
+                            writing_status: false,
+                            userName: "",
+                            age: "",
+                            area: "",
+                            mbti: "",
+                            major: "",
+                            tmi: "",
+                            quizquestion: "",
+                            apply_status: false
+                        }
+                        // {
+                        //     userId: 0,
+                        //     itemId: 0,
+                        //     writing_status: false,
+                        //     userName: "김광일",
+                        //     age: "20",
+                        //     area: "서울",
+                        //     mbti: "ESFJ",
+                        //     major: "컴퓨터공학",
+                        //     tmi: "발냄새",
+                        //     quizquestion: "",
+                        //     apply_status: false
+                        // }
+                    } /> */}
                 </div>
                 {
                     memberProfiles.map((data, index) => (
@@ -32,8 +57,36 @@ function ProfileListPage() {
                                 data.profile_writing_status === true
                                     ? (
                                         data.apply_status === true
-                                            ? (<ProfileCard index={index} profileType="apply" data={data}/>)
-                                            : (<ProfileCard index={index} profileType="nonApply" data={data}/>)
+                                            ? (<ProfileCard2 index={0} profileType="" data=
+                                                {
+                                                    {
+                                                        userId: 0,
+                                                        itemId: 0,
+                                                        writing_status: false,
+                                                        userName: "",
+                                                        age: "",
+                                                        area: "",
+                                                        mbti: "",
+                                                        major: "",
+                                                        tmi: "",
+                                                        quizquestion: "",
+                                                        apply_status: false
+                                                    }} /> )
+                                            : (<ProfileCard2 index={0} profileType="" data=
+                                                {
+                                                    {
+                                                        userId: 0,
+                                                        itemId: 0,
+                                                        writing_status: false,
+                                                        userName: "",
+                                                        age: "",
+                                                        area: "",
+                                                        mbti: "",
+                                                        major: "",
+                                                        tmi: "",
+                                                        quizquestion: "",
+                                                        apply_status: false
+                                                    }} />)
                                     )
                                     : (<EmptyProfile/>)
                             }

@@ -29,6 +29,7 @@ export async function accessTokenUser(): Promise<string | null> {
     } catch (error: unknown) {
         console.error("accessToken 재발급 중 오류 발생:", error);
         alert("accessToken 재발급 중 오류 발생");
+        sessionStorage.clear();
         window.location.href = "/";
         return null;
     }
