@@ -97,9 +97,14 @@ function ProjectDetailPage() {
     const deleteProjectInfo = async () => {
           try {
             const api_access = getAccessApi(); // 클라이언트 전용 인스턴스
-            const response = await api_access.delete("/itemuser/member", {
-              data: { id: sessionStorage.getItem("projectId"), deleteMember : deleteMember }
-            } as any);    
+            const response = await api_access.request({
+              url: "/itemuser/member",
+              method: "DELETE",
+              data: {
+                id: sessionStorage.getItem("projectId"),
+                deleteMember,
+              },
+            });  
     
             if (response.status === 200) {
               console.log("삭제 완료");

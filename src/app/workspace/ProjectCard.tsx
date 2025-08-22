@@ -81,9 +81,11 @@ function ProjectCard({ data, setProjectList }: { data: ProjectData, setProjectLi
     const deleteProjectInfo = async () => {
       try {
         const api_access = getAccessApi(); // 클라이언트 전용 인스턴스
-        const response = await api_access.delete("/itemuser", {
-          data: { id: data.id }
-        } as any);    
+        const response = await api_access.request({
+        url: "/itemuser",
+        method: "DELETE",
+        data: { id: data.id }
+      });
 
         if (response.status === 200) {
           console.log("삭제 완료");

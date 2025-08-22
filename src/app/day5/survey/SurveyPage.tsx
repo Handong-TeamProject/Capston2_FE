@@ -138,8 +138,8 @@ function SurveyPage() {
 
           const response2 = await getProjectInfo(projectId);
           if (response2.users && Array.isArray(response2.users)) {
-            const convertedUsers: User[] = response2.users.map((user: { id: number; userName: string }) => ({
-              user_id: user.id,
+            const convertedUsers: User[] = response2.users.map((user: { userId: number; userName: string }) => ({
+              user_id: user.userId,
               userName: user.userName
             }));
             setUserList(convertedUsers);
