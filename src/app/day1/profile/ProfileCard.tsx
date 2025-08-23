@@ -1,8 +1,8 @@
-import { getMyProfileInfo, MyProfile, putMyProfileInfo } from "@/app/api/hooks/profile";
+import { MyProfile, putMyProfileInfo } from "@/app/api/hooks/profile";
 import AlertModal from "@/components/Modal/AlertModal";
 import ConfirmModal from "@/components/Modal/ConfirmModal";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import {useState } from "react";
 
 
 function ProfileCard({ myProfile, setMyProfile }: { myProfile: MyProfile; setMyProfile: React.Dispatch<React.SetStateAction<MyProfile>> }) {
@@ -67,7 +67,7 @@ function ProfileCard({ myProfile, setMyProfile }: { myProfile: MyProfile; setMyP
             age: myProfile.age,
             tmi: myProfile.tmi,
         };
-        const response = await putMyProfileInfo(putProfile);
+        await putMyProfileInfo(putProfile);
         setIsEdit(false);
         setIsWriteModalOpen(false);
         setIsWriteSuccessModalOpen(true);

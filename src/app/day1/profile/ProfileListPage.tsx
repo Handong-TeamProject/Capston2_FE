@@ -2,7 +2,6 @@
 
 import ActivityDesc from "@/components/common/ActivityDesc";
 import React, {useEffect, useState} from "react";
-import {profileDesc} from "@/data/day1/profileDesc";
 import ProfileCard from "./ProfileCard";
 import ProfileCard2 from "./ProfileCard2";
 import EmptyProfile from "./EmptyProfile";

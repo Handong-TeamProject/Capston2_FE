@@ -4,7 +4,7 @@ export interface responseMyProfile {
 
     // users: { userName: string, userId: number, userrole: string }[] | null;
     id: number;
-    writing_status: Boolean;
+    writing_status: boolean;
     itemId: number;
     userId: number;
     quizquestion: string; //질문 항목 (MBTI, 지역, 전공, 나이)
@@ -23,7 +23,7 @@ export interface MyProfile {
 
     // users: { userName: string, userId: number, userrole: string }[] | null;
     id: number;
-    writing_status: Boolean;
+    writing_status: boolean;
     itemId: number;
     userId: number;
     quizquestion: string; //질문 항목 (MBTI, 지역, 전공, 나이)
