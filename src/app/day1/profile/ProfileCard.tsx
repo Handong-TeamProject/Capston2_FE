@@ -1,69 +1,23 @@
-import { getProfileInfo, MyProfile, putProfileInfo } from "@/app/api/hooks/profile";
+import { getMyProfileInfo, MyProfile, putMyProfileInfo } from "@/app/api/hooks/profile";
 import AlertModal from "@/components/Modal/AlertModal";
 import ConfirmModal from "@/components/Modal/ConfirmModal";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
 
-function ProfileCard() {
+function ProfileCard({ myProfile, setMyProfile }: { myProfile: MyProfile; setMyProfile: React.Dispatch<React.SetStateAction<MyProfile>> }) {
     // const [profilData, setProfileData] = useState(data);
-    const [myProfile, setMyProfile] = useState<MyProfile>({
-        id:0,
-        userId: 0,
-        itemId: 0,
-        writing_status: false,
-        userName: "",
-        age: "",
-        area: "",
-        mbti: "",
-        major: "",
-        tmi: "",
-        quizquestion: "",
-        apply_status: false,
-    });
+    
     
     const [isEdit, setIsEdit] = useState(false);
     const [isResult, setIsResult] = useState(false);
-    const [quizAnswer, setQuizAnswer] = useState("");
+    // const [quizAnswer, setQuizAnswer] = useState("");
     const [isWriteModalOpen, setIsWriteModalOpen] = useState(false);
     const [isWriteSuccessModalOpen, setIsWriteSuccessModalOpen] = useState(false);
     const [isCheckModalOpen, setIsCheckModalOpen] = useState(false);
 
-    useEffect(() => {
-        const fetchProjectInfo = async () => {
-            const projectId = sessionStorage.getItem("projectId");
-            if (projectId) {
-                const response = await getProfileInfo(projectId);
-                console.log("받은 응답:", response);
-                const initMyProfile = {
-                    id : response.id,
-                    writing_status: response.writing_status,
-                    itemId: response.itemId,
-                    userId: response.userId,
-                    quizquestion: response.quizquestion,
-                    mbti: response.mbti,
-                    area: response.area,
-                    major: response.major,
-                    age: response.age,
-                    tmi: response.tmi,
-                    userName: response.userName,
-                    apply_status: false
-                    //     ? response.users.map((member: { userName: string, userId: number, userrole : string }) => ({
-                    //         name: member.userName,
-                    //         userId: member.userId,
-                    //         userrole: member.userrole,
-                    //         }))
-                    //     : [], // null이면 빈 배열로 대체
-                };
-
-                setMyProfile(
-                    initMyProfile,
-                );
-                // setEditProjectInfo({...responseProjectInfo,});
-            }
-        };
-        fetchProjectInfo();
-    }, []);
+    
+    
 
     const handleChangeColors = (buttonText: string) => {
         switch (buttonText) {
@@ -113,7 +67,7 @@ function ProfileCard() {
             age: myProfile.age,
             tmi: myProfile.tmi,
         };
-        const response = await putProfileInfo(putProfile);
+        const response = await putMyProfileInfo(putProfile);
         setIsEdit(false);
         setIsWriteModalOpen(false);
         setIsWriteSuccessModalOpen(true);
