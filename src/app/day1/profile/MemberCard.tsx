@@ -1,4 +1,4 @@
-import { MyProfile, PostMemberQuizAnswer, postMemberQuizAnswer } from "@/app/api/hooks/profile";
+import { getMemberQuizAnswers, MyProfile, PostMemberQuizAnswer, postMemberQuizAnswer } from "@/app/api/hooks/profile";
 import AlertModal from "@/components/Modal/AlertModal";
 import ConfirmModal from "@/components/Modal/ConfirmModal";
 import Image from "next/image";
@@ -7,9 +7,9 @@ import { useState } from "react";
 
 function MemberCard({ data, index, id }: { data: MyProfile, index : number, id : number }) {
     
-    const [isResult, setIsResult] = useState(false);
+    const [, setIsResult] = useState(false);
     const [isEdit, setIsEdit] = useState(false);
-    const [myProfile, setMyProfile] = useState<MyProfile>(data);
+    const [myProfile] = useState<MyProfile>(data);
     const quizQuesion = myProfile.quizquestion;
     const [quizAnswer, setQuizAnswer] = useState("");
     const [isApply, setIsApply] = useState(myProfile?.apply_status);
@@ -18,6 +18,13 @@ function MemberCard({ data, index, id }: { data: MyProfile, index : number, id :
     const [isWriteModalOpen, setIsWriteModalOpen] = useState(false);
     const [isWriteSuccessModalOpen, setIsWriteSuccessModalOpen] = useState(false);
     const [isCheckModalOpen, setIsCheckModalOpen] = useState(false);
+
+    type memberQuizAnswer = {
+        userName: string;
+        answer: string;
+    };
+
+    const [memberQuizAnswers, setMemberQuizAnswers] = useState<memberQuizAnswer[]>([]);
 
     const handleChangeColors = (buttonText: string) => {
         switch (buttonText) {
@@ -109,6 +116,20 @@ function MemberCard({ data, index, id }: { data: MyProfile, index : number, id :
         setIsApply(true);
     }
 
+    const handleShowResult = async (id: number) => {
+            setIsResult(true);
+            const response = await getMemberQuizAnswers(id);
+            setMemberQuizAnswers(
+                Array.isArray(response)
+                ? response.map((item) => ({
+                    userName: item.userName,
+                    answer : item.answer
+                }))
+                : []
+            );
+    
+        }
+
     return (
         <div className="w-full rounded-3xl bg-beige90 h-52 md:h-60 flex items-center px-4 lg:px-8">
             {
@@ -117,26 +138,22 @@ function MemberCard({ data, index, id }: { data: MyProfile, index : number, id :
                     <div className="w-full flex flex-col">
                         <div className="w-full flex justify-between mb-2 items-center">
                             <p className="font-bold text-lg">{myProfile.userName}님의 퀴즈 결과</p>
-                            <Image src="/Img/cancleBefore.png" onClick={() => setIsEdit(false)} alt="cancle" width={30} height={30} className="w-[30px] h-[30px] cursor-pointer" />
+                            <Image src="/Img/cancleBefore.png" onClick={() => setIsResult(false)} alt="cancle" width={30} height={30} className="w-[30px] h-[30px] cursor-pointer" />
                         </div>
                         <div className="w-full flex">
                             <div className="w-1/2 text-sm lg:text-base">
-                                <p className="text-orange">퀴즈 정답</p>
-                                <p>{myProfile.mbti}</p>
+                                <p className="text-orange">퀴즈 정답 <span className="text-black">(주제 : {myProfile.quizquestion})</span></p>
+                                <p>{myProfile[myProfile.quizquestion as keyof MyProfile]}</p>
                             </div>
                             <div className="w-1/2 text-sm lg:text-base">
-                                <div className="mb-1">
-                                    <p className="text-orange font-bold">김광일님의 답변</p>
-                                    <p>MBTI</p>
-                                </div>
-                                <div className="mb-1">
-                                    <p className="text-orange font-bold">김광일님의 답변</p>
-                                    <p>MBTI</p>
-                                </div>
-                                <div className="mb-1">
-                                    <p className="text-orange font-bold">김광일님의 답변</p>
-                                    <p>MBTI</p>
-                                </div>
+                                {
+                                    memberQuizAnswers.map((data, index) => (
+                                        <div className="mb-1" key = {index}>
+                                            <p className="text-orange font-bold">{data.userName}님의 답변</p>
+                                            <p>{data.answer}</p>
+                                        </div>
+                                    ))
+                                }
                             </div>
                         </div>
                     </div>
@@ -163,7 +180,7 @@ function MemberCard({ data, index, id }: { data: MyProfile, index : number, id :
                                         :
                                         <button
                                             className={`rounded-md w-20 lg:w-24 h-8 mt-4 text-sm lg:text-lg object-hover ${handleChangeColors('현황보기')}`}
-                                            onClick={() => setIsEdit(true)}
+                                            onClick={() => handleShowResult(myProfile.id)}
                                         >현황보기</button>
                                     :
                                     isEdit

@@ -107,3 +107,15 @@ export const postMemberQuizAnswer = async (data : PostMemberQuizAnswer) => {
         throw error;
     }
 }
+
+export const getMemberQuizAnswers = async (id:number) => {
+    try {
+        const api_access = getAccessApi();
+        const response = await api_access.get("/profile/quiz/list", { params : {authorId : id} });
+        // console.log("success", response);
+        return response.data;
+    } catch (error) {
+        console.error("Failed to post member quiz answer:", error);
+        throw error;
+    }
+}
