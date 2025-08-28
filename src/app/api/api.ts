@@ -1,6 +1,7 @@
 // libs/api.ts
 import axios from 'axios';
 import { accessTokenUser } from './hooks/token'; // 상대 경로 주의
+import { ApiError, extractMessageAndCode } from './api-error';
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL; // 기본값 설정
 
@@ -36,6 +37,18 @@ function attachInterceptors(instance: ReturnType<typeof axios.create>) {
                 alert("접근 권한이 없습니다.");
                 window.dispatchEvent(new Event("logout"));
                 window.location.href = "/";
+            }
+
+            if (status === 409) {
+                const { message, code } = extractMessageAndCode(error.response?.data);
+                // 호출부에서 status/code로 분기하기 쉽도록 ApiError로 감싼다.
+                return Promise.reject(
+                new ApiError({
+                    message: message ?? "이미 존재하는 데이터로 인해 처리할 수 없다.",
+                    status: 409,
+                    code: code ?? "ALREADY_EXISTS",
+                })
+                );
             }
 
             return Promise.reject(error);

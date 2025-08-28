@@ -1,11 +1,11 @@
-import { MyProfile, putMyProfileInfo } from "@/app/api/hooks/profile";
+import { getMemberQuizAnswers, MyProfile, putMyProfileInfo } from "@/app/api/hooks/profile";
 import AlertModal from "@/components/Modal/AlertModal";
 import ConfirmModal from "@/components/Modal/ConfirmModal";
 import Image from "next/image";
 import {useState } from "react";
 
 
-function ProfileCard({ myProfile, setMyProfile }: { myProfile: MyProfile; setMyProfile: React.Dispatch<React.SetStateAction<MyProfile>> }) {
+function ProfileCard({ myProfile, index, setMyProfile }: { myProfile: MyProfile; index : number, setMyProfile: React.Dispatch<React.SetStateAction<MyProfile>> }) {
     // const [profilData, setProfileData] = useState(data);
     
     
@@ -15,6 +15,13 @@ function ProfileCard({ myProfile, setMyProfile }: { myProfile: MyProfile; setMyP
     const [isWriteModalOpen, setIsWriteModalOpen] = useState(false);
     const [isWriteSuccessModalOpen, setIsWriteSuccessModalOpen] = useState(false);
     const [isCheckModalOpen, setIsCheckModalOpen] = useState(false);
+
+    type memberQuizAnswer = {
+        userName: string;
+        answer: string;
+    };
+
+    const [memberQuizAnswers, setMemberQuizAnswers] = useState<memberQuizAnswer[]>([]);
 
     
     
@@ -74,6 +81,20 @@ function ProfileCard({ myProfile, setMyProfile }: { myProfile: MyProfile; setMyP
         setMyProfile((prev) => ({...prev, writing_status :  true}))
 
     }
+
+    const handleShowResult = async (id: number) => {
+        setIsResult(true);
+        const response = await getMemberQuizAnswers(id);
+        setMemberQuizAnswers(
+            Array.isArray(response)
+            ? response.map((item) => ({
+                userName: item.userName,
+                answer : item.answer
+            }))
+            : []
+        );
+
+    }
     
     return (
         <div className="w-full rounded-3xl bg-beige90 h-52 md:h-60 flex items-center px-4 lg:px-8">
@@ -84,7 +105,7 @@ function ProfileCard({ myProfile, setMyProfile }: { myProfile: MyProfile; setMyP
                     <>
                         <div className="flex flex-col items-center mr-4 lg:mr-8">
                             <Image
-                                src={`/Img/member${1}.png`}
+                                src={`/Img/member${index}.png`}
                                 alt="user image"
                                 className="w-14 lg:w-20"
                                 width={48}
@@ -105,14 +126,14 @@ function ProfileCard({ myProfile, setMyProfile }: { myProfile: MyProfile; setMyP
                                     :
                                     <button
                                         className={`rounded-md w-20 lg:w-24 h-8 mt-4 text-sm lg:text-lg object-hover ${handleChangeColors('현황보기')}`}
-                                        onClick={() => setIsResult(true)}
+                                        onClick={() => handleShowResult(myProfile.id)}
                                     >현황보기</button>
                             }
                         </div>
                         
                         <div className="flex flex-col w-full">
                             <div className="w-full flex gap-3 mb-1 text-sm lg:text-base">
-                                <div className="w-1/3">
+                                <div className="w-1/2">
                                     <p className="text-orange font-bold mb-1">이름</p>
                                     <input
                                         type="text"
@@ -127,7 +148,7 @@ function ProfileCard({ myProfile, setMyProfile }: { myProfile: MyProfile; setMyP
                                         }
                                     />
                                 </div>
-                                <div className="w-1/3">
+                                <div className="w-1/2">
                                     <p className="text-orange  font-bold mb-1">지역</p>
                                     <input
                                         type="text"
@@ -144,7 +165,7 @@ function ProfileCard({ myProfile, setMyProfile }: { myProfile: MyProfile; setMyP
                                 </div>
                             </div>
                             <div className="w-full flex gap-3 mb-1 text-sm lg:text-base">
-                                <div className="w-1/3">
+                                <div className="w-1/2">
                                     <p className="text-orange  font-bold mb-1">나이</p>
                                     <input
                                         type="text"
@@ -159,7 +180,7 @@ function ProfileCard({ myProfile, setMyProfile }: { myProfile: MyProfile; setMyP
                                         }
                                     />
                                 </div>
-                                <div className="w-1/3">
+                                <div className="w-1/2">
                                     <p className="text-orange  font-bold mb-1">직업/전공</p>
                                     <input
                                         type="text"
@@ -176,7 +197,7 @@ function ProfileCard({ myProfile, setMyProfile }: { myProfile: MyProfile; setMyP
                                 </div>
                             </div>
                             <div className="w-full flex gap-3 mb-1 text-sm lg:text-base">
-                                <div className="w-1/3">
+                                <div className="w-1/2">
                                     <p className="text-orange  font-bold mb-1">MBTI</p>
                                     <input
                                         type="text"
@@ -191,7 +212,7 @@ function ProfileCard({ myProfile, setMyProfile }: { myProfile: MyProfile; setMyP
                                         }
                                     />
                                 </div>
-                                <div className="w-1/3">
+                                <div className="w-1/2">
                                     <p className="text-orange  font-bold mb-1">관심사/TMI</p>
                                     <input
                                         type="text"
@@ -236,22 +257,18 @@ function ProfileCard({ myProfile, setMyProfile }: { myProfile: MyProfile; setMyP
                         </div>
                         <div className="w-full flex">
                             <div className="w-1/2 text-sm lg:text-base">
-                                <p className="text-orange">퀴즈 정답</p>
-                                <p>{myProfile.mbti}</p>
+                                <p className="text-orange">퀴즈 정답 <span className="text-black">(주제 : {myProfile.quizquestion})</span></p>
+                                <p>{myProfile[myProfile.quizquestion as keyof MyProfile]}</p>
                             </div>
                             <div className="w-1/2 text-sm lg:text-base">
-                                <div className="mb-1">
-                                    <p className="text-orange font-bold">김광일님의 답변</p>
-                                    <p>MBTI</p>
-                                </div>
-                                <div className="mb-1">
-                                    <p className="text-orange font-bold">김광일님의 답변</p>
-                                    <p>MBTI</p>
-                                </div>
-                                <div className="mb-1">
-                                    <p className="text-orange font-bold">김광일님의 답변</p>
-                                    <p>MBTI</p>
-                                </div>
+                                {
+                                    memberQuizAnswers.map((data, index) => (
+                                        <div className="mb-1" key = {index}>
+                                            <p className="text-orange font-bold">{data.userName}님의 답변</p>
+                                            <p>{data.answer}</p>
+                                        </div>
+                                    ))
+                                }
                             </div>
                         </div>
                     </div>
