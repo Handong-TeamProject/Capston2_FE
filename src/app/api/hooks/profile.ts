@@ -69,6 +69,7 @@ export const getMyProfileInfo = async (id : string): Promise<responseMyProfile> 
                 itemId : id,
             }});
 
+        console.log(response);
         // ⬇️ response.data를 명시적으로 타입 단언
         return response.data as responseMyProfile;
     } catch (error) {
@@ -89,3 +90,20 @@ export const putMyProfileInfo = async (myProfile : PutMyProfile) => {
         throw error;
     }
 };
+
+export interface PostMemberQuizAnswer {
+    answer: string;
+    authorId: number;
+    itemuserId: number;
+}
+
+export const postMemberQuizAnswer = async (data : PostMemberQuizAnswer) => {
+    try {
+        const api_access = getAccessApi();
+        const response = await api_access.post("/profile/quiz", data);
+        console.log("success", response);
+    } catch (error) {
+        console.error("Failed to post member quiz answer:", error);
+        throw error;
+    }
+}

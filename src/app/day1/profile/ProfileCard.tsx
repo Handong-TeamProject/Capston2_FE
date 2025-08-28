@@ -5,7 +5,7 @@ import Image from "next/image";
 import {useState } from "react";
 
 
-function ProfileCard({ myProfile, setMyProfile }: { myProfile: MyProfile; setMyProfile: React.Dispatch<React.SetStateAction<MyProfile>> }) {
+function ProfileCard({ myProfile, index, setMyProfile }: { myProfile: MyProfile; index : number, setMyProfile: React.Dispatch<React.SetStateAction<MyProfile>> }) {
     // const [profilData, setProfileData] = useState(data);
     
     
@@ -84,7 +84,7 @@ function ProfileCard({ myProfile, setMyProfile }: { myProfile: MyProfile; setMyP
                     <>
                         <div className="flex flex-col items-center mr-4 lg:mr-8">
                             <Image
-                                src={`/Img/member${1}.png`}
+                                src={`/Img/member${index}.png`}
                                 alt="user image"
                                 className="w-14 lg:w-20"
                                 width={48}
@@ -112,7 +112,7 @@ function ProfileCard({ myProfile, setMyProfile }: { myProfile: MyProfile; setMyP
                         
                         <div className="flex flex-col w-full">
                             <div className="w-full flex gap-3 mb-1 text-sm lg:text-base">
-                                <div className="w-1/3">
+                                <div className="w-1/2">
                                     <p className="text-orange font-bold mb-1">이름</p>
                                     <input
                                         type="text"
@@ -127,7 +127,7 @@ function ProfileCard({ myProfile, setMyProfile }: { myProfile: MyProfile; setMyP
                                         }
                                     />
                                 </div>
-                                <div className="w-1/3">
+                                <div className="w-1/2">
                                     <p className="text-orange  font-bold mb-1">지역</p>
                                     <input
                                         type="text"
@@ -144,7 +144,7 @@ function ProfileCard({ myProfile, setMyProfile }: { myProfile: MyProfile; setMyP
                                 </div>
                             </div>
                             <div className="w-full flex gap-3 mb-1 text-sm lg:text-base">
-                                <div className="w-1/3">
+                                <div className="w-1/2">
                                     <p className="text-orange  font-bold mb-1">나이</p>
                                     <input
                                         type="text"
@@ -159,7 +159,7 @@ function ProfileCard({ myProfile, setMyProfile }: { myProfile: MyProfile; setMyP
                                         }
                                     />
                                 </div>
-                                <div className="w-1/3">
+                                <div className="w-1/2">
                                     <p className="text-orange  font-bold mb-1">직업/전공</p>
                                     <input
                                         type="text"
@@ -176,7 +176,7 @@ function ProfileCard({ myProfile, setMyProfile }: { myProfile: MyProfile; setMyP
                                 </div>
                             </div>
                             <div className="w-full flex gap-3 mb-1 text-sm lg:text-base">
-                                <div className="w-1/3">
+                                <div className="w-1/2">
                                     <p className="text-orange  font-bold mb-1">MBTI</p>
                                     <input
                                         type="text"
@@ -191,7 +191,7 @@ function ProfileCard({ myProfile, setMyProfile }: { myProfile: MyProfile; setMyP
                                         }
                                     />
                                 </div>
-                                <div className="w-1/3">
+                                <div className="w-1/2">
                                     <p className="text-orange  font-bold mb-1">관심사/TMI</p>
                                     <input
                                         type="text"

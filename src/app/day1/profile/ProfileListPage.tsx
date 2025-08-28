@@ -3,7 +3,7 @@
 import ActivityDesc from "@/components/common/ActivityDesc";
 import React, {useEffect, useState} from "react";
 import ProfileCard from "./ProfileCard";
-import ProfileCard2 from "./ProfileCard2";
+import MemberCard from "./MemberCard";
 import EmptyProfile from "./EmptyProfile";
 import { getMyProfileInfo, MyProfile } from "@/app/api/hooks/profile";
 
@@ -56,7 +56,7 @@ function ProfileListPage() {
                 );
                 setMemberProfile(
                     response.users
-                )
+                );
             }
         };
         fetchProjectInfo();
@@ -69,7 +69,7 @@ function ProfileListPage() {
             </div>
             <div className="flex flex-wrap -mx-2">
                 <div className="w-full md:w-1/2 px-3 mb-6">
-                    <ProfileCard myProfile={myProfile} setMyProfile={setMyProfile} />
+                    <ProfileCard myProfile={myProfile} index={1} setMyProfile={setMyProfile} />
                     {/* <ProfileCard2 index={0} profileType="" data=
                         {
                         {
@@ -107,8 +107,8 @@ function ProfileListPage() {
                                 data.writing_status === true
                                     ? (
                                         data.apply_status === true
-                                            ? (<ProfileCard2 index={0} profileType="" data={data} /> )
-                                            : (<ProfileCard2 index={0} profileType="" data={data} /> )
+                                            ? (<ProfileCard myProfile={data} index={index+2} setMyProfile={setMyProfile} /> )
+                                            : (<MemberCard data={data} index={index + 2} id = {myProfile.id} /> )
                                     )
                                     : (<EmptyProfile/>)
                             }
