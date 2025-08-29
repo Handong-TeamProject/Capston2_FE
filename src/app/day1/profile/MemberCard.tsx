@@ -107,7 +107,8 @@ function MemberCard({ data, index, id }: { data: MyProfile, index : number, id :
         const data:PostMemberQuizAnswer = {
             answer: quizAnswer,
             authorId: myProfile.id,
-            itemuserId : id,
+            itemuserId: id,
+            itemId : myProfile.itemId
         }
         await postMemberQuizAnswer(data);
         setIsEdit(false);

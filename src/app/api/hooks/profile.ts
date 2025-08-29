@@ -69,7 +69,7 @@ export const getMyProfileInfo = async (id : string): Promise<responseMyProfile> 
                 itemId : id,
             }});
 
-        console.log(response);
+        console.log(response.data);
         // ⬇️ response.data를 명시적으로 타입 단언
         return response.data as responseMyProfile;
     } catch (error) {
@@ -95,6 +95,7 @@ export interface PostMemberQuizAnswer {
     answer: string;
     authorId: number;
     itemuserId: number;
+    itemId: number;
 }
 
 export const postMemberQuizAnswer = async (data : PostMemberQuizAnswer) => {
