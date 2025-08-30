@@ -23,7 +23,7 @@ QRapo, 빠르게 라포 형성과 관계 발전을 도와주는 서비스
 - 배포: **Vercel** (추후 포함 가능)
 
 ### 백엔드 (별도 Repo)
-- **Spring Boot**, **JPA**, **MySQL**, Docker, AWS EC2
+- **Spring Boot**, **JPA**, **MySQL**, AWS EC2
 
 ### 협업 도구
 - IDE: VSCode
@@ -47,8 +47,6 @@ QRapo, 빠르게 라포 형성과 관계 발전을 도와주는 서비스
   - 그룹 생성 또는 참여  
   - 개인 간 매칭 기능 지원
 
-- **신뢰도 기반 점수/순위 시스템**  
-  - 대화 및 활동 참여도 반영
 
 - **MVP 구조 설계**  
   - 단계별 확장이 가능한 플러그형 모듈 구조
@@ -120,24 +118,26 @@ Capston2_FE/
 ⸻
 
 🔍 실행 가이드
-	1.	클론 & 설치
-
+1. 클론 & 설치
+```
 git clone https://github.com/Handong-TeamProject/Capston2_FE.git
 cd Capston2_FE
 npm install
+```
 
+2. 개발 서버 실행
 
-	2.	개발 서버 실행
-
+```
 npm run dev
+```
 
 브라우저에서 http://localhost:3000 열기
 
-	3.	빌드
-
+3. 빌드
+```
 npm run build
 npm run start
-
+```
 
 
 ⸻
