@@ -2,7 +2,6 @@
 
 QRapo, 빠르게 라포 형성과 관계 발전을 도와주는 서비스
 
----
 
 ## 🧭 프로젝트 개요
 
@@ -13,7 +12,6 @@ QRapo, 빠르게 라포 형성과 관계 발전을 도와주는 서비스
   - **팀원**: 김광일 (프론트엔드), 정은다 (백엔드)
 - **📅 기간**: 2025년 봄학기 캡스톤 디자인
 
----
 
 ## 🛠 기술 스택
 
@@ -32,7 +30,7 @@ QRapo, 빠르게 라포 형성과 관계 발전을 도와주는 서비스
 - 문서관리: Notion
 - 버전관리: GitHub
 
----
+
 
 ## 🎯 주요 기능
 
@@ -51,11 +49,12 @@ QRapo, 빠르게 라포 형성과 관계 발전을 도와주는 서비스
 - **MVP 구조 설계**  
   - 단계별 확장이 가능한 플러그형 모듈 구조
 
----
 
-<pre>
+
+
 ## 🏗 프로젝트 구조
 
+<pre>
 Capston2_FE/
 ├── public/                  # 정적 파일 (SVG, 이미지 등)
 │   └── img/                 # 로고, 아이콘 등 시각 요소
@@ -100,7 +99,7 @@ Capston2_FE/
 ├── eslint-config, prettier-config 등
 </pre>
 
----
+
 
 <!--
 ## 🎨 스크린샷
@@ -115,9 +114,9 @@ Capston2_FE/
 ![5. 회고 제출](./public/screenshots/review.png)
 -->
 
-⸻
 
-🔍 실행 가이드
+
+## 🔍 실행 가이드
 1. 클론 & 설치
 ```
 git clone https://github.com/Handong-TeamProject/Capston2_FE.git
@@ -129,9 +128,11 @@ npm install
 
 ```
 npm run dev
+
+// 브라우저에서 http://localhost:3000 열기
 ```
 
-브라우저에서 http://localhost:3000 열기
+
 
 3. 빌드
 ```
@@ -140,16 +141,14 @@ npm run start
 ```
 
 
-⸻
 
-🧩 향후 계획
-	•	컴포넌트 테스트 (Jest + React Testing Library)
-	•	프론트↔백엔드 통합 테스트
-	•	Docker 컨테이너 구성 및 CI/CD 파이프라인 구축
-	•	접근성 개선 및 모바일 반응형 UI 보강
+## 🧩 향후 계획
+- 컴포넌트 테스트 (Jest + React Testing Library)
+- 프론트↔백엔드 통합 테스트
+- Github Actions를 활용한 CI/CD 파이프라인 구축
+- 접근성 개선 및 모바일 반응형 UI 보강
 
-⸻
 
-⚖️ 라이선스
+## ⚖️ 라이선스
 
 MIT License
