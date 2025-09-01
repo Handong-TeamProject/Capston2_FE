@@ -108,6 +108,11 @@ function ProjectDetailPage() {
     
             if (response.status === 200) {
               console.log("삭제 완료");
+              setProjectInfo((prev) => ({
+                ...prev,
+                users: prev.users.filter((user) => user.userId !== deleteMember),
+              }));
+
             } else {
               alert("프로젝트 삭제에 실패했습니다.");
             }
