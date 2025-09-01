@@ -317,21 +317,9 @@ function ProjectDetailPage() {
               <p className="text-lg font-bold">| 구성원</p>
               <div className="flex flex-wrap text-xs text-gray md:text-base">
                 {projectData.users?.map((member, index) => (
-                  <div className="mb-3 flex w-1/4 md:w-1/2" key={index}>
-                    <div className="pt-4">
-                      <div className="text-center flex flex-col items-center">
-                        <Image
-                          src={`/Img/member${index + 1}.png`}
-                          alt={member?.name || "member"}
-                          className="rounded-full md:h-16 md:w-16"
-                          width={48}
-                          height={48}
-                        />
-                        <p>{member?.name}</p>
-                      </div>
-                    </div>
+                  <div className="mb-3 flex flex-col w-1/4 md:w-1/2  justify-center items-center" key={index}>
                     {isEdit && (
-                      <div>
+                      <div className=" w-full flex justify-end ">
                         <Image
                           src="/Img/cancleBefore.png"
                           onMouseEnter={(e) =>
@@ -350,6 +338,18 @@ function ProjectDetailPage() {
                         />
                       </div>
                     )}
+                    <div className={` ${!isEdit && 'pt-4'}`}>
+                      <div className="text-center flex flex-col items-center">
+                        <Image
+                          src={`/Img/member${index + 1}.png`}
+                          alt={member?.name || "member"}
+                          className="rounded-full md:h-16 md:w-16"
+                          width={48}
+                          height={48}
+                        />
+                        <p>{member?.name}</p>
+                      </div>
+                    </div>
                   </div>
                 ))}
               </div>
