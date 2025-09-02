@@ -4,8 +4,9 @@ import ActivityDesc from "@/components/common/ActivityDesc";
 import {balanceQuestionList} from "@/data/common/balanceQuestionList";
 import {balanceQuiz} from "@/data/day1/balanceQuizList";
 import Image from "next/image";
-import React, {useEffect, useState} from "react";
+import React, {use, useEffect, useState} from "react";
 import { BalanceAnswerPostApiReqeust, BalanceApiResponse, BalancePostApiReqeust, getBalanceAsnwerList, getBalanceList, postBalance, postBalanceAsnwer } from "@/app/api/hooks/balanace";
+import ConfirmModal from "@/components/Modal/ConfirmModal";
 
 
 function BalanceGamePage() {
@@ -13,6 +14,9 @@ function BalanceGamePage() {
     const [isResults, setIsResults] = useState<boolean[]>(balanceQuiz.map(
         () => false
     ));
+
+    const [isAddQuestionModalOpen, setIsAddQuestionModalOpen] = useState(false);
+    const [isChooseAnswerModalOpen, setIsChooseAnswerModalOpen] = useState(false);
     
     const fetchBalanceQuestions = async () => {
         const projectId = sessionStorage.getItem("projectId");
@@ -35,46 +39,57 @@ function BalanceGamePage() {
     };
 
     const handleAddQuestion = async () => {
-        if (window.confirm("문제를 추가하시겠습니까?")) {
-            let newQuestion: BalancePostApiReqeust;
-            const projectId = sessionStorage.getItem("projectId");
-
-            do {
-                const randomNum = Math.floor(Math.random() * 30) + 1;
-                newQuestion = {
-                    balancequestion: randomNum,
-                    itemId: projectId ? projectId : ""
-                };
-            } while (
-                balanceQuestions.some((quiz) => quiz.balancequestion === newQuestion.balancequestion)
-            );
-
-            await postBalance(newQuestion);
-            fetchBalanceQuestions();
         
-            setIsResults((prev) => [
-                ...prev,
-                false
-            ]); // 결과 보기 상태도 함께 추가
-            alert("문제를 추가합니다.");
-        }
-    };
+        let newQuestion: BalancePostApiReqeust;
+        const projectId = sessionStorage.getItem("projectId");
 
-    const handleSelect = async (index: number, selection: string) => {
-        if (window.confirm("선택하시겠습니까?")) {
-            const newBalanceAnswer: BalanceAnswerPostApiReqeust= {
-                balancegameId: balanceQuestions[index].id,
-                itemuserId: balanceQuestions[index].itemuserId,
-                chosenanswer: selection === "case1" ? 1 : 2
+        do {
+            const randomNum = Math.floor(Math.random() * 30) + 1;
+            newQuestion = {
+                balancequestion: randomNum,
+                itemId: projectId ? projectId : ""
             };
-            console.log("newBalanceAnswer", newBalanceAnswer);
+        } while (
+            balanceQuestions.some((quiz) => quiz.balancequestion === newQuestion.balancequestion)
+        );
 
-            const response = await postBalanceAsnwer(newBalanceAnswer);
-            console.log("response", response);
+        await postBalance(newQuestion);
+        fetchBalanceQuestions();
+    
+        setIsResults((prev) => [
+            ...prev,
+            false
+        ]); // 결과 보기 상태도 함께 추가
 
-            fetchBalanceQuestions();
-        }
+        setIsAddQuestionModalOpen(false);
     };
+
+    const [selectQuestionNumber, setSelectQuestionNumber] = useState(0);
+    const [selectQuestionCase, setSelectQuestionCase] = useState("");
+
+    const handleSelect = async () => {
+
+        const newBalanceAnswer: BalanceAnswerPostApiReqeust= {
+            balancegameId: balanceQuestions[selectQuestionNumber].id,
+            itemuserId: balanceQuestions[selectQuestionNumber].itemuserId,
+            chosenanswer: selectQuestionCase === "case1" ? 1 : 2
+        };
+        // console.log("newBalanceAnswer", newBalanceAnswer);
+
+        const response = await postBalanceAsnwer(newBalanceAnswer);
+        // console.log("response", response);
+
+        fetchBalanceQuestions();
+        setIsChooseAnswerModalOpen(false);
+
+    };
+
+    const handleChooseAnswer = async (index: number, selection: string) => {
+        setSelectQuestionNumber(index);
+        setSelectQuestionCase(selection);
+        setIsChooseAnswerModalOpen(true);
+    }
+
 
     const toggleResult = (index : number) => {
         setIsResults((prev) => {
@@ -118,7 +133,7 @@ function BalanceGamePage() {
                 <div className="flex justify-end w-full">
                     <button
                         className="hover:bg-lightGray object-hover bg-black text-white h-10 rounded-md flex items-center justify-center px-2"
-                        onClick={handleAddQuestion}>
+                        onClick={() => setIsAddQuestionModalOpen(true)}>
                         <Image
                             src="/Img/plus.png"
                             alt="plus image"
@@ -127,6 +142,15 @@ function BalanceGamePage() {
                             className="w-4 h-4 mr-2"/>
                         생성하기
                     </button>
+                    {
+                        isAddQuestionModalOpen && (
+                            <ConfirmModal
+                                message="문제를 추가하시겠습니까?"
+                                closeModal={() => setIsAddQuestionModalOpen(false)}
+                                handleAction={() => handleAddQuestion()}
+                            />
+                        )
+                    }
                 </div>
 
                 <div className="flex flex-wrap w-full mt-4">
@@ -207,14 +231,23 @@ function BalanceGamePage() {
                                                                 <div className="w-full flex justify-center mt-10">
                                                                     <button
                                                                         className="hover:bg-orange50 bg-orange text-white px-4 py-2 rounded-md mr-4"
-                                                                        onClick={() => handleSelect(index, "case1")}>
+                                                                        onClick={() => handleChooseAnswer(index, "case1")}>
                                                                         선택하기
                                                                     </button>
                                                                     <button
                                                                         className="hover:bg-boldGray bg-black text-white px-4 py-2 rounded-md"
-                                                                        onClick={() => handleSelect(index, "case2")}>
+                                                                        onClick={() => handleChooseAnswer(index, "case2")}>
                                                                         선택하기
                                                                     </button>
+                                                                    {
+                                                                        isChooseAnswerModalOpen && (
+                                                                            <ConfirmModal
+                                                                                message="선택하시겠습니까?"
+                                                                                closeModal={() => setIsChooseAnswerModalOpen(false)}
+                                                                                handleAction={() => handleSelect()}
+                                                                            />
+                                                                        )
+                                                                    }
                                                                 </div>
                                                             )
                                                             : (
