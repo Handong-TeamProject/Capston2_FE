@@ -209,7 +209,8 @@ function BalanceGamePage() {
                                             )
                                             : (
                                                 <div
-                                                    className="w-full h-full bg-beige90 rounded-2xl flex flex-col justify-center">
+                                                    className="w-full h-full bg-beige90 rounded-2xl flex flex-col justify-center relative">
+                                                    <p className="absolute left-3  top-3 w-5 h-5 flex justify-center items-center rounded-full p-3 border border-orange text-orange">{index + 1}</p>
                                                     <div className="flex flex-col items-center justify-center text-center">
                                                         <p className="text-orange text-xl font-bold w-4/5">
                                                             {
