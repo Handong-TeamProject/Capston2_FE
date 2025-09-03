@@ -11,6 +11,7 @@ import { InputField, InputSpan, TextareaField } from "@/components/common/InputS
 import Image from "next/image";
 import { getAccessApi } from "../api/api";
 import { getProjectList, joinProject } from "../api/hooks/workspace";
+import AlertModal from "@/components/Modal/AlertModal";
 
 const ProjectListPage: React.FC = () => {
   const [isJoinModalOpen, setIsJoinModalOpen] = useState(false);
@@ -18,9 +19,11 @@ const ProjectListPage: React.FC = () => {
   const [isConfirmCreateModalOpen, setIsConfirmCreateModalOpen] =
     useState(false);
   const [isConfirmJoinModalOpen, setIsConfirmJoinModalOpen] = useState(false);
+  const [isAlertJoinModalOpen, setIsAlertJoinModalOpen] = useState(false);
   const [projectName, setProjectName] = useState("");
   const [projectDesc, setProjectDesc] = useState("");
   const [projectCode, setProjectCode] = useState("");
+  const [message, setMessage] = useState("");
 
   interface ProjectInfo {
     id: number;
@@ -42,6 +45,9 @@ const ProjectListPage: React.FC = () => {
   const openConfirmJoinModal = () => setIsConfirmJoinModalOpen(true);
   const closeConfirmJoinModal = () => setIsConfirmJoinModalOpen(false);
 
+  const openAlertJoinModal = () => setIsAlertJoinModalOpen(true);
+  const closeAlertJoinModal = () => setIsAlertJoinModalOpen(false);
+
   const isCreateButtonEnabled =
     projectName.trim() !== "" && projectDesc.trim() !== "";
   const isJoinButtonEnabled = projectCode.trim() !== "";
@@ -51,6 +57,7 @@ const ProjectListPage: React.FC = () => {
     closeCreateModal();
     setProjectName("");
     setProjectDesc("");
+    setProjectCode("");
   };
 
   const handleCreateProject = async () => {
@@ -85,16 +92,19 @@ const ProjectListPage: React.FC = () => {
     getProjectList(setProjectList);
   };
 
-  const handleJoinProject = () => {
-
-    joinProject(projectCode);   
-    
-    closeConfirmJoinModal();
-    closeJoinModal();
-    setProjectCode("");
-    alert("프로젝트에 참여하였습니다!");
-
-    getProjectList(setProjectList);
+  const handleJoinProject = async () => {
+    const result = await joinProject(projectCode);
+    if (result && result.ok) {
+      alert("프로젝트에 참여하였습니다!");
+      getProjectList(setProjectList);
+      closeConfirmJoinModal();
+      closeJoinModal();
+      setProjectCode("");
+    } else {
+      setMessage(result.message);
+      closeConfirmJoinModal();
+      openAlertJoinModal();
+    }
   };
 
   useEffect(() => {
@@ -234,6 +244,15 @@ const ProjectListPage: React.FC = () => {
           handleAction={handleJoinProject}
         />
       )}
+      {
+        isAlertJoinModalOpen && (
+          <AlertModal
+            message={message}
+            closeModal={closeAlertJoinModal}
+          />
+        )
+      }
+
     </div>
   );
 };

@@ -33,11 +33,28 @@ export const getProjectList = async (setProjectList:React.Dispatch<SetStateActio
 };
 
 
-export const joinProject = async (code:string) => {
+export const joinProject2 = async (code:string) => {
     try {
         const api_access = getAccessApi(); // 클라이언트 전용 인스턴스
         await api_access.post("/item/join", { inputCode: code } );
     } catch (error) {
         console.error("Failed to fetch user info:", error);
+    }
+};
+
+
+export const joinProject = async (code: string) => {
+    const api_access = getAccessApi();
+    try {
+        const res = await api_access.post("/item/join", { inputCode: code });
+        return { ok: true as const, data: res.data };
+    } catch (err: any) {
+        const status = err.response?.status;
+        const msg =
+        err.response?.data?.message ||
+        err.response?.data?.error ||
+        "프로젝트 참여에 실패했습니다.";
+
+        return { ok: false as const, status, message: msg };
     }
 };
