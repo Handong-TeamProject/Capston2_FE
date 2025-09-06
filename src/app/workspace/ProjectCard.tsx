@@ -3,6 +3,7 @@ import ConfirmModal from "../../components/Modal/ConfirmModal";
 import { useRouter } from "next/navigation";
 import { getAccessApi } from "../api/api";
 
+
 interface ProjectData {
   id: number;
   title: string;
@@ -10,7 +11,13 @@ interface ProjectData {
   day_status: string;
 }
 
-function ProjectCard({ data, setProjectList }: { data: ProjectData, setProjectList: React.Dispatch<React.SetStateAction<ProjectData[]>> }) {
+interface ProjectCardProps {
+  data: ProjectData;
+  setProjectList: React.Dispatch<React.SetStateAction<ProjectData[]>>;
+  onDeleteSuccess?: () => void; // ✅ 부모에서 모달 띄우는 콜백
+}
+
+function ProjectCard({ data, setProjectList, onDeleteSuccess }: ProjectCardProps) {
   const router = useRouter();
   const [isSelectedModalOpen, setIsSelectedModalOpen] = useState(false);
   const [isDeletedModalOpen, setIsDeletedModalOpen] = useState(false);
@@ -103,7 +110,8 @@ function ProjectCard({ data, setProjectList }: { data: ProjectData, setProjectLi
     const response = await deleteProjectInfo()
     console.log(response);
     setProjectList((prev) => prev.filter((project) => project.id !== data.id));
-    alert("프로젝트가 삭제되었습니다.");
+    // alert("프로젝트가 삭제되었습니다.");
+    onDeleteSuccess?.(); 
     closeDeletededModal();
   };
 

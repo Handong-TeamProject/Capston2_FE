@@ -20,6 +20,8 @@ const ProjectListPage: React.FC = () => {
     useState(false);
   const [isConfirmJoinModalOpen, setIsConfirmJoinModalOpen] = useState(false);
   const [isAlertJoinModalOpen, setIsAlertJoinModalOpen] = useState(false);
+  const [isDeletedSuccessModalOpen, setIsDeletedSuccessModalOpen] = useState(false);
+
   const [projectName, setProjectName] = useState("");
   const [projectDesc, setProjectDesc] = useState("");
   const [projectCode, setProjectCode] = useState("");
@@ -47,6 +49,9 @@ const ProjectListPage: React.FC = () => {
 
   const openAlertJoinModal = () => setIsAlertJoinModalOpen(true);
   const closeAlertJoinModal = () => setIsAlertJoinModalOpen(false);
+
+  const openDeletedSuccessModal = () => setIsDeletedSuccessModalOpen(true);
+  const closeDeletedSuccessModal = () => setIsDeletedSuccessModalOpen(false);
 
   const isCreateButtonEnabled =
     projectName.trim() !== "" && projectDesc.trim() !== "";
@@ -141,7 +146,7 @@ const ProjectListPage: React.FC = () => {
       {projectList.length > 0 ? (
         <div className="mb-12 mt-4 grid grid-cols-1 gap-10 md:mb-20 md:mt-10 md:grid-cols-2 lg:grid-cols-3">
           {projectList.map((data, index) => (
-            <ProjectCard key={index} data={data} setProjectList={setProjectList} />
+            <ProjectCard key={index} data={data} setProjectList={setProjectList} onDeleteSuccess={openDeletedSuccessModal}  />
           ))}
         </div>
       ) : (
@@ -252,6 +257,12 @@ const ProjectListPage: React.FC = () => {
           />
         )
       }
+      {isDeletedSuccessModalOpen && (
+        <AlertModal
+          message="프로젝트가 삭제되었습니다."
+          closeModal={closeDeletedSuccessModal}
+        />
+      )}
 
     </div>
   );
