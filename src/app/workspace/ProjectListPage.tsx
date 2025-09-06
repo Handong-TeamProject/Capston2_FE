@@ -21,6 +21,8 @@ const ProjectListPage: React.FC = () => {
   const [isConfirmJoinModalOpen, setIsConfirmJoinModalOpen] = useState(false);
   const [isAlertJoinModalOpen, setIsAlertJoinModalOpen] = useState(false);
   const [isDeletedSuccessModalOpen, setIsDeletedSuccessModalOpen] = useState(false);
+  const [isJoinSuccessModalOpen, setIsJoinSuccessModalOpen] = useState(false);
+  
 
   const [projectName, setProjectName] = useState("");
   const [projectDesc, setProjectDesc] = useState("");
@@ -37,6 +39,9 @@ const ProjectListPage: React.FC = () => {
 
   const openJoinModal = () => setIsJoinModalOpen(true);
   const closeJoinModal = () => setIsJoinModalOpen(false);
+
+  const openJoinSuccessModal = () => setIsJoinSuccessModalOpen(true);
+  const closeJoinSuccessModal = () => setIsJoinSuccessModalOpen(false);
 
   const openCreateModal = () => setIsCreateModalOpen(true);
   const closeCreateModal = () => setIsCreateModalOpen(false);
@@ -100,7 +105,7 @@ const ProjectListPage: React.FC = () => {
   const handleJoinProject = async () => {
     const result = await joinProject(projectCode);
     if (result && result.ok) {
-      alert("프로젝트에 참여하였습니다!");
+      openJoinSuccessModal();
       getProjectList(setProjectList);
       closeConfirmJoinModal();
       closeJoinModal();
@@ -261,6 +266,12 @@ const ProjectListPage: React.FC = () => {
         <AlertModal
           message="프로젝트가 삭제되었습니다."
           closeModal={closeDeletedSuccessModal}
+        />
+      )}
+      {isJoinSuccessModalOpen && (
+        <AlertModal
+          message="프로젝트에 참여되었습니다."
+          closeModal={closeJoinSuccessModal}
         />
       )}
 
